@@ -1,0 +1,76 @@
+﻿<Page x:Class="Merge_Data_Utility.UI.Pages.ContentElementPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:Merge_Data_Utility.UI.Pages"
+      xmlns:editorFields="clr-namespace:Merge_Data_Utility.UI.Controls.EditorFields"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      xmlns:other="clr-namespace:Merge_Data_Utility.UI.Controls.Other"
+      mc:Ignorable="d"
+      d:DesignHeight="900" d:DesignWidth="500"
+      Title="Create a Content Element">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Background="White" VerticalAlignment="Top">
+            <Grid Margin="0,0,0,5" Height="22" VerticalAlignment="Bottom"
+                  Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                <Button x:Name="back" HorizontalAlignment="Left" Margin="1" Click="OtherType">Choose Another Type</Button>
+                <Button IsDefault="True" Click="Done" Margin="1" HorizontalAlignment="Right">Done</Button>
+            </Grid>
+            <StackPanel x:Name="button" Margin="5,0,5,0">
+                <TextBlock>Label</TextBlock>
+                <TextBox x:Name="buttonLabelBox" Width="250" HorizontalAlignment="Left" SpellCheck.IsEnabled="True" />
+                <TextBlock>Action</TextBlock>
+                <editorFields:ActionPickerField x:Name="buttonAction" />
+            </StackPanel>
+            <StackPanel x:Name="label" Margin="5,0,5,0">
+                <TextBlock>Text</TextBlock>
+                <TextBox x:Name="labelTextBox" Width="450" HorizontalAlignment="Left" SpellCheck.IsEnabled="True"
+                         Height="115"
+                         TextWrapping="Wrap" AcceptsReturn="True" TextChanged="UpdateLabelPreview" />
+                <TextBlock>Font Size</TextBlock>
+                <xctk:IntegerUpDown x:Name="labelSizeBox" Width="50" HorizontalAlignment="Left" Minimum="1" Value="12"
+                                    Maximum="30" ValueChanged="UpdateLabelPreview" />
+                <TextBlock>Style</TextBlock>
+                <ComboBox x:Name="labelStyleBox" HorizontalAlignment="Left" Width="150"
+                          SelectionChanged="UpdateLabelPreview">
+                    <ComboBoxItem Tag="Normal">Regular</ComboBoxItem>
+                    <ComboBoxItem Tag="Italic" FontStyle="Italic">Italic</ComboBoxItem>
+                    <ComboBoxItem Tag="Bold" FontWeight="Bold">Bold</ComboBoxItem>
+                    <ComboBoxItem Tag="BoldItalic" FontStyle="Italic" FontWeight="Bold">Bold and Italic</ComboBoxItem>
+                </ComboBox>
+                <TextBlock x:Name="labelPreview" Margin="0,5,0,0" />
+            </StackPanel>
+            <other:ContentControl x:Name="image" Margin="5,0,5,0">
+                <StackPanel>
+                    <!--<TextBlock>Source</TextBlock>
+            <TextBox x:Name="sourceBox" Width="300" HorizontalAlignment="Left" />
+            <TextBlock>Scale Type</TextBlock>
+            <ComboBox x:Name="scaleTypeBox" Width="150" HorizontalAlignment="Left">
+                <ComboBoxItem Tag="None">None</ComboBoxItem>
+                <ComboBoxItem Tag="Fill">Fill</ComboBoxItem>
+                <ComboBoxItem Tag="Uniform">Uniform</ComboBoxItem>
+                <ComboBoxItem Tag="UniformToFill">Uniform and Fill</ComboBoxItem>
+            </ComboBox>
+            <TextBlock>Preview</TextBlock>
+            <Button HorizontalAlignment="Left" Click="UpdateImagePreview">Update</Button>
+            <Image x:Name="imagePreview" Width="178" Height="100" HorizontalAlignment="Left" Stretch="None" />-->
+                    <TextBlock>Image</TextBlock>
+                    <editorFields:ImageUploader x:Name="imageUploader" />
+                </StackPanel>
+            </other:ContentControl>
+            <StackPanel x:Name="video" Margin="5,0,5,0">
+                <TextBlock>Video ID</TextBlock>
+                <TextBox x:Name="videoIdBox" Width="100" HorizontalAlignment="Left" />
+                <TextBlock>Vendor</TextBlock>
+                <ComboBox x:Name="videoVendorBox" HorizontalAlignment="Left" Width="150">
+                    <ComboBoxItem>YouTube</ComboBoxItem>
+                    <ComboBoxItem>Vimeo</ComboBoxItem>
+                </ComboBox>
+                <TextBlock>Preview</TextBlock>
+                <Button HorizontalAlignment="Left" Click="UpdateVideoPreview">Update</Button>
+                <WebBrowser x:Name="videoPreview" Width="356" Height="200" HorizontalAlignment="Left" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

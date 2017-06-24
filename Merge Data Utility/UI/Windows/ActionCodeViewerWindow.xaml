@@ -1,0 +1,15 @@
+﻿<Window x:Class="Merge_Data_Utility.UI.Windows.ActionCodeViewerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows"
+        xmlns:editorFields="clr-namespace:Merge_Data_Utility.UI.Controls.EditorFields"
+        mc:Ignorable="d"
+        Title="Action Code Viewer" Height="500" Width="500" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <editorFields:ActionPickerField x:Name="actionField" VerticalAlignment="Top" Margin="5"/>
+        <Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,30,0,0" Click="CreateAction">Create Action From Code</Button>
+        <TextBox x:Name="codeBox" AcceptsReturn="True" Margin="0,55,0,0"></TextBox>
+    </Grid>
+</Window>

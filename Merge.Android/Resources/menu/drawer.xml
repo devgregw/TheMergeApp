@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <group android:checkableBehavior="single" android:id="@+id/drawerGroupMain">
+    <item android:id="@+id/drawerItemHome" android:title="Home" android:icon="@drawable/Home" />
+    <item android:id="@+id/drawerItemEvents" android:title="Upcoming Events"
+          android:icon="@drawable/UpcomingEvents" />
+    <item android:id="@+id/drawerItemGroups" android:title="Merge Groups" android:icon="@drawable/MergeGroups" />
+    <!--<item android:id="@+id/drawerItemAnnouncements" android:title="Announcements" android:icon="@drawable/ic_announcement_black_24dp"/>-->
+  </group>
+  <!--<item android:id="@+id/drawerItemLeaders" android:title="Leaders" android:icon="@drawable/ic_perm_identity_black_24dp" />-->
+  <item android:id="@+id/drawerItemGroupMap" android:title="Group Map" android:icon="@drawable/GroupMap" />
+  <item android:id="@+id/drawerItemLeaderResources" android:title="Leader Resources" android:icon="@drawable/PasswordProtected"/>
+  <group android:id="@+id/drawerGroupExtras">
+    <item android:id="@+id/drawerItemAbout" android:title="About Merge" android:icon="@drawable/About" />
+    <item android:id="@+id/drawerItemSettings" android:title="Settings" android:icon="@drawable/Settings" />
+  </group>
+  <group android:id="@+id/drawerGroupAdvanced">
+    <item android:id="@+id/drawerItemFeedback" android:title="Send Feedback"
+          android:icon="@drawable/SendFeedback" />
+    <item android:id="@+id/drawerItemLogs" android:title="Send Logs"
+          android:icon="@drawable/SendLogs" />
+  </group>
+</menu>

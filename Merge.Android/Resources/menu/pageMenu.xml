@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:id="@+id/MenuItemReload" android:title="Reload" android:icon="@drawable/Refresh" android:order="98"/>
+  <item android:id="@+id/MenuItemContactUs" android:title="Contact Us" android:icon="@drawable/About" android:order="99"/>
+</menu>

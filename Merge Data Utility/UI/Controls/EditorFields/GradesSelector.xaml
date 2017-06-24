@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="Merge_Data_Utility.UI.Controls.EditorFields.GradesSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Merge_Data_Utility.UI.Controls.EditorFields"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             d:DesignHeight="130" d:DesignWidth="300">
+    <StackPanel Orientation="Horizontal" Height="130">
+        <xctk:CheckListBox x:Name="gradesBox">
+            <TextBlock TextWrapping="Wrap" Text="Seventh" />
+            <TextBlock TextWrapping="Wrap" Text="Eighth" />
+            <TextBlock TextWrapping="Wrap" Text="Ninth" />
+            <TextBlock TextWrapping="Wrap" Text="Tenth" />
+            <TextBlock TextWrapping="Wrap" Text="Eleventh" />
+            <TextBlock TextWrapping="Wrap" Text="Twelfth" />
+        </xctk:CheckListBox>
+        <StackPanel Orientation="Vertical" Margin="5,0,0,0">
+            <Button x:Name="gradesSelectAll" Content="Select All" Click="gradesSelectAll_Click" />
+            <Button x:Name="gradesSelectNone" Content="Select None" Click="gradesSelectNone_Click" />
+            <Separator />
+            <Button x:Name="gradesSelectJH" Content="Select Junior High" Click="gradesSelectJH_Click" />
+            <Button x:Name="gradesSelectHS" Content="Select High School" Click="gradesSelectHS_Click" />
+            <Separator />
+            <Button x:Name="gradesSelectUnder" Content="Select Underclassmen" Click="gradesSelectUnder_Click" />
+            <Button x:Name="gradesSelectUpper" Content="Select Upperclassmen" Click="gradesSelectUpper_Click" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

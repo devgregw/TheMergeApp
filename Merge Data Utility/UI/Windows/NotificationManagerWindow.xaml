@@ -1,0 +1,44 @@
+﻿<Window x:Class="Merge_Data_Utility.UI.Windows.NotificationManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows"
+        xmlns:other="clr-namespace:Merge_Data_Utility.UI.Controls.Other"
+        mc:Ignorable="d"
+        Icon="/Merge Data Utility;component/shadow-64.png" Title="Notification Manager" Height="500" Width="500" MinHeight="500" MinWidth="500"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}" Offset="0" />
+                <GradientStop Color="White" Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Menu VerticalAlignment="Top" Background="{x:Null}">
+            <Button Click="Reload">Refresh</Button>
+            <Button Click="SendNotification">Send a Notification</Button>
+            <Button Click="OpenDashboard">Open Dashboard</Button>
+            <TextBlock>Powered by OneSignal</TextBlock>
+        </Menu>
+        <other:ContentControl x:Name="content" Margin="0,22,0,0">
+            <TabControl>
+                <TabItem Header="In Progress">
+                    <ScrollViewer>
+                        <StackPanel x:Name="inProgressList" Margin="5"/>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="Scheduled">
+                    <ScrollViewer>
+                        <StackPanel x:Name="scheduledList" Margin="5"/>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="History">
+                    <ScrollViewer>
+                        <StackPanel x:Name="historyList" Margin="5"/>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+        </other:ContentControl>
+    </Grid>
+</Window>

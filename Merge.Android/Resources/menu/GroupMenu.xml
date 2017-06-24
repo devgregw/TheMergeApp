@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:id="@+id/MenuItemGetDirections" android:title="Get Directions" android:icon="@drawable/GetDirections" android:order="97"/>
+  <item android:id="@+id/MenuItemSeeAll" android:title="See All Groups" android:icon="@drawable/GroupMap" android:order="98"/>
+  <item android:id="@+id/MenuItemContactLeaders" android:title="Contact Group Leaders" android:icon="@drawable/MergeGroups" android:order="99"/>
+  <item android:id="@+id/MenuItemContactUs" android:title="Contact Us" android:icon="@drawable/About" android:order="100"/>
+</menu>

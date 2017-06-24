@@ -1,0 +1,68 @@
+﻿<Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"><!--x:Class="Merge_Data_Utility.UI.Pages.Editors.AnnouncementEditorPage"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:local="clr-namespace:Merge_Data_Utility.UI.Pages.Editors"
+                 xmlns:base="clr-namespace:Merge_Data_Utility.UI.Pages.Base"
+                 xmlns:editorFields="clr-namespace:Merge_Data_Utility.UI.Controls.EditorFields"
+                 xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                 mc:Ignorable="d"
+                 d:DesignHeight="2000" d:DesignWidth="500"
+                 Title="Announcement Editor">
+    <ScrollViewer Background="White">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5">
+            <editorFields:FieldHeader Title="ID" Description="This is a unique identifier for this object." />
+            <editorFields:IdField x:Name="idField" />
+            <editorFields:FieldHeader Title="Importance"
+                                      Description="Important announcements are bigger and prioritized." />
+            <ComboBox x:Name="importance" HorizontalAlignment="Left" Width="200">
+                <ComboBoxItem>Normal</ComboBoxItem>
+                <ComboBoxItem>Medium</ComboBoxItem>
+                <ComboBoxItem>High</ComboBoxItem>
+            </ComboBox>
+            <editorFields:FieldHeader Title="Title"
+                                      Description="Try to keep the title short.  You can give more detail in 'Short Description' and 'Description'." />
+            <TextBox x:Name="titleBox" Width="250" HorizontalAlignment="Left" MaxLines="1" SpellCheck.IsEnabled="True" />
+            <editorFields:FieldHeader Title="Short Description"
+                                      Description="Briefly summarize the event.  Try to avoid giving the date and location; that's what 'Start Date', 'End Date', 'Location', and 'Address' are for." />
+            <TextBox x:Name="sdescBox" Width="350" HorizontalAlignment="Left" SpellCheck.IsEnabled="True" MaxLines="4" />
+            <editorFields:FieldHeader Title="Description"
+                                      Description="Describe this event as much as you want.  Try to avoid giving the date and location; that's what 'Start Date', 'End Date', 'Location', and 'Address' are for." />
+            <TextBox x:Name="descBox" Width="450" HorizontalAlignment="Left" SpellCheck.IsEnabled="True" Height="115"
+                     TextWrapping="Wrap" />
+
+            <editorFields:FieldHeader Title="Grades"
+                                      Description="Choose the grade levels that this object is intended for. Users outside of the target audience will not see this object in the app (if filters are enabled)." />
+            <editorFields:GradesSelector x:Name="gradesField" />
+            <editorFields:FieldHeader Title="Genders"
+                                      Description="Choose the genders that this object is intended for. Users outside of the target audience will not see this object in the app (if filters are enabled)." />
+            <editorFields:GenderSelector x:Name="gendersField" />
+            <editorFields:FieldHeader Title="Button"
+                                      Description="In addition to displaying text, announcements can also display a button.  The button is configured to invoke an action when clicked." />
+            <CheckBox x:Name="buttonCheck" Margin="0,2.5,0,2.5" Checked="ButtonEnabled" Unchecked="ButtonDisabled"
+                      FontWeight="Bold">
+                Enable button
+            </CheckBox>
+            <TextBlock>Label</TextBlock>
+            <TextBox x:Name="buttonLabel" HorizontalAlignment="Left" Width="250" IsEnabled="false" />
+            <TextBlock>Action</TextBlock>
+            <editorFields:ActionPickerField x:Name="buttonAction" IsEnabled="False" />
+            <editorFields:FieldHeader Title="Cover Image"
+                                      Description="For the best look, the image should be at least 1920x1080 pixels (a 16:9 ratio), although the app can work with abnormally-sized images.  PNG format is also required.  For best performance, avoid resolutions >= 3840x2160 pixels and files >= 5 MB in size.  Also, avoid transparency because it may cause the image to not display as intended." />
+            <editorFields:ImageUploader x:Name="coverField" />
+            <editorFields:FieldHeader Title="Color"
+                                      Description="For the best appearance, choose a color that fits with the icon and cover. Various elements in the app will be colorized according to this value. If you want, the best color can be automatically extracted from the cover or icon images." />
+            <editorFields:ColorPickerField x:Name="colorField" />
+            <editorFields:FieldHeader Title="Theme"
+                                      Description="This sets the color of text that appears on colored surfaces. For best results, choose 'auto'." />
+            <editorFields:ThemePickerField x:Name="themeField" />
+            <editorFields:FieldHeader Title="Theme Preview"
+                                      Description="Preview the 'Color' and 'Theme' settings here." />
+            <editorFields:ThemePreviewField x:Name="previewField" />
+            <editorFields:FieldHeader Title="All done!"
+                                      Description="Review the information above and click 'Publish' in the upper-left corner to publish this object.  Alternatively, click 'Save as Draft' to save it for later."
+                                      Margin="0,0,0,20" />
+        </StackPanel>
+    </ScrollViewer>-->
+</Page>

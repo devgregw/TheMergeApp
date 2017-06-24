@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="false"
+                  android:background="@color/colorPrimary">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:fitsSystemWindows="true" />
+    <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@android:color/white"
+      android:layout_below="@id/toolbar">
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="200dp"
+          android:background="@android:color/black"
+          android:elevation="4dp">
+          <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/LargeHeader"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true" />
+        </RelativeLayout>
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="8dp"
+          android:orientation="vertical">
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            android:textColor="@android:color/black"
+            android:textStyle="bold|italic"
+            android:text="The Merge App" />
+          <TextView
+            android:id="@+id/aboutVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"/>
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="@android:color/black"
+            android:text="Designed and developed by Greg Whatley for Pantego Bible Church."
+            android:layout_marginBottom="4dp"/>
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="@android:color/black"
+            android:text="May the Lord direct your hearts to the love of God and to the steadfastness of Christ." />
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="@android:color/black"
+            android:text="     2 Thessalonians 3:5 ESV"
+            android:layout_marginBottom="4dp"/>
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+              android:id="@+id/aboutDevgregw"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="0.5"
+              android:layout_marginBottom="4dp"
+              android:text="devgregw.com"
+              android:backgroundTint="?attr/colorPrimary" />
+            <Button
+              android:id="@+id/aboutPantego"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="0.5"
+              android:text="pantego.org"
+              android:backgroundTint="?attr/colorPrimary" />
+          </LinearLayout>
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="@android:color/black"
+            android:text="This app is licensed under the MIT license.  By using this app, you agree to the MIT license and all third-party licenses.  Tap Licenses to learn more." />
+          <Button
+            android:id="@+id/aboutLicenses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Licenses"
+            android:backgroundTint="?attr/colorPrimary" />
+          <Button
+            android:id="@+id/aboutSendFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Send Feedback"
+            android:backgroundTint="?attr/colorPrimary"
+            android:layout_marginBottom="8dp" />
+        </LinearLayout>
+      </LinearLayout>
+    </ScrollView>
+  </RelativeLayout>

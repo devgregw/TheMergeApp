@@ -1,0 +1,30 @@
+﻿<Window x:Class="Merge_Data_Utility.UI.Windows.ActionConfigurationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows"
+        mc:Ignorable="d" Icon="/Merge Data Utility;component/shadow-64.png" Title="Configure Action" Height="500" Width="450" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Border BorderBrush="Black" BorderThickness="0,0,0,1" VerticalAlignment="Top">
+            <Grid VerticalAlignment="Top" Height="25"
+                  Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="1,1,0,1" Grid.Column="0" VerticalAlignment="Center">Action:</TextBlock>
+                <ComboBox x:Name="typeBox" Margin="0,1,0,1" Grid.Column="2" Width="225" />
+                <StackPanel Grid.Column="4" Orientation="Horizontal" Margin="1">
+                    <Button Width="50" Click="Cancel">Cancel</Button>
+                    <Button Margin="5,0,0,0" Width="50" Click="Done">Done</Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Frame x:Name="contentFrame" Margin="5,31,5,5" NavigationUIVisibility="Hidden" />
+    </Grid>
+</Window>

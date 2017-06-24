@@ -1,0 +1,30 @@
+﻿<base:ActionConfigurationPage x:Class="Merge_Data_Utility.UI.Pages.ActionConfiguration.TextActionPage"
+                              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                              xmlns:local="clr-namespace:Merge_Data_Utility.UI.Pages.ActionConfiguration"
+                              xmlns:other="clr-namespace:Merge_Data_Utility.UI.Controls.Other"
+                              xmlns:base="clr-namespace:Merge_Data_Utility.UI.Pages.Base"
+                              mc:Ignorable="d"
+                              d:DesignHeight="300" d:DesignWidth="300"
+                              Title="Text">
+    <StackPanel Background="White">
+        <other:SpecialRadioButton x:Name="r1">
+            <StackPanel>
+                <TextBlock>Contact Medium</TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox x:Name="mediumBox" Width="200" IsReadOnly="True" />
+                    <Button Margin="5,0,0,0" Click="ChooseMedium">Choose</Button>
+                </StackPanel>
+            </StackPanel>
+        </other:SpecialRadioButton>
+        <Separator Margin="5" />
+        <other:SpecialRadioButton x:Name="r2">
+            <StackPanel>
+                <TextBlock>Phone Number</TextBlock>
+                <TextBox x:Name="numberBox" Width="200" />
+            </StackPanel>
+        </other:SpecialRadioButton>
+    </StackPanel>
+</base:ActionConfigurationPage>

@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="Merge_Data_Utility.UI.Controls.EditorFields.ColorPickerField"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Merge_Data_Utility.UI.Controls.EditorFields"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel Background="White">
+        <xctk:ColorPicker x:Name="picker" Height="25" HorizontalAlignment="Left" Width="200"
+                          SelectedColorChanged="ColorPicked" UsingAlphaChannel="False" />
+        <Button x:Name="btnSuggestions" Content="Get suggestions" HorizontalAlignment="Left"
+                Click="SuggestionsRequested" />
+    </StackPanel>
+</UserControl>

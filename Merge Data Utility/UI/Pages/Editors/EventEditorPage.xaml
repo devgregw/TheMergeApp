@@ -1,0 +1,54 @@
+﻿<base:EditorPage x:Class="Merge_Data_Utility.UI.Pages.Editors.EventEditorPage"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:local="clr-namespace:Merge_Data_Utility.UI.Pages.Editors"
+                 xmlns:fields="clr-namespace:Merge_Data_Utility.UI.Controls.EditorFields"
+                 xmlns:base="clr-namespace:Merge_Data_Utility.UI.Pages.Base"
+                 xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                 mc:Ignorable="d"
+                 d:DesignHeight="2000" d:DesignWidth="500"
+                 Title="Event Editor">
+    <ScrollViewer Background="White">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5">
+            <fields:ModelBaseFieldCollectionControl x:Name="baseCtrls" Type="event" />
+            <Separator Margin="10"/>
+            <fields:FieldHeader Title="Location"
+                                Description="Give the name and/or room number of the place here. If applicable, use 'Address' to specify the place's address." />
+            <TextBox x:Name="locationBox" Width="250" HorizontalAlignment="Left" SpellCheck.IsEnabled="True"
+                     MaxLines="4" />
+            <fields:FieldHeader Title="Address (optional)"
+                                Description="If you specify an address, users will be able to get directions from the Merge app. Click one of the buttons below to insert a preset address." />
+            <StackPanel x:Name="addressPresets" Orientation="Horizontal">
+                <Button Content="Main/Multipurpose/Student Building(s)"
+                        Tag="8001 Anderson Blvd, Fort Worth Texas, 76120" />
+                <Button Content="The Connection" Tag="8200 Anderson Blvd, Fort Worth Texas, 76120" Margin="5,0,0,0" />
+            </StackPanel>
+            <TextBox x:Name="addressBox" Width="250" HorizontalAlignment="Left" InputScope="PostalAddress"
+                     SpellCheck.IsEnabled="True" MaxLines="4" />
+            <Separator Margin="10"/>
+            <fields:FieldHeader Title="Start Date" Description="Choose the date and time when the event will start." />
+            <xctk:DateTimePicker x:Name="startDateBox" Width="300" HorizontalAlignment="Left" Format="Custom"
+                                 FormatString="dddd, d MMMM, yyyy h:mm tt" />
+            <fields:FieldHeader Title="End Date" Description="Choose the date and time when the event will end." />
+            <xctk:DateTimePicker x:Name="endDateBox" Width="300" HorizontalAlignment="Left" Format="Custom"
+                                 FormatString="dddd, d MMMM, yyyy h:mm tt" />
+            <Separator Margin="10"/>
+            <fields:FieldHeader Title="Price"
+                                Description="Specify the cost of the event.  Set it to 0 if the event is free." />
+            <xctk:DecimalUpDown x:Name="priceBox" Value="0" Minimum="0" Maximum="1000" Width="100"
+                                HorizontalAlignment="Left" />
+            <fields:FieldHeader Title="Registration URL"
+                                Description="Specify the web address where a user can register for the event.  Leave this field empty if registration is not required." />
+            <TextBox x:Name="urlBox" Width="300" InputScope="Url" HorizontalAlignment="Left" />
+            <fields:FieldHeader Title="Registration Closing Date" Description="Specify the date and time when registration for this event will close.  The value of this field is ignored if a Registration URL is not specified."/>
+            <xctk:DateTimePicker x:Name="regCloseBox" Width="300" HorizontalAlignment="Left" Format="Custom"
+                                 FormatString="dddd, d MMMM, yyyy h:mm tt" />
+            <Separator Margin="10"/>
+            <fields:FieldHeader Title="All done!"
+                                Description="Review the information above and click 'Publish' in the upper-left corner to publish this object.  Alternatively, click 'Save as Draft' to save it for later."
+                                Margin="0,0,0,20" />
+        </StackPanel>
+    </ScrollViewer>
+</base:EditorPage>

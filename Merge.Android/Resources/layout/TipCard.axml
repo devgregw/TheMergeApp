@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardBackgroundColor="?attr/colorPrimary"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="2dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="35dp"
+        android:background="?attr/colorPrimary"
+        android:padding="6dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tipViewLayoutMain"
+                android:layout_marginRight="35dp"
+                android:layout_marginEnd="35dp">
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/tipViewIcon"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/Tip" />
+                <TextView
+                    android:id="@+id/tipMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@android:color/black"
+                    android:text="Example message" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/tipViewClickableLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tipViewLayoutMain"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="2dp">
+                <ImageView
+                    android:id="@+id/tipCanClick"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/tipMessage"
+                    android:src="@drawable/TipHasAction" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tap to open" />
+            </LinearLayout>
+        </LinearLayout>
+        <ImageButton
+            android:id="@+id/tipDismissButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="false"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:elevation="1dp"
+            android:src="@drawable/Dismiss"
+            android:background="?android:attr/selectableItemBackground"
+            android:scaleType="center" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

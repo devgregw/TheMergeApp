@@ -1,0 +1,41 @@
+﻿<Window x:Class="Merge_Data_Utility.UI.Windows.AttendanceManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows"
+        xmlns:other="clr-namespace:Merge_Data_Utility.UI.Controls.Other"
+        mc:Ignorable="d"
+        Icon="/Merge Data Utility;component/shadow-64.png" Title="Attendance Manager" Height="500" Width="500" WindowStartupLocation="CenterScreen" MinHeight="500"
+        MinWidth="500">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}" Offset="0" />
+                <GradientStop Color="White" Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Menu VerticalAlignment="Top" Background="{x:Null}">
+            <MenuItem Header="File">
+                <MenuItem Header="New">
+                    <MenuItem Header="Record..." Click="NewRecord_Click" />
+                    <MenuItem Header="Group..." Click="NewGroup_Click" />
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <other:ContentControl x:Name="content">
+            <TabControl Margin="0,18,0,0">
+                <TabItem Header="Records">
+                    <ScrollViewer>
+                        <StackPanel x:Name="recordsList" VerticalAlignment="Top" Margin="5" />
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="Groups">
+                    <ScrollViewer>
+                        <StackPanel x:Name="groupsList" VerticalAlignment="Top" Margin="5"/>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+        </other:ContentControl>
+    </Grid>
+</Window>

@@ -1,0 +1,28 @@
+﻿<Page x:Class="Merge_Data_Utility.UI.Pages.AuthenticationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:Merge_Data_Utility.UI.Pages"
+      xmlns:other="clr-namespace:Merge_Data_Utility.UI.Controls.Other"
+      mc:Ignorable="d"
+      d:DesignHeight="650" d:DesignWidth="1000"
+      Title="Authentication">
+    <Grid Background="White">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-138,0,0">
+            <Image Source="/Merge Data Utility;component/shadow-512.png" Height="128" Width="128" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+            <other:ContentControl x:Name="content">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock FontSize="34" FontWeight="Light" TextAlignment="Center">Sign in.</TextBlock>
+                    <TextBlock>Email address</TextBlock>
+                    <TextBox x:Name="usr" Width="250" />
+                    <TextBlock>Password</TextBlock>
+                    <PasswordBox x:Name="pwd" Width="250" />
+                    <Grid>
+                        <Button Click="SignIn" HorizontalAlignment="Right" Margin="5" IsDefault="True">Sign in</Button>
+                    </Grid>
+                </StackPanel>
+            </other:ContentControl>
+        </StackPanel>
+    </Grid>
+</Page>

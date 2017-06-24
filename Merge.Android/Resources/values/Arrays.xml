@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<resources>
+  <string-array name="gradeLevels_entries">
+    <item>Seventh</item>
+    <item>Eighth</item>
+    <item>Ninth</item>
+    <item>Tenth</item>
+    <item>Eleventh</item>
+    <item>Twelfth</item>
+  </string-array>
+  <string-array name="gradeLevels_values">
+    <item>Seventh</item>
+    <item>Eighth</item>
+    <item>Ninth</item>
+    <item>Tenth</item>
+    <item>Eleventh</item>
+    <item>Twelfth</item>
+  </string-array>
+  <string-array name="genders_entries">
+    <item>Male</item>
+    <item>Female</item>
+  </string-array>
+  <string-array name="genders_values">
+    <item>Male</item>
+    <item>Female</item>
+  </string-array>
+</resources>

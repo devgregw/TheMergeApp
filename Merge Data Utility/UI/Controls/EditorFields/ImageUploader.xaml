@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="Merge_Data_Utility.UI.Controls.EditorFields.ImageUploader"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="220" d:DesignWidth="500">
+    <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Vertical">
+            <TextBox IsReadOnly="True" x:Name="coverFileBox" Width="320" HorizontalAlignment="Left" />
+            <Grid HorizontalAlignment="Left" Width="320" Height="180">
+                <!--<Grid.Background>
+                    <ImageBrush ImageSource="/Merge Data Utility;component/tile.png" Stretch="UniformToFill"/>
+                </Grid.Background>-->
+                <Border BorderThickness="1" BorderBrush="Black" />
+                <Image x:Name="coverImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Uniform" />
+            </Grid>
+        </StackPanel>
+        <StackPanel Margin="5,0,0,0" VerticalAlignment="Top">
+            <Button x:Name="coverBrowse" Content="Browse this PC..." Click="coverBrowse_Click" Margin="0,0,0,2.5" />
+            <!--<Button x:Name="uploadBrowse" Content="Browse uploads..." Click="uploadBrowse_Click" Margin="0,0,0,2.5" />-->
+            <Button x:Name="clearButton" Click="clearButton_Click" Margin="0,0,0,2.5">Clear</Button>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

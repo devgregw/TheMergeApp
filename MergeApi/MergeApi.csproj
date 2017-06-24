@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CD631983-99E5-4B2A-ADF5-2B85E8F94249}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MergeApi</RootNamespace>
+    <AssemblyName>MergeApi</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="MergeDatabase.cs" />
+    <Compile Include="Exceptions\ActionInvocationException.cs" />
+    <Compile Include="Exceptions\InvalidParamGroupException.cs" />
+    <Compile Include="Exceptions\UnknownClassException.cs" />
+    <Compile Include="Framework\Abstractions\ActionBase.cs" />
+    <Compile Include="Framework\Abstractions\ElementBase.cs" />
+    <Compile Include="Framework\Abstractions\MediumBase.cs" />
+    <Compile Include="Framework\Abstractions\ModelBase.cs" />
+    <Compile Include="Framework\Abstractions\TargetableBase.cs" />
+    <Compile Include="Framework\Enumerations\Converters\GenderConverter.cs" />
+    <Compile Include="Framework\Enumerations\Converters\GradeLevelConverter.cs" />
+    <Compile Include="Framework\Enumerations\EmailAddressKind.cs" />
+    <Compile Include="Framework\Enumerations\LabelStyle.cs" />
+    <Compile Include="Framework\Enumerations\LogLevel.cs" />
+    <Compile Include="Framework\Enumerations\ScaleType.cs" />
+    <Compile Include="Framework\Enumerations\Tab.cs" />
+    <Compile Include="Framework\Enumerations\VideoVendor.cs" />
+    <Compile Include="Framework\Interfaces\IClassable.cs" />
+    <Compile Include="Framework\Interfaces\IValidatable.cs" />
+    <Compile Include="Framework\Interfaces\Receivers\IElementCreationReceiver.cs" />
+    <Compile Include="Converters\ClassableJsonConverter.cs" />
+    <Compile Include="Converters\ClassableListJsonConverter.cs" />
+    <Compile Include="Framework\Interfaces\Receivers\ILogReceiver.cs" />
+    <Compile Include="Models\Actions\AddToCalendarAction.cs" />
+    <Compile Include="Models\Actions\CallAction.cs" />
+    <Compile Include="Models\Actions\ClickAnnouncementButtonAction.cs" />
+    <Compile Include="Models\Actions\EmailAction.cs" />
+    <Compile Include="Models\Actions\GetDirectionsAction.cs" />
+    <Compile Include="Models\Actions\LaunchUriAction.cs" />
+    <Compile Include="Models\Actions\OpenAnnouncementDetailsAction.cs" />
+    <Compile Include="Models\Actions\OpenEventDetailsAction.cs" />
+    <Compile Include="Models\Actions\OpenGroupDetailsAction.cs" />
+    <Compile Include="Models\Actions\OpenGroupMapPageAction.cs" />
+    <Compile Include="Models\Actions\OpenPageAction.cs" />
+    <Compile Include="Models\Actions\ShowContactInfoAction.cs" />
+    <Compile Include="Models\Actions\TextAction.cs" />
+    <Compile Include="Models\Core\Attendance\AttendanceGroup.cs" />
+    <Compile Include="Models\Core\Attendance\AttendanceRecord.cs" />
+    <Compile Include="Models\Core\Tab\TabTip.cs" />
+    <Compile Include="Models\Core\Tab\TabHeader.cs" />
+    <Compile Include="Models\Core\MergeAnnouncement.cs" />
+    <Compile Include="Framework\Enumerations\Gender.cs" />
+    <Compile Include="Framework\Enumerations\GradeLevel.cs" />
+    <Compile Include="Framework\Enumerations\Importance.cs" />
+    <Compile Include="Framework\Enumerations\PhoneNumberKind.cs" />
+    <Compile Include="Framework\Enumerations\Theme.cs" />
+    <Compile Include="Exceptions\ApiResponseException.cs" />
+    <Compile Include="Models\Core\MergeGroup.cs" />
+    <Compile Include="Models\Core\MergeLeader.cs" />
+    <Compile Include="Models\Core\MergePage.cs" />
+    <Compile Include="Models\Elements\ButtonElement.cs" />
+    <Compile Include="Models\Elements\ImageElement.cs" />
+    <Compile Include="Models\Elements\LabelElement.cs" />
+    <Compile Include="Models\Elements\VideoElement.cs" />
+    <Compile Include="Models\Mediums\EmailAddressMedium.cs" />
+    <Compile Include="Models\Mediums\PhoneNumberMedium.cs" />
+    <Compile Include="Tools\CoordinatePair.cs" />
+    <Compile Include="Tools\DefaultLogReceiver.cs" />
+    <Compile Include="Tools\Extensions.cs" />
+    <Compile Include="Framework\Interfaces\IIdentifiable.cs" />
+    <Compile Include="Framework\Interfaces\Receivers\IActionInvocationReceiver.cs" />
+    <Compile Include="Framework\Interfaces\INamable.cs" />
+    <Compile Include="Framework\Interfaces\IThemeable.cs" />
+    <Compile Include="Models\Core\MergeEvent.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\StorageReference.cs" />
+    <Compile Include="Tools\Utilities.cs" />
+    <Compile Include="Tools\ValidationResult.cs" />
+    <Compile Include="Framework\Enumerations\ValidationResultType.cs" />
+    <Compile Include="Tools\VersionInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Firebase.Auth, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\FirebaseAuthentication.net.3.0.5\lib\netstandard1.1\Firebase.Auth.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.Database, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\FirebaseDatabase.net.2.0.2\lib\portable45-net45+win8+wpa81\Firebase.Database.dll</HintPath>
+    </Reference>
+    <Reference Include="Lorem.NET, Version=2.1.55.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Lorem.Universal.NET.2.1.55\lib\netstandard1.0\Lorem.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.10.0.2\lib\portable-net45+win8+wpa81+wp8\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Rx-Core.2.2.5\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Rx-Interfaces.2.2.5\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Rx-Linq.2.2.5\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Rx-PlatformServices.2.2.5\lib\portable-net45+winrt45+wp8+wpa81\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\netstandard1.1\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Cryptography, Version=2.0.5782.12232, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\XLabs.Cryptography.2.0.5782\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\XLabs.Cryptography.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

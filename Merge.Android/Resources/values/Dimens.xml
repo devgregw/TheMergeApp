@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<resources>
+  <!-- Default screen margins, per the Android Design guidelines. -->
+  <dimen name="activity_horizontal_margin">16dp</dimen>
+  <dimen name="activity_vertical_margin">16dp</dimen>
+  <dimen name="firstRunDialogPadding">24dp</dimen>
+  <dimen name="half_margin">8dp</dimen>
+  <dimen name="loaderProgSize">60dp</dimen>
+  <dimen name="loaderMessageSize">18dp</dimen>
+  <dimen name="viewBaseHeight">114dp</dimen>
+  <dimen name="announcementViewBaseHeight">82dp</dimen>
+  <dimen name="GradientHeight">25dp</dimen>
+  <dimen name="OneDip">1dp</dimen>
+  <dimen name="TwoHundredDp">200dp</dimen>
+  <dimen name="DefaultElevation">4dp</dimen>
+</resources>

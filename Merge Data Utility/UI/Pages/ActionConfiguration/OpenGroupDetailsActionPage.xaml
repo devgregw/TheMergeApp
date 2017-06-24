@@ -1,0 +1,19 @@
+﻿<base:ActionConfigurationPage x:Class="Merge_Data_Utility.UI.Pages.ActionConfiguration.OpenGroupDetailsActionPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Merge_Data_Utility.UI.Pages.ActionConfiguration"
+      xmlns:base="clr-namespace:Merge_Data_Utility.UI.Pages.Base"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+      Title="OpenGroupDetailsActionPage">
+
+    <StackPanel Background="White">
+        <TextBlock>Group</TextBlock>
+        <StackPanel Orientation="Horizontal">
+            <TextBox x:Name="groupIdBox" Width="100" IsReadOnly="True" />
+            <Button Margin="5,0,0,0" Click="ChooseGroup">Choose</Button>
+        </StackPanel>
+    </StackPanel>
+</base:ActionConfigurationPage>

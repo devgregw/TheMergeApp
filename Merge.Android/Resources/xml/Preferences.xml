@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory android:title="Filters">
+    <MultiSelectListPreference android:key="gradeLevels" android:dialogTitle="Grade Levels"
+                               android:title="Grade Levels"
+                               android:summary="Specify the grade level(s) to filter events and announcements by.  If you choose none of the options, no filtering by grade level is done."
+                               android:entries="@array/gradeLevels_entries"
+                               android:entryValues="@array/gradeLevels_values" />
+    <MultiSelectListPreference android:key="genders" android:dialogTitle="Genders" android:title="Genders"
+                               android:summary="Specify the gender(s) to filter events and announcements by.  If you choose none of the options, no filtering by gender is done."
+                               android:entries="@array/genders_entries" android:entryValues="@array/genders_values" />
+  </PreferenceCategory>
+  <PreferenceCategory android:title="Extras">
+    <CheckBoxPreference android:key="isLeader" android:title="Enable leader-only features"
+                        android:summary="Leaders have special access to certain features.  Turn this on only if you are a leader and have been provided with a username and password."
+                        android:defaultValue="false" />
+    <CheckBoxPreference android:key="caching" android:title="Allow data caching"
+                        android:summary="When this is on, data consumption may be slightly lowered."
+                        android:defaultValue="true" />
+    <CheckBoxPreference android:key="logging" android:title="Enable logging"
+                        android:summary="While this is on, Merge will record usage events, including crashes.  After modifying this setting, restart the Merge app to apply changes."
+                        android:defaultValue="false" />
+  </PreferenceCategory>
+  <PreferenceCategory android:key="secret" android:title="Secret">
+    <CheckBoxPreference android:key="firstRun" android:title="First run"
+                        android:defaultValue="true" />
+    <EditTextPreference android:key="token" android:title="Token" android:defaultValue=""/>
+    <EditTextPreference android:key="tokenExpiration" android:title="Token expiration" android:defaultValue=""/>
+    <EditTextPreference android:key="leaderUsername" android:title="Leader username" android:defaultValue=""/>
+    <EditTextPreference android:key="leaderPassword" android:title="Leader password" android:defaultValue=""/>
+    <EditTextPreference android:key="leaderAuthenticationState" android:title="Authentication state" android:defaultValue="-1"/>
+    <EditTextPreference android:key="dismissedTips" android:title="Dismissed tips" android:defaultValue=""/>
+    <EditTextPreference android:key="tags" android:title="Tags" android:defaultValue=""/>
+  </PreferenceCategory>
+</PreferenceScreen>

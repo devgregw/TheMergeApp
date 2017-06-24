@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="Merge_Data_Utility.UI.Controls.EditorFields.ModelBaseFieldCollectionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Merge_Data_Utility.UI.Controls.EditorFields"
+             mc:Ignorable="d"
+             d:DesignHeight="2000" d:DesignWidth="500">
+    <StackPanel Background="White">
+        <local:FieldHeader Title="ID" Description="This is a unique identifier for this ${type}." />
+        <local:IdField x:Name="idField" />
+        <Separator Margin="10"/>
+        <local:FieldHeader Title="Title"
+                           Description="Try to keep the title short.  You can give more detail in 'Short Description' and 'Description'." />
+        <TextBox x:Name="titleBox" Width="250" HorizontalAlignment="Left" MaxLines="1" SpellCheck.IsEnabled="True" />
+        <local:FieldHeader Title="Short Description"
+                           Description="Briefly summarize the ${type}." />
+        <TextBox x:Name="sdescBox" Width="350" HorizontalAlignment="Left" SpellCheck.IsEnabled="True" MaxLines="4" />
+        <local:FieldHeader x:Name="descHeader" Title="Description"
+                           Description="Describe this ${type} as much as you want." />
+        <TextBox x:Name="descBox" Width="450" HorizontalAlignment="Left" SpellCheck.IsEnabled="True" Height="115"
+                 TextWrapping="Wrap" />
+        <Separator Margin="10"/>
+        <local:FieldHeader Title="Grades"
+                           Description="Choose the grade levels that this ${type} is intended for. Users outside of the target audience will not see this ${type} in the app (if filters are enabled)." />
+        <local:GradesSelector x:Name="gradesField" />
+        <local:FieldHeader Title="Genders"
+                           Description="Choose the genders that this ${type} is intended for. Users outside of the target audience will not see this ${type} in the app (if filters are enabled)." />
+        <local:GenderSelector x:Name="gendersField" />
+        <Separator Margin="10"/>
+        <local:FieldHeader Title="Cover Image"
+                           Description="For the best look, the image should be at least 1920x1080 pixels (a 16:9 ratio), although the app can work with abnormally-sized images.  PNG format is also required.  For best performance, avoid resolutions >= 3840x2160 pixels and files >= 5 MB in size.  Also, avoid transparency because it may cause the image to not display as intended." />
+        <local:ImageUploader x:Name="coverField" />
+        <Separator Margin="10"/>
+        <local:FieldHeader Title="Color"
+                           Description="For the best appearance, choose a color that fits with the cover image. Various elements in the app will be colorized according to this value. If you want, some suggested colors can be automatically extracted from the cover image." />
+        <local:ColorPickerField x:Name="colorField" />
+        <local:FieldHeader Title="Theme"
+                           Description="This sets the color of text that appears on colored surfaces. For best results, choose 'auto'." />
+        <local:ThemePickerField x:Name="themeField" />
+        <local:FieldHeader Title="Theme Preview" Description="Preview the 'Color' and 'Theme' settings here." />
+        <local:ThemePreviewField x:Name="previewField" />
+    </StackPanel>
+</UserControl>

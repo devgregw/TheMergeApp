@@ -1,0 +1,43 @@
+﻿<base:EditorPage x:Class="Merge_Data_Utility.UI.Pages.Editors.GroupEditorPage"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:local="clr-namespace:Merge_Data_Utility.UI.Pages.Editors"
+                 xmlns:base="clr-namespace:Merge_Data_Utility.UI.Pages.Base"
+                 xmlns:editorFields="clr-namespace:Merge_Data_Utility.UI.Controls.EditorFields"
+                 xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                 mc:Ignorable="d"
+                 d:DesignHeight="2000" d:DesignWidth="500"
+                 Title="Group Editor">
+
+    <ScrollViewer Background="White">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5">
+            <editorFields:FieldHeader Title="ID" Description="This is a unique identifier for this object." />
+            <editorFields:IdField x:Name="idField" />
+            <Separator Margin="10"/>
+            <editorFields:FieldHeader Title="Name" Description="Give this group a name." />
+            <TextBox x:Name="nameBox" SpellCheck.IsEnabled="true" Width="250" HorizontalAlignment="Left" />
+            <editorFields:FieldHeader Title="Hosts" Description="Specify the people or group that host this group." />
+            <TextBox x:Name="hostsBox" HorizontalAlignment="Left" Width="300" />
+            <editorFields:FieldHeader Title="Leaders"
+                                      Description="Make a list of the people who lead this Merge group." />
+            <editorFields:ListField x:Name="leadersList" />
+            <editorFields:FieldHeader Title="Address" Description="Specify the location of the host home." />
+            <TextBox x:Name="addressBox" Width="250" HorizontalAlignment="Left" InputScope="PostalAddress"
+                     SpellCheck.IsEnabled="True" MaxLines="1" />
+            <Separator Margin="10"/>
+            <editorFields:FieldHeader Title="Cover Image"
+                                      Description="For the best look, the image should be at least 1920x1080 pixels (a 16:9 ratio), although the app can work with abnormally-sized images.  PNG format is also required.  For best performance, avoid resolutions >= 3840x2160 pixels and files >= 5 MB in size.  Also, avoid transparency because it may cause the image to not display as intended." />
+            <editorFields:ImageUploader x:Name="coverField" />
+            <Separator Margin="10"/>
+            <editorFields:FieldHeader Title="Contact Mediums"
+                                      Description="Provide a list of the ways a leader or host of this group can be contacted." />
+            <editorFields:ListField x:Name="mediumsList" />
+            <Separator Margin="10"/>
+            <editorFields:FieldHeader Title="All done!"
+                                      Description="Review the information above and click 'Publish' in the upper-left corner to publish this object.  Alternatively, click 'Save as Draft' to save it for later."
+                                      Margin="0,0,0,20" />
+        </StackPanel>
+    </ScrollViewer>
+</base:EditorPage>

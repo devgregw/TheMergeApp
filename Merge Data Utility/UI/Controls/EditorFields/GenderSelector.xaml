@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="Merge_Data_Utility.UI.Controls.EditorFields.GenderSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Merge_Data_Utility.UI.Controls.EditorFields"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             d:DesignHeight="40" d:DesignWidth="300">
+    <StackPanel Orientation="Horizontal" Height="40">
+        <xctk:CheckListBox x:Name="gendersBox" HorizontalAlignment="Left">
+            <TextBlock TextWrapping="Wrap" Text="Male" />
+            <TextBlock TextWrapping="Wrap" Text="Female" />
+        </xctk:CheckListBox>
+        <StackPanel Orientation="Vertical" Margin="5,0,0,0">
+            <Button x:Name="gendersSelectAll" Content="Select All" Click="gendersSelectAll_Click" />
+            <Button x:Name="gendersSelectNone" Content="Select None" Click="gendersSelectNone_Click" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

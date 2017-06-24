@@ -1,0 +1,10 @@
+﻿<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+      xmlns:foo="http://schemas.android.com/apk/res-auto" tools:context="com.devgregw.Merge.MainActivity">
+  <item android:id="@+id/action_refresh" android:orderInCategory="96" foo:showAsAction="always"
+        android:icon="@drawable/Refresh" android:title="Refresh" />
+  <!--<item android:id="@+id/action_leaders" android:orderInCategory="97" android:showAsAction="never" android:title="Leaders" />
+    <item android:id="@+id/action_feedback" android:orderInCategory="98" android:showAsAction="never" android:title="Send Feedback" />
+    <item android:id="@+id/action_about" android:orderInCategory="99" android:showAsAction="never" android:title="About Merge"/>
+  <item android:id="@+id/action_log" android:orderInCategory="99" android:showAsAction="never" android:title="Send Logs"/>
+    <item android:id="@+id/action_settings" android:orderInCategory="100" android:showAsAction="never" android:title="@string/action_settings" />-->
+</menu>

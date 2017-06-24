@@ -1,0 +1,46 @@
+﻿<base:EditorPage x:Class="Merge_Data_Utility.UI.Pages.Editors.TipEditorPage"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:local="clr-namespace:Merge_Data_Utility.UI.Pages.Editors"
+                 xmlns:base="clr-namespace:Merge_Data_Utility.UI.Pages.Base"
+                 xmlns:editorFields="clr-namespace:Merge_Data_Utility.UI.Controls.EditorFields"
+                 xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                 mc:Ignorable="d"
+                 d:DesignHeight="2000" d:DesignWidth="500"
+                 Title="Tip Editor">
+    <ScrollViewer Background="White">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5">
+            <editorFields:FieldHeader Title="ID" Description="This is a unique identifier for this object." />
+            <editorFields:IdField x:Name="idField" />
+            <Separator Margin="10"/>
+            <editorFields:FieldHeader Title="Tab" Description="Specify the tab that this tip will appear on." />
+            <ComboBox x:Name="tab" HorizontalAlignment="Left" Width="150">
+                <ComboBoxItem Tag="Home">Home</ComboBoxItem>
+                <ComboBoxItem Tag="Events">Upcoming Events</ComboBoxItem>
+                <ComboBoxItem Tag="Groups">Merge Groups</ComboBoxItem>
+            </ComboBox>
+            <editorFields:FieldHeader Title="Message" Description="Specify the message this tip will display." />
+            <TextBox x:Name="message" HorizontalAlignment="Left" Width="350" />
+            <Separator Margin="10"/>
+            <editorFields:FieldHeader Title="Action"
+                                      Description="Optionally, specify an action to be invoked when a user taps the tip." />
+            <editorFields:ActionPickerField x:Name="action" />
+            <editorFields:FieldHeader Title="Persistent"
+                                      Description="If this tip is marked as persistent, it cannot be dismissed by a user and will stay on-screen until it is deleted.  If not, the tip can be dismissed by a user." />
+            <CheckBox x:Name="persistent">Persistent</CheckBox>
+            <Separator Margin="10"/>
+            <editorFields:FieldHeader Title="Grades"
+                                      Description="Choose the grade levels that this tip is intended for. Users outside of the target audience will not see this tip in the app (if filters are enabled)." />
+            <editorFields:GradesSelector x:Name="gradesField" />
+            <editorFields:FieldHeader Title="Genders"
+                                      Description="Choose the genders that this tip is intended for. Users outside of the target audience will not see this tip in the app (if filters are enabled)." />
+            <editorFields:GenderSelector x:Name="gendersField" />
+            <Separator Margin="10"/>
+            <editorFields:FieldHeader Title="All done!"
+                                      Description="Review the information above and click 'Publish' in the upper-left corner to publish this object.  Alternatively, click 'Save as Draft' to save it for later."
+                                      Margin="0,0,0,20" />
+        </StackPanel>
+    </ScrollViewer>
+</base:EditorPage>
