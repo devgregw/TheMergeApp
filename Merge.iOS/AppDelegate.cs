@@ -1,4 +1,5 @@
 ﻿using Foundation;
+using Merge.iOS.UI.ViewControllers;
 using UIKit;
 
 namespace Merge.iOS {
@@ -19,7 +20,7 @@ namespace Merge.iOS {
 
             // If you have defined a root view controller, set it here:
             // Window.RootViewController = myViewController;
-
+            Window.RootViewController = new MainNavigationController();
             // make the window visible
             Window.MakeKeyAndVisible();
 

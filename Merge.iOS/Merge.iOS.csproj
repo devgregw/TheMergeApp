@@ -86,11 +86,17 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="UI\ViewControllers\MainNavigationController.cs" />
+    <Compile Include="UI\ViewControllers\MainNavigationController.designer.cs">
+      <DependentUpon>MainNavigationController.cs</DependentUpon>
+    </Compile>
     <None Include="GettingStarted.Xamarin" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
     <Content Include="Entitlements.plist" />
+    <InterfaceDefinition Include="UI\Storyboards\MainStoryboard.storyboard" />
+    <InterfaceDefinition Include="UI\ViewControllers\MainNavigationController.xib" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -98,5 +104,12 @@
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MergeApi\MergeApi.csproj">
+      <Project>{cd631983-99e5-4b2a-adf5-2b85e8f94249}</Project>
+      <Name>MergeApi</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
