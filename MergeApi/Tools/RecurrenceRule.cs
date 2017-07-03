@@ -22,13 +22,13 @@ namespace MergeApi.Tools {
         [JsonProperty("count")]
         public int? Count { get; set; }
 
-        public override string ToString() {
-            var main = $"Repeats every{(Interval == 1 ? "" : Interval == 2 ? " other" : $" {Interval}")} {Frequency.ToString().ToLower().Replace("ly", "")}{(Interval <= 2 ? "" : "s")}";
-            if (End.HasValue)
+        public static string GetRuleDescription(DateTime initial, RecurrenceRule rule) {
+            var main = $"Repeats every{(rule.Interval == 1 ? "" : rule.Interval == 2 ? " other" : $" {rule.Interval}")} {rule.Frequency.ToString().ToLower().Replace("ly", "")}{(rule.Interval <= 2 ? "" : "s")}";
+            if (rule.End.HasValue)
                 main +=
-                    $" until {End.Value.ToString("D", DateTimeFormatInfo.CurrentInfo)} {End.Value.ToString("h:mm tt", CultureInfo.CurrentUICulture)}";
-            else if (Count.HasValue) {
-                var remaining = GetAllOccurrences(DateTime.Today, this).Count;
+                    $" until {rule.End.Value.ToString("D", DateTimeFormatInfo.CurrentInfo)} {rule.End.Value.ToString("h:mm tt", CultureInfo.CurrentUICulture)}";
+            else if (rule.Count.HasValue) {
+                var remaining = GetAllOccurrences(initial, rule).Count(dt => dt >= DateTime.Now);
                 if (remaining > 0)
                     main += $" {remaining} more time{(remaining == 1 ? "" : "s")}";
             }

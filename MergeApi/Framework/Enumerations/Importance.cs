@@ -31,14 +31,13 @@
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+// ReSharper disable UnusedMember.Global
 
 #endregion
 
 namespace MergeApi.Framework.Enumerations {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum Importance {
-        Normal,
-        Medium,
-        High
+        High = 0, Medium = 1, Normal = 2
     }
 }
