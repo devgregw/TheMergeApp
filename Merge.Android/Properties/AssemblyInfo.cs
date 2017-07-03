@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge.Android:  AssemblyInfo.cs (in Solution Merge.Android)
-// Created by Greg Whatley on 05/22/2017 at 9:50 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:37 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -30,7 +30,7 @@
 #region USINGS
 
 using System.Reflection;
-using Merge.Android.Classes.Helpers;
+using Merge.Android.Helpers;
 
 #endregion
 

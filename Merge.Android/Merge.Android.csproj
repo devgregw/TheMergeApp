@@ -69,8 +69,9 @@
     <Reference Include="Lorem.NET, Version=2.1.55.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Lorem.Universal.NET.2.1.55\lib\netstandard1.0\Lorem.NET.dll</HintPath>
     </Reference>
-    <Reference Include="MergeApi">
-      <HintPath>..\..\Extras\MergeApi\bin\Release\MergeApi.dll</HintPath>
+    <Reference Include="MergeApi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MergeApi\bin\Release\MergeApi.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Android" />
@@ -169,45 +170,47 @@
     <Reference Include="Xamarin.GooglePlayServices.Tasks, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Xamarin.GooglePlayServices.Tasks.42.1021.1\lib\MonoAndroid70\Xamarin.GooglePlayServices.Tasks.dll</HintPath>
     </Reference>
+    <Reference Include="XLabs.Cryptography, Version=2.0.5782.12232, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\XLabs.Cryptography.2.0.5782\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Cryptography.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutActivity.cs" />
-    <Compile Include="AttendanceManagerActivity.cs" />
-    <Compile Include="Classes\Controls\BasicCard.cs" />
-    <Compile Include="Classes\Controls\DataCard.cs" />
-    <Compile Include="Classes\Controls\IconView.cs" />
-    <Compile Include="Classes\Controls\LoadingCard.cs" />
-    <Compile Include="Classes\Controls\TipCard.cs" />
-    <Compile Include="Classes\Helpers\AlertDialogColorOverride.cs" />
-    <Compile Include="Classes\Helpers\ApiAccessor.cs" />
-    <Compile Include="Classes\Helpers\Extensions.cs" />
-    <Compile Include="Classes\Helpers\ListenerWrappers.cs" />
-    <Compile Include="Classes\Helpers\LogHelper.cs" />
-    <Compile Include="Classes\Helpers\ObjectWrapper.cs" />
-    <Compile Include="Classes\Helpers\PreferenceHelper.cs" />
-    <Compile Include="Classes\Helpers\SdkChecker.cs" />
-    <Compile Include="Classes\Helpers\SessionRepo.cs" />
-    <Compile Include="Classes\Helpers\VersionConsts.cs" />
-    <Compile Include="Classes\Helpers\ViewApplier.cs" />
-    <Compile Include="DataDetailActivity.cs" />
-    <Compile Include="GroupMapActivity.cs" />
-    <Compile Include="LeaderResourcesActivity.cs" />
-    <Compile Include="MainActivity.cs" />
-    <Compile Include="MergeActionInvocationReceiver.cs" />
+    <Compile Include="UI\Activities\AboutActivity.cs" />
+    <Compile Include="UI\Activities\LeadersOnly\AttendanceGroupEditorActivity.cs" />
+    <Compile Include="UI\Activities\LeadersOnly\AttendanceManagerActivity.cs" />
+    <Compile Include="UI\Fragments\AttendanceListFragment.cs" />
+    <Compile Include="UI\Views\BasicCard.cs" />
+    <Compile Include="UI\Views\DataCard.cs" />
+    <Compile Include="UI\Views\IconView.cs" />
+    <Compile Include="UI\Views\LoadingCard.cs" />
+    <Compile Include="UI\Views\TipCard.cs" />
+    <Compile Include="Helpers\AlertDialogColorOverride.cs" />
+    <Compile Include="Helpers\Utilities.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Helpers\GenericFileProvider.cs" />
+    <Compile Include="Helpers\LogHelper.cs" />
+    <Compile Include="Helpers\ObjectWrapper.cs" />
+    <Compile Include="Helpers\PreferenceHelper.cs" />
+    <Compile Include="Helpers\SdkChecker.cs" />
+    <Compile Include="Helpers\VersionConsts.cs" />
+    <Compile Include="Helpers\ViewApplier.cs" />
+    <Compile Include="UI\Activities\DataDetailActivity.cs" />
+    <Compile Include="UI\Activities\GroupMapActivity.cs" />
+    <Compile Include="UI\Activities\LeadersOnly\LeaderResourcesActivity.cs" />
+    <Compile Include="UI\Activities\MainActivity.cs" />
+    <Compile Include="Receivers\MergeActionInvocationReceiver.cs" />
     <Compile Include="MergeApplication.cs" />
-    <Compile Include="MergeElementCreationReceiver.cs" />
-    <Compile Include="MergeInstanceIdService.cs" />
-    <Compile Include="MergeNotificationService.cs" />
-    <Compile Include="PageActivity.cs" />
-    <Compile Include="RecordEditorActivity.cs" />
+    <Compile Include="Receivers\MergeElementCreationReceiver.cs" />
+    <Compile Include="Services\MergeInstanceIdService.cs" />
+    <Compile Include="Services\MergeNotificationService.cs" />
+    <Compile Include="UI\Activities\LeadersOnly\AttendanceRecordEditorActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingsActivity.cs" />
-    <Compile Include="WelcomeActivity.cs" />
+    <Compile Include="UI\Activities\SettingsActivity.cs" />
+    <Compile Include="UI\Activities\WelcomeActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="google-services.json" />
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
@@ -250,13 +253,13 @@
     <AndroidResource Include="Resources\layout\TipCard.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\RemoteImageView.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\AttendanceManagerActivity.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\RecordEditorActivity.axml">
+    <AndroidResource Include="Resources\layout\AttendanceRecordEditorActivity.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\AttendanceGroupEditorActivity.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -823,6 +826,10 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\TipHasAction.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\xml\provider_paths.xml" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

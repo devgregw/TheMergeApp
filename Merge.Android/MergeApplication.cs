@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge.Android:  MergeApplication.cs (in Solution Merge.Android)
-// Created by Greg Whatley on 05/22/2017 at 9:50 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:33 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -33,30 +33,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Android.App;
-using Android.Content;
-using Android.Graphics;
-using Android.OS;
-using Android.Preferences;
 using Android.Runtime;
-using Android.Widget;
-using Firebase;
+using Android.Util;
 using Firebase.Auth;
 using Firebase.Messaging;
-using Merge.Android.Classes.Helpers;
+using Merge.Android.Helpers;
+using Merge.Android.Receivers;
 using MergeApi.Client;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Framework.Interfaces.Receivers;
-using Android.Util;
 
 #endregion
 
 namespace Merge.Android {
-    [Application(Label = "Merge", AllowBackup = true, Icon = "@mipmap/ic_launcher", Theme = "@style/AppTheme", Logo = "@mipmap/ic_launcher", Debuggable = false)]
+    [Application(Label = "Merge", AllowBackup = true, Icon = "@mipmap/ic_launcher", Theme = "@style/AppTheme",
+        Logo = "@mipmap/ic_launcher", Debuggable = false)]
     /*[MetaData("com.google.android.gms.version", Value = "@integer/google_play_services_version")]
     [MetaData("com.google.android.geo.API_KEY", Value = "AIzaSyCShFAZLYGX2iGpBoWRuP6q0QfAaqAg-sA")]
     [MetaData("com.google.firebase.messaging.default_notification_icon", Resource = "@drawable/ic_notification")]*/
     public class MergeApplication : Application {
         public MergeApplication(IntPtr handle, JniHandleOwnership transfer) : base(handle, transfer) { }
+        internal static FirebaseAuthLink AuthLink { get; set; }
 
         public static void UpdateTopics() {
             var grades = PreferenceHelper.GradeLevels.Count > 0
@@ -65,7 +62,8 @@ namespace Merge.Android {
             var genders = PreferenceHelper.Genders.Count > 0
                 ? new List<Gender>(PreferenceHelper.Genders)
                 : EnumConsts.AllGenders;
-            var newTags = grades.Select(grade => $"grade_{grade.ToString().ToLower()}").Concat(genders.Select(gender => $"gender_{gender.ToString().ToLower()}")).ToList();
+            var newTags = grades.Select(grade => $"grade_{grade.ToString().ToLower()}")
+                .Concat(genders.Select(gender => $"gender_{gender.ToString().ToLower()}")).ToList();
             var oldTags = PreferenceHelper.Tags.ToList();
             if (PreferenceHelper.IsValidLeader)
                 newTags.Add("verified_leader");
@@ -86,7 +84,6 @@ namespace Merge.Android {
                 Log.Error("MergeApplication", "FirebaseApp not intialized!!");
             }
         }
-        internal static FirebaseAuthLink AuthLink { get; set; }
 
         public override void OnCreate() {
             base.OnCreate();
@@ -94,14 +91,16 @@ namespace Merge.Android {
             PreferenceHelper.Initialize(this);
             LogHelper.Initialize(this);
             MergeDatabase.Initialize(async () => {
-                    if (!string.IsNullOrWhiteSpace(PreferenceHelper.Token) && PreferenceHelper.TokenExpiration > DateTime.Now && PreferenceHelper.AuthenticationState !=
+                    if (!string.IsNullOrWhiteSpace(PreferenceHelper.Token) &&
+                        PreferenceHelper.TokenExpiration > DateTime.Now && PreferenceHelper.AuthenticationState !=
                         PreferenceHelper.LeaderAuthenticationState.Failed)
                         return PreferenceHelper.Token;
                     if (PreferenceHelper.AuthenticationState == PreferenceHelper.LeaderAuthenticationState.NoAttempt) {
                         AuthLink = await MergeDatabase.AuthenticateAsync();
                         PreferenceHelper.AuthenticationState =
                             PreferenceHelper.LeaderAuthenticationState.NoAttempt;
-                    } else if (PreferenceHelper.AuthenticationState == PreferenceHelper.LeaderAuthenticationState.Successful) {
+                    } else if (PreferenceHelper.AuthenticationState ==
+                               PreferenceHelper.LeaderAuthenticationState.Successful) {
                         try {
                             AuthLink = await MergeDatabase.AuthenticateAsync(PreferenceHelper.LeaderUsername,
                                 PreferenceHelper.LeaderPassword);
@@ -119,7 +118,7 @@ namespace Merge.Android {
                         return AuthLink.FirebaseToken;
                     }
                     return "";
-                }, new MergeActionInvocationReceiver(), new MergeElementCreationReceiver(this), 
+                }, new MergeActionInvocationReceiver(), new MergeElementCreationReceiver(this),
                 new MergeLogger());
         }
 

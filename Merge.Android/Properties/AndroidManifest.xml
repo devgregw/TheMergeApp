@@ -10,6 +10,8 @@
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.READ_CALENDAR"/>
+  <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
   <permission android:name="com.devgregw.merge.permission.C2D_MESSAGE" android:protectionLevel="signature" />
   <uses-permission android:name="com.devgregw.merge.permission.C2D_MESSAGE" />
   <uses-feature android:name="android.hardware.telephony" android:required="false" />
@@ -18,7 +20,8 @@
                android:name="com.devgregw.merge.MergeApplication" android:debuggable="false">
     <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
     <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCShFAZLYGX2iGpBoWRuP6q0QfAaqAg-sA" />
-    <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/ic_notification"/>
+    <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+               android:resource="@drawable/ic_notification" />
     <!--<receiver android:name="com.onesignal.GcmBroadcastReceiver"
               android:permission="com.google.android.c2dm.permission.SEND">
       <intent-filter>
@@ -32,7 +35,7 @@
     <receiver
       android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
       android:exported="true"
-      android:permission="com.google.android.c2dm.permission.SEND" >
+      android:permission="com.google.android.c2dm.permission.SEND">
       <intent-filter>
         <action android:name="com.google.android.c2dm.intent.RECEIVE" />
         <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
