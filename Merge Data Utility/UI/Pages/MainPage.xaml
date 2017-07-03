@@ -153,7 +153,14 @@
                     <Button x:Name="attendanceManager" VerticalAlignment="Bottom" Click="attendanceManager_Click">Open Attendance Manager</Button>
                 </Grid>
             </GroupBox>
-            <GroupBox x:Name="notificationsBox" Grid.Row="1" Header="Notifications">
+            <GroupBox Grid.Row="1" Header="Tools">
+                <StackPanel>
+                    <Button Content="Action Code Viewer" Margin="0,0,0,5" Click="ActionCodeViewer_Click"/>
+                    <Button Content="File Browser" Margin="0,0,0,5" Click="FileBrowser_Click"/>
+                    <Button Content="Notification Composer" Margin="0,0,0,5" Click="NotificationComposer_Click"/>
+                </StackPanel>
+            </GroupBox>
+            <!--<GroupBox x:Name="notificationsBox" Grid.Row="1" Header="Notifications">
                 <Grid>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -169,7 +176,7 @@
                     <Button VerticalAlignment="Bottom" Margin="0,0,0,25" Click="notificationManager_Click">Open Notification Manager</Button>
                     <Button VerticalAlignment="Bottom" Click="notificationDashboard_Click">Open OneSignal Dashboard</Button>
                 </Grid>
-            </GroupBox>
+            </GroupBox>-->
             <GroupBox Grid.Row="2" Header="About">
                 <Grid>
                     <Grid VerticalAlignment="Top">

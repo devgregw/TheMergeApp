@@ -42,9 +42,6 @@ using Merge_Data_Utility.Tools;
 using Merge_Data_Utility.UI.Controls;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using OneSignal.CSharp.SDK;
-using OneSignal.CSharp.SDK.Resources.Notifications;
-using OneSignal.CSharp.SDK.Serializers;
 
 #endregion
 

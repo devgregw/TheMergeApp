@@ -48,7 +48,7 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
 
         public Theme SelectedTheme {
             get {
-                return themeBox.SelectedItem.Convert(o => ((ComboBoxItem) o).Content.ToString().ToEnum<Theme>(true));
+                return themeBox.SelectedItem.Manipulate(o => ((ComboBoxItem) o).Content.ToString().ToEnum<Theme>());
             }
             set => themeBox.SelectedIndex = value == Theme.Auto ? 0 : value == Theme.Light ? 1 : 2;
         }

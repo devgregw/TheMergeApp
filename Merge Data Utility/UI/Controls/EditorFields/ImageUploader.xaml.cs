@@ -37,7 +37,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using Firebase.Storage;
 using MergeApi.Client;
 using Merge_Data_Utility.Tools;
 using Merge_Data_Utility.UI.Windows.Choosers;

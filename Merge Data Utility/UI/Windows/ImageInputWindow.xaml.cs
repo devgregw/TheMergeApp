@@ -70,6 +70,11 @@ namespace Merge_Data_Utility.UI.Windows {
         }
 
         private async void Ok(object sender, RoutedEventArgs e) {
+            if (string.IsNullOrWhiteSpace(field.Value)) {
+                MessageBox.Show(this, "You must select an image or click Cancel.", "Error", MessageBoxButton.OK,
+                    MessageBoxImage.Error, MessageBoxResult.OK);
+                return;
+            }
             var reference = new LoaderReference(content);
             reference.StartLoading("Processing...");
             ImageUrl = await field.PerformChangesAsync(

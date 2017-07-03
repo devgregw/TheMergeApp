@@ -36,12 +36,10 @@ using System.Collections.Generic;
 
 namespace Merge_Data_Utility {
     public static class VersionInfo {
-        public const string VERSION_STRING = "2.0.0.0";
+        public const string VersionString = "2.0.0.1";
 
-        public static readonly Version Version = Version.Parse(VERSION_STRING);
+        public static readonly Version Version = Version.Parse(VersionString);
 
-        public static readonly int Update = 13;
-
-        public static readonly Dictionary<string, string> Licenses = new Dictionary<string, string>();
+        public static readonly int Update = 14;
     }
 }

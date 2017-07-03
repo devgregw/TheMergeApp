@@ -24,8 +24,6 @@ using Merge_Data_Utility.Tools;
 using Merge_Data_Utility.UI.Pages.Base;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using OneSignal.CSharp.SDK;
-using OneSignal.CSharp.SDK.Resources.Notifications;
 
 namespace Merge_Data_Utility.UI.Windows {
     /// <summary>

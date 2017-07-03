@@ -34,8 +34,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Merge_Data_Utility.UI.Windows;
-using OneSignal.CSharp.SDK;
-using OneSignal.CSharp.SDK.Resources.Notifications;
 
 #endregion
 
@@ -58,7 +56,7 @@ namespace Merge_Data_Utility.UI.Controls {
             failed.Text = $"Failed: {n.Failed} ({GetIntAverage(n.Failed, notifs)}%)";
             clicked.Text = $"Clicked: {n.Converted} ({GetIntAverage(n.Converted, notifs)}%)";
             id.Text = n.Id;
-            if (active) {
+            /*if (active) {
                 cancel.Click += async (s, e) => await Task.Run(() => {
                     var client = new OneSignalClient("MGNlYmMzYjAtZmMxMS00MjQxLTgxOGUtOGI4ZWU0YTQ0YzUz");
                     if (MessageBox.Show("Are you sure you want to cancel this notification?", "Confirm",
@@ -72,7 +70,7 @@ namespace Merge_Data_Utility.UI.Controls {
             } else {
                 cancel.Visibility = Visibility.Collapsed;
                 canceled.Visibility = n.Canceled ? Visibility.Visible : Visibility.Collapsed;
-            }
+            }*/
         }
 
         private int GetIntAverage(int top, int bottom) {

@@ -130,17 +130,13 @@ namespace Merge_Data_Utility.UI.Pages {
                 case 2:
                     _window.ContactMedium = PhoneNumberMedium.Create(nameBox.Text, phoneNumberBox.Text,
                         sms.IsChecked.GetValueOrDefault(false),
-                        phoneType.SelectedItem.Convert(
-                            o =>
-                                (PhoneNumberKind)
-                                Enum.Parse(typeof(PhoneNumberKind), ((ComboBoxItem) o).Content.ToString(), true)));
+                        phoneType.SelectedItem.Manipulate(
+                            o => ((ComboBoxItem)o).Content.ToString().ToEnum<PhoneNumberKind>()));
                     break;
                 case 3:
                     _window.ContactMedium = EmailAddressMedium.Create(nameBox.Text, emailBox.Text,
-                        emailType.SelectedItem.Convert(
-                            o =>
-                                (EmailAddressKind)
-                                Enum.Parse(typeof(EmailAddressKind), ((ComboBoxItem) o).Content.ToString(), true)));
+                        emailType.SelectedItem.Manipulate(
+                            o => ((ComboBoxItem)o).Content.ToString().ToEnum<EmailAddressKind>()));
                     break;
             }
             _window.Close();

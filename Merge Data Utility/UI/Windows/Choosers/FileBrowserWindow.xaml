@@ -1,0 +1,18 @@
+﻿<Window x:Class="Merge_Data_Utility.UI.Windows.Choosers.FileBrowserWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows.Choosers"
+        xmlns:c="clr-namespace:Merge_Data_Utility.UI.Controls.Other"
+        mc:Ignorable="d"
+        Icon="/Merge Data Utility;component/shadow-64.png" Title="File Browser" Height="500" Width="500" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid>
+        <Menu VerticalAlignment="Top">
+            <Button Click="Upload_Click">Upload</Button>
+        </Menu>
+        <c:ContentControl x:Name="cc" Margin="0,22,0,0">
+            <ListView x:Name="list" />
+        </c:ContentControl>
+    </Grid>
+</Window>

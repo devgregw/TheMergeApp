@@ -46,6 +46,7 @@ using Merge_Data_Utility.UI.Controls;
 using Merge_Data_Utility.UI.Pages.Base;
 using Merge_Data_Utility.UI.Pages.Editors;
 using Merge_Data_Utility.UI.Windows;
+using Merge_Data_Utility.UI.Windows.Choosers;
 using Newtonsoft.Json.Linq;
 using ValidationResult = MergeApi.Tools.ValidationResult;
 
@@ -192,7 +193,7 @@ namespace Merge_Data_Utility.UI.Pages {
         }
 
         public async void InitializeNotifications() {
-            var reference = new LoaderReference(notificationsBox);
+            /*var reference = new LoaderReference(notificationsBox);
             reference.StartLoading("Loading notification data...");
             using (var client = new WebClient()) {
                 client.Headers.Add(HttpRequestHeader.Authorization,
@@ -203,7 +204,7 @@ namespace Merge_Data_Utility.UI.Pages {
                             "https://onesignal.com/api/v1/apps/b52deecc-3f20-4904-a3f0-fd8e9aabb2b3"));
                 messageableUsers.Text = response.Value<int>("messageable_players").ToString();
             }
-            reference.StopLoading();
+            reference.StopLoading();*/
         }
 
         public void InitializeAboutAdmin() {
@@ -274,6 +275,14 @@ namespace Merge_Data_Utility.UI.Pages {
 
         private void ActionCodeViewer_Click(object sender, RoutedEventArgs e) {
             new ActionCodeViewerWindow().ShowDialog();
+        }
+
+        private void NotificationComposer_Click(object sender, RoutedEventArgs e) {
+            Process.Start("https://console.firebase.google.com/project/the-merge-app/notification/compose");
+        }
+
+        private void FileBrowser_Click(object sender, RoutedEventArgs e) {
+            new FileBrowserWindow().ShowDialog();
         }
     }
 }

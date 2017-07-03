@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml;
 using MergeApi.Framework.Abstractions;
 using Newtonsoft.Json;
 
@@ -25,7 +26,7 @@ namespace Merge_Data_Utility.UI.Windows {
             actionField.ActionSelected += (s, e) => {
                 var old = codeBox.Text;
                 try {
-                    codeBox.Text = actionField.SelectedAction == null ? "" : JsonConvert.SerializeObject(actionField.SelectedAction, Formatting.Indented);
+                    codeBox.Text = actionField.SelectedAction == null ? "" : JsonConvert.SerializeObject(actionField.SelectedAction, Newtonsoft.Json.Formatting.Indented);
                 } catch {
                     codeBox.Text = old;
                 }

@@ -94,10 +94,11 @@ namespace Merge_Data_Utility.UI.Pages.ActionConfiguration {
                         ? "No end date specified or it is earlier than the start date."
                         : ""
                 };
+                errors.AddRange(recurrenceField.GetValidationErrors());
                 errors.RemoveAll(string.IsNullOrWhiteSpace);
                 if (!errors.Any())
                     return AddToCalendarAction.FromEventInfo(titleBox.Text, locationBox.Text, startBox.Value.Value,
-                        endBox.Value.Value);
+                        endBox.Value.Value, recurrenceField.GetRule());
                 DisplayErrorMessage(errors);
                 return null;
             }

@@ -68,6 +68,7 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
                     : "");
             else
                 errors.Add("No end date selected.");
+            errors.AddRange(recurrenceField.GetValidationErrors());
             errors.Add(!priceBox.Value.HasValue ? "The price is invalid." : "");
             if (!string.IsNullOrWhiteSpace(urlBox.Text))
                 errors.Add(regCloseBox.Value.HasValue ? "" : "No registration closing date specified.");
@@ -81,6 +82,7 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
                 Address = addressBox.Text,
                 StartDate = startDateBox.Value,
                 EndDate = endDateBox.Value,
+                RecurrenceRule = recurrenceField.GetRule(),
                 Price = Convert.ToDouble(priceBox.Value.GetValueOrDefault(0)),
                 RegistrationUrl = urlBox.Text,
                 RegistrationClosingDate = string.IsNullOrWhiteSpace(urlBox.Text) ? null : regCloseBox.Value
@@ -132,6 +134,7 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
             addressBox.Text = src.Address;
             startDateBox.Value = src.StartDate;
             endDateBox.Value = src.EndDate;
+            recurrenceField.SetSource(src.RecurrenceRule);
             priceBox.Value = Convert.ToDecimal(src.Price);
             urlBox.Text = src.RegistrationUrl;
             regCloseBox.Value = src.RegistrationClosingDate;

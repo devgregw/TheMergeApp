@@ -34,6 +34,8 @@
             <fields:FieldHeader Title="End Date" Description="Choose the date and time when the event will end." />
             <xctk:DateTimePicker x:Name="endDateBox" Width="300" HorizontalAlignment="Left" Format="Custom"
                                  FormatString="dddd, d MMMM, yyyy h:mm tt" />
+            <fields:FieldHeader Title="Recurrence" Description="Optionally, specify a recurrence rule so that this event will repeat."></fields:FieldHeader>
+            <fields:RecurrenceField x:Name="recurrenceField"/>
             <Separator Margin="10"/>
             <fields:FieldHeader Title="Price"
                                 Description="Specify the cost of the event.  Set it to 0 if the event is free." />

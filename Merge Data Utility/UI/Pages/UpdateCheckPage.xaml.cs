@@ -35,6 +35,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Cache;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Linq;
 
@@ -48,11 +49,20 @@ namespace Merge_Data_Utility.UI.Pages {
         public UpdateCheckPage(int tab = 0, bool skip = false) {
             InitializeComponent();
             Loaded += async (s, e) => {
-                var info = await CheckForUpdate();
-                if (info.IsAvailable)
-                    NavigationService.Navigate(new UpdatePromptPage(info, tab, skip));
-                else
-                    NavigationService.Navigate(skip ? (Page)new MainPage(tab) : new AuthenticationPage());
+                ConsoleVersion info = null;
+                try {
+                    info = await CheckForUpdate();
+                } catch (Exception ex) {
+                    MessageBox.Show(
+                        $"An error occurred while checking for updates.  You may continue to use the Merge Data Utility.\n{ex.Message} ({ex.GetType().FullName})",
+                        "Check for Updates", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                    info = null;
+                } finally {
+                    if (info != null && info.IsAvailable)
+                        NavigationService.Navigate(new UpdatePromptPage(info, tab, skip));
+                    else
+                        NavigationService.Navigate(skip ? (Page) new MainPage(tab) : new AuthenticationPage());
+                }
             };
         }
 
