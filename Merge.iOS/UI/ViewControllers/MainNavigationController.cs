@@ -4,7 +4,8 @@ using UIKit;
 
 namespace Merge.iOS.UI.ViewControllers {
     public partial class MainNavigationController : UINavigationController {
-        public MainNavigationController() : base("MainNavigationController", null) {
+        public MainNavigationController(IntPtr ptr) : base(ptr) {
+            
         }
 
         public override void DidReceiveMemoryWarning() {

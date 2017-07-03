@@ -17,10 +17,13 @@ namespace Merge.iOS {
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions) {
             // create a new window instance based on the screen size
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
-
+            UINavigationBar.Appearance.BarTintColor = UIColor.Yellow;
+            UIBarButtonItem.Appearance.TintColor = UIColor.Black;
+            UITabBar.Appearance.BarTintColor = UIColor.Yellow;
             // If you have defined a root view controller, set it here:
             // Window.RootViewController = myViewController;
-            Window.RootViewController = new MainNavigationController();
+            Window.RootViewController = UIStoryboard.FromName("MainStoryboard", null)
+                .InstantiateInitialViewController();
             // make the window visible
             Window.MakeKeyAndVisible();
 

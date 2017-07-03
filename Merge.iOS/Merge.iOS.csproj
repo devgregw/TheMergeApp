@@ -96,7 +96,6 @@
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
     <Content Include="Entitlements.plist" />
     <InterfaceDefinition Include="UI\Storyboards\MainStoryboard.storyboard" />
-    <InterfaceDefinition Include="UI\ViewControllers\MainNavigationController.xib" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
