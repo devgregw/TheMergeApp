@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MergeApi.Tools {
     public sealed class StorageReference {
-        public string Url => $"https://api.mergeonpoint.com/uploads/{Name}";
+        public string Url => $"https://merge.devgregw.com/content/{Name}";
 
         public string Name { get; private set; }
 

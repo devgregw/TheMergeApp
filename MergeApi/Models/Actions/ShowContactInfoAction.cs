@@ -54,7 +54,7 @@ namespace MergeApi.Models.Actions {
         public string Name2 { get; set; }
 
         [JsonProperty("contactMediums")]
-        [JsonConverter(typeof(ClassableListJsonConverter<ElementBase>))]
+        [JsonConverter(typeof(ClassableListJsonConverter<MediumBase>))]
         public List<MediumBase> ContactMediums2 { get; set; }
 
         public static ShowContactInfoAction FromGroupId(string groupId) {

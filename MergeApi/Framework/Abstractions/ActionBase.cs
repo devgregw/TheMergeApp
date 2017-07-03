@@ -31,6 +31,7 @@
 
 using System;
 using System.Threading.Tasks;
+using MergeApi.Converters;
 using MergeApi.Exceptions;
 using MergeApi.Framework.Interfaces;
 using MergeApi.Tools;
@@ -70,5 +71,14 @@ namespace MergeApi.Framework.Abstractions {
         public abstract string ToFriendlyString();
 
         public abstract void Invoke();
+
+        private class ActionWrapper {
+            [JsonProperty("code")] [JsonConverter(typeof(ClassableJsonConverter))] private ActionBase _action;
+
+            public static implicit operator ActionBase(ActionWrapper w) => w._action;
+        }
+
+        public static ActionBase FromJson(string json) => JsonConvert.DeserializeObject<ActionWrapper>(
+            @"{""code"":" + json + "}");
     }
 }

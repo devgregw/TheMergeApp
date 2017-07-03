@@ -46,6 +46,9 @@ namespace MergeApi.Models.Core {
         [JsonProperty("endDate")]
         public DateTime? EndDate { get; set; }
 
+        [JsonProperty("recurrenceRule")]
+        public RecurrenceRule RecurrenceRule { get; set; }
+
         [JsonProperty("location")]
         public string Location { get; set; }
 

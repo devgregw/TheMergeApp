@@ -60,6 +60,9 @@ namespace MergeApi.Models.Actions {
         [JsonProperty("end")]
         public DateTime EndDate2 { get; set; }
 
+        [JsonProperty("recurrenceRule")]
+        public RecurrenceRule RecurrenceRule2 { get; set; }
+
         public static AddToCalendarAction FromEventId(string eventId) {
             Utilities.AssertCondition(!string.IsNullOrWhiteSpace(eventId), eventId);
             return new AddToCalendarAction {
@@ -68,7 +71,7 @@ namespace MergeApi.Models.Actions {
             };
         }
 
-        public static AddToCalendarAction FromEventInfo(string title, string loc, DateTime start, DateTime end) {
+        public static AddToCalendarAction FromEventInfo(string title, string loc, DateTime start, DateTime end, RecurrenceRule rule) {
             Utilities.AssertCondition(s => !string.IsNullOrWhiteSpace(s), title, loc);
             Utilities.AssertCondition(end > start, end);
             return new AddToCalendarAction {
@@ -76,6 +79,7 @@ namespace MergeApi.Models.Actions {
                 Location2 = loc,
                 StartDate2 = start,
                 EndDate2 = end,
+                RecurrenceRule2 = rule,
                 ParamGroup = "2"
             };
         }

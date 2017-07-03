@@ -37,44 +37,17 @@ using System.Linq;
 
 namespace MergeApi.Tools {
     public static class Extensions {
-        /*public static ListResponse<T> Apply<T>(this ListResponse<T> r, Predicate<T> p) where T : IIdentifiable {
-            return new ListResponse<T>(r.Items.Where(i => p(i)), r.Type, r.Data, r.Errors.ToArray());
+        public static TResult Manipulate<T, TResult>(this T obj, Func<T, TResult> manipulator) {
+            Utilities.AssertCondition<object>(o => o != null, obj, manipulator);
+            return manipulator(obj);
         }
 
-        public static void Log(this object o, LogLevel level, string message) {
-            MergeDatabase.LogReceiver.Log(level, o.GetType().FullName, message);
-        }
-
-        public static void Log(this object o, LogLevel level, Exception e) {
-            MergeDatabase.LogReceiver.Log(level, o.GetType().FullName, e);
-        }*/
-
-        public static TResult Cast<TValue, TResult>(this TValue obj) where TResult : TValue {
-            return (TResult) obj;
-        }
-
-        public static DateTime ToDateTime(this long timestamp) {
-            return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(timestamp);
-        }
-
-        public static Dictionary<TKey, TValue> WithoutKeys<TKey, TValue>(this IDictionary<TKey, TValue> dict,
-            params TKey[] keys) {
-            Utilities.AssertCondition<object>(o => o != null, dict, keys);
-            return
-                new Dictionary<TKey, TValue>(dict.Where(p => !keys.Contains(p.Key))
-                    .ToDictionary(x => x.Key, x => x.Value));
-        }
-
-        public static TResult Convert<T, TResult>(this T obj, Func<T, TResult> converter) {
-            Utilities.AssertCondition<object>(o => o != null, obj, converter);
-            return converter(obj);
-        }
-
-        public static string ToMD5Hash(this string s) {
+        // ReSharper disable once InconsistentNaming
+        public static string MD5(this string s) {
             return Utilities.HashMD5(s);
         }
 
-        public static TEnum ToEnum<TEnum>(this string str, bool ignoreCase) {
+        public static TEnum ToEnum<TEnum>(this string str, bool ignoreCase = true) {
             return (TEnum) Enum.Parse(typeof(TEnum), str, ignoreCase);
         }
 

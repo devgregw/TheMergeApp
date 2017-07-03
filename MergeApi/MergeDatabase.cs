@@ -109,15 +109,20 @@ namespace MergeApi.Client {
         public static async Task<List<StorageReference>> ListStorageReferencesAsync() {
             LogReceiver.Log(LogLevel.Debug, "MergeDatabase.ListSotrageReferencesAsync",
                 "Retrieving storage references");
-            using (var client = new HttpClient())
-                return JObject.Parse(await client.GetStringAsync("https://api.mergeonpoint.com/uploads/manager.php")).Value<JArray>("files").Select(t => new StorageReference(t.ToString())).ToList();
+            using (var client = new HttpClient()) {
+                var r = await client.GetStringAsync("https://merge.devgregw.com/content/manager.php");
+                LogReceiver.Log(LogLevel.Debug, "MergeDatabase.ListStorageReferencesAsync", $"Response: {r}");
+                return JObject.Parse(r).Value<JArray>("files").Select(t => new StorageReference(t.ToString())).ToList();
+            }
         }
 
         public static async Task DeleteStorageReferenceAsync(string fileName) {
             LogReceiver.Log(LogLevel.Debug, "MergeDatabase.DeleteStorageReferenceAsync",
                 $"Deleting storage reference: {fileName}");
-            using (var client = new HttpClient())
-                await client.DeleteAsync($"https://api.mergeonpoint.com/uploads/manager.php?name={fileName}");
+            using (var client = new HttpClient()) {
+                var r = await client.GetStringAsync($"https://merge.devgregw.com/content/manager.php?name={fileName}&action=delete");
+                LogReceiver.Log(LogLevel.Debug, "MergeDatabase.DeleteStorageReferenceAsync", $"Response: {r}");
+            }
         }
 
         public static async Task DeleteAssetsAsync<T>(T data, string fkey) where T : IIdentifiable {
@@ -125,10 +130,10 @@ namespace MergeApi.Client {
                 $"Deleting the assets associated with {typeof(T).Name} {data.Id} ({fkey})");
             var names = new List<string>();
             if (data is ModelBase)
-                names.Add((data as ModelBase).CoverImage.Replace("https://api.mergeonpoint.com/uploads/", ""));
+                names.Add((data as ModelBase).CoverImage.Replace("https://merge.devgregw.com/content/", ""));
             if (data is MergePage)
                 names.AddRange((data as MergePage).Content.OfType<ImageElement>()
-                    .Select(e => e.Url.Replace("https://api.mergeonpoint.com/uploads/", "")));
+                    .Select(e => e.Url.Replace("https://merge.devgregw.com/content/", "")));
             LogReceiver.Log(LogLevel.Verbose, "MergeDatabase.DeleteAssetsAsync",
                 $"The following assets will be deleted from {typeof(T).Name} {data.Id} ({fkey}): {names.Format()}");
             foreach (var name in names)

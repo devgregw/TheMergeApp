@@ -29,12 +29,18 @@
 
 #region USINGS
 
+using System;
 using Newtonsoft.Json;
 
 #endregion
 
 namespace MergeApi.Tools {
     public sealed class CoordinatePair {
+        public static double GetDistanceBetween(CoordinatePair one, CoordinatePair two) {
+            return Math.Sqrt(Math.Pow(Convert.ToDouble(one.Latitude - two.Latitude), 2) +
+                             Math.Pow(Convert.ToDouble(one.Longitude - two.Longitude), 2));
+        }
+
         public CoordinatePair() { }
 
         public CoordinatePair(decimal lat, decimal lng) {
