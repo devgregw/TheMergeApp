@@ -30,6 +30,7 @@
 #region USINGS
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Android.App;
 using Android.Content.Res;
@@ -202,6 +203,7 @@ namespace Merge.Android.UI.Activities {
             _dataLayout.AddView(new IconView(this, Resource.Drawable.Targeting, Utilities.GetTargetingString(p)));
         }
 
+        [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private void SetupLayout(MergeEvent e) {
             _event = e;
             SetupMenu(Resource.Menu.EventMenu, !e.HasRegistration);
@@ -214,16 +216,14 @@ namespace Merge.Android.UI.Activities {
             string MakeDateString(DateTime start, DateTime end) {
                 return $"Starts on {start.ToLongDateString()} at {start.ToString("h:mm tt", CultureInfo.CurrentUICulture)} and ends on {end.ToLongDateString()} at {end.ToString("h:mm tt", CultureInfo.CurrentUICulture)}";
             }
-
-            // ReSharper disable once PossibleInvalidOperationException
+            
             var dateString = MakeDateString(e.StartDate.Value, e.EndDate.Value);
             if (e.RecurrenceRule != null) {
-                // ReSharper disable once PossibleInvalidOperationException
                 var begin = RecurrenceRule.GetNextOccurrence(e.StartDate.Value, e.RecurrenceRule);
                 if (begin.HasValue) {
                     var diff = e.EndDate.Value - e.StartDate.Value;
                     var end = begin.Value.AddMilliseconds(diff.TotalMilliseconds);
-                    dateString = MakeDateString(begin.Value, end) + $"\n{e.RecurrenceRule}";
+                    dateString = MakeDateString(begin.Value, end) + $"\n{RecurrenceRule.GetRuleDescription(e.StartDate.Value, e.RecurrenceRule)}";
                 }
             }
             _dataLayout.AddView(new IconView(this, Resource.Drawable.DateTime,
@@ -231,7 +231,6 @@ namespace Merge.Android.UI.Activities {
             _dataLayout.AddView(new IconView(this, Resource.Drawable.Location,
                 $"{e.Location}{(!string.IsNullOrWhiteSpace(e.Address) ? $" ({e.Address})" : "")}"));
             if (e.HasRegistration)
-                // ReSharper disable once PossibleInvalidOperationException
                 _dataLayout.AddView(new IconView(this, Resource.Drawable.RegistrationRequired,
                     $"Registration required (closes on {e.RegistrationClosingDate.Value.ToString("dddd, d MMMM yyyy \"at\" h:mm tt", CultureInfo.CurrentUICulture)})"));
             _dataLayout.AddView(new IconView(this, Resource.Drawable.Targeting, Utilities.GetTargetingString(e)));

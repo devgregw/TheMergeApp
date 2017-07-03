@@ -31,8 +31,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Android;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -42,8 +44,10 @@ using Android.Gms.Common.Apis;
 using Android.Gms.Location;
 using Android.Graphics;
 using Android.Graphics.Drawables;
+using Android.Locations;
 using Android.OS;
 using Android.Support.Design.Widget;
+using Android.Support.V4.Content;
 using Android.Support.V4.Widget;
 using Android.Views;
 using Android.Views.Animations;
@@ -75,7 +79,7 @@ namespace Merge.Android.UI.Activities {
     /// </summary>
     [Activity(Label = "Merge", MainLauncher = true, Icon = "@mipmap/ic_launcher",
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
-    [IntentFilter(new[] {"android.intent.action.MAIN"}, Categories = new[] {"android.intent.category.LAUNCHER"})]
+    [IntentFilter(new[] { "android.intent.action.MAIN" }, Categories = new[] { "android.intent.category.LAUNCHER" })]
     [Obsolete("This class inherits one or more obsoleted classes or interfaces")]
     // ReSharper disable once UnusedMember.Global
     public class MainActivity : appcompat7.AppCompatActivity, ViewSwitcher.IViewFactory {
@@ -234,7 +238,24 @@ namespace Merge.Android.UI.Activities {
                         e => new DataCard(this, e));
                     break;
                 case TabGroups:
-                    await HandleTab(() => _groups, v => _groups = v, TabGroups, g => CoordinatePair.GetDistanceBetween(LocationServices.FusedLocationApi.GetLastLocation(_playServices).Manipulate(l => new CoordinatePair(Convert.ToDecimal(l.Latitude), Convert.ToDecimal(l.Longitude))), g.Coordinates),
+                    await HandleTab(() => _groups, v => _groups = v, TabGroups, g => {
+                            Location location = null;
+                            if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) ==
+                                Permission.Granted || ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessCoarseLocation) ==
+                                Permission.Granted)
+                                location = LocationServices.FusedLocationApi.GetLocationAvailability(_playServices)
+                                    .IsLocationAvailable
+                                    ? LocationServices.FusedLocationApi.GetLastLocation(_playServices)
+                                    : null;
+                        if (location == null)
+                            LogHelper.WriteMessage("WARN", "Location services unavailable; cannot sort Merge Groups");
+                        return location == null
+                            ? g.Id
+                            : CoordinatePair
+                                .GetDistanceBetween(
+                                    new CoordinatePair(Convert.ToDecimal(location.Latitude),
+                                        Convert.ToDecimal(location.Longitude)), g.Coordinates).ToString(CultureInfo.CurrentUICulture);
+                    },
                         g => true, g => new DataCard(this, g));
                     break;
             }
@@ -250,15 +271,16 @@ namespace Merge.Android.UI.Activities {
                 @out = AnimationUtils.LoadAnimation(this, global::Android.Resource.Animation.FadeOut);
             @in.Duration = HeaderAnimationDuration;
             @out.Duration = HeaderAnimationDuration;
-            var switcher = (ImageSwitcher) ((RelativeLayout) _navView.GetHeaderView(0)).GetChildAt(0);
-            var caption = (TextView) ((RelativeLayout) _navView.GetHeaderView(0)).GetChildAt(1);
+            var switcher = (ImageSwitcher)((RelativeLayout)_navView.GetHeaderView(0)).GetChildAt(0);
+            var caption = (TextView)((RelativeLayout)_navView.GetHeaderView(0)).GetChildAt(1);
             switcher.InAnimation = @in;
             switcher.OutAnimation = @out;
             switcher.SetFactory(this);
             var handler = new Handler();
 
             // ReSharper disable once InconsistentNaming
-            void action() {
+            void action()
+            {
                 if (!_headerRunning)
                     return;
                 _currentHeader++;
@@ -404,7 +426,7 @@ namespace Merge.Android.UI.Activities {
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.NewMain);
-            ((MergeActionInvocationReceiver) MergeDatabase.ActionInvocationReceiver).SetContext(this);
+            ((MergeActionInvocationReceiver)MergeDatabase.ActionInvocationReceiver).SetContext(this);
             if (PreferenceHelper.FirstRun) {
                 // Open the full WelcomeActivity if this is the first time the user has opened the app
                 StartActivityForResult(typeof(WelcomeActivity), WelcomeActivityRequestCode);
@@ -423,7 +445,7 @@ namespace Merge.Android.UI.Activities {
 
         protected override void OnResume() {
             InitializeGooglePlayServices();
-            ((MergeActionInvocationReceiver) MergeDatabase.ActionInvocationReceiver).SetContext(this);
+            ((MergeActionInvocationReceiver)MergeDatabase.ActionInvocationReceiver).SetContext(this);
             MergeApplication.UpdateTopics();
             base.OnResume();
         }
