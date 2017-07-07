@@ -50,13 +50,13 @@ namespace MergeApi.Framework.Abstractions {
             ParamGroup = pgp;
         }
 
-        [JsonProperty("paramGroup")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "paramGroup")]
         public string ParamGroup {
             get => string.IsNullOrWhiteSpace(_paramGroup) ? "-1" : _paramGroup;
             set => _paramGroup = value;
         }
 
-        [JsonProperty("class")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "class")]
         public string Class {
             get => GetType().FullName;
             set {
@@ -73,7 +73,7 @@ namespace MergeApi.Framework.Abstractions {
         public abstract void Invoke();
 
         private class ActionWrapper {
-            [JsonProperty("code")] [JsonConverter(typeof(ClassableJsonConverter))] private ActionBase _action;
+            [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "code")] [JsonConverter(typeof(ClassableJsonConverter))] private ActionBase _action;
 
             public static implicit operator ActionBase(ActionWrapper w) => w._action;
         }

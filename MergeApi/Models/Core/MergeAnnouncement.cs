@@ -38,13 +38,13 @@ namespace MergeApi.Models.Core {
      */
 
     /*public sealed class MergeAnnouncement : ModelBase {
-        [JsonProperty("buttonLabel")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "buttonLabel")]
         public string ButtonLabel { get; set; }
 
-        [JsonProperty("importance")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "importance")]
         public Importance Importance { get; set; }
 
-        [JsonProperty("buttonAction")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "buttonAction")]
         [JsonConverter(typeof(ClassableJsonConverter))]
         public ActionBase ButtonAction { get; set; }
 

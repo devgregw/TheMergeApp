@@ -40,10 +40,10 @@ namespace MergeApi.Framework.Abstractions {
     public abstract class MediumBase : IClassable {
         private string _class;
 
-        [JsonProperty("who")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "who")]
         public string Who { get; set; }
 
-        [JsonProperty("class")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "class")]
         public string Class {
             get => GetType().FullName;
             set {

@@ -39,13 +39,13 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Mediums {
     public sealed class PhoneNumberMedium : MediumBase {
-        [JsonProperty("phoneNumber")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "phoneNumber")]
         public string PhoneNumber { get; set; }
 
-        [JsonProperty("textable")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "textable")]
         public bool CanReceiveSMS { get; set; }
 
-        [JsonProperty("kind")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "kind")]
         public PhoneNumberKind Kind { get; set; }
 
         public static bool IsValidPhoneNumber(string number) {

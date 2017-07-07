@@ -40,31 +40,31 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Core {
     public sealed class MergeGroup : IIdentifiable, INamable {
-        [JsonProperty("host")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "host")]
         public string Host { get; set; }
 
-        [JsonProperty("leaders")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "leaders")]
         public List<string> Leaders { get; set; }
 
         public string LeadersFormatted => Leaders == null ? "" : Leaders.Format();
 
-        [JsonProperty("address")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "address")]
         public string Address { get; set; }
 
-        [JsonProperty("coordinates")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "coordinates")]
         public CoordinatePair Coordinates { get; set; }
 
-        [JsonProperty("cover")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "cover")]
         public string CoverImage { get; set; }
 
-        [JsonProperty("contactMediums")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "contactMediums")]
         [JsonConverter(typeof(ClassableListJsonConverter<MediumBase>))]
         public List<MediumBase> ContactMediums { get; set; }
 
-        [JsonProperty("id")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "id")]
         public string Id { get; set; }
 
-        [JsonProperty("name")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "name")]
         public string Name { get; set; }
     }
 }

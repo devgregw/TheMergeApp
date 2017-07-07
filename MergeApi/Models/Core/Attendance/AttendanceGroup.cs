@@ -43,16 +43,16 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Core.Attendance {
     public sealed class AttendanceGroup : IIdentifiable {
-        [JsonProperty("leaderNames")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "leaderNames")]
         public List<string> LeaderNames { get; set; }
 
-        [JsonProperty("studentNames")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "studentNames")]
         public List<string> StudentNames { get; set; }
 
-        [JsonProperty("gradeLevel")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "gradeLevel")]
         public GradeLevel GradeLevel { get; set; }
 
-        [JsonProperty("gender")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "gender")]
         public Gender Gender { get; set; }
 
         public string Summary {
@@ -63,7 +63,7 @@ namespace MergeApi.Models.Core.Attendance {
             }
         }
 
-        [JsonProperty("id")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "id")]
         public string Id { get; set; }
 
         public async Task<List<AttendanceRecord>> GetRecordsAsync() {

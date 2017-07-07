@@ -38,12 +38,12 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Core.Tab {
     public sealed class TabTip : TargetableBase, IIdentifiable {
-        [JsonProperty("persistent")] private string _persistent;
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "persistent")] private string _persistent;
 
-        [JsonProperty("message")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "message")]
         public string Message { get; set; }
 
-        [JsonProperty("action")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "action")]
         [JsonConverter(typeof(ClassableJsonConverter))]
         public ActionBase Action { get; set; }
 
@@ -53,10 +53,10 @@ namespace MergeApi.Models.Core.Tab {
             set => _persistent = value.ToString();
         }
 
-        [JsonProperty("tab")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "tab")]
         public Framework.Enumerations.Tab Tab { get; set; }
 
-        [JsonProperty("id")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "id")]
         public string Id { get; set; }
     }
 }

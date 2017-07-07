@@ -38,7 +38,7 @@ namespace MergeApi.Models.Actions {
      */
 
     /*public sealed class ClickAnnouncementButtonAction : ActionBase {
-        [JsonProperty("announcementId")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "announcementId")]
         public string AnnouncementId1 { get; set; }
 
         public static ClickAnnouncementButtonAction FromAnnouncementId(string aid) {

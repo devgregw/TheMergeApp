@@ -38,10 +38,10 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Framework.Abstractions {
     public abstract class TargetableBase {
-        [JsonProperty("grades")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "grades")]
         public List<GradeLevel> GradeLevels { get; set; }
 
-        [JsonProperty("genders")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "genders")]
         public List<Gender> Genders { get; set; }
 
         public bool CheckTargeting(IEnumerable<GradeLevel> setGradeLevels, IEnumerable<Gender> setGenders) {

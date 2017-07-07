@@ -39,10 +39,10 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Mediums {
     public sealed class EmailAddressMedium : MediumBase {
-        [JsonProperty("address")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "address")]
         public string Address { get; set; }
 
-        [JsonProperty("kind")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "kind")]
         public EmailAddressKind Kind { get; set; }
 
         public static bool IsValidEmailAddress(string address) {

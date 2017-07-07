@@ -40,10 +40,10 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Elements {
     public sealed class VideoElement : ElementBase {
-        [JsonProperty("vendor")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "vendor")]
         public VideoVendor Vendor { get; set; }
 
-        [JsonProperty("id")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "id")]
         public string VideoId { get; set; }
 
         public override T CreateView<T>() {

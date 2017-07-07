@@ -43,7 +43,7 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Actions {
     public sealed class OpenEventDetailsAction : ActionBase {
-        [JsonProperty("eventId")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "eventId")]
         public string EventId1 { get; set; }
 
         public static OpenEventDetailsAction FromEventId(string eid) {

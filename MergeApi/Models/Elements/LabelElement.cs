@@ -40,7 +40,7 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Elements {
     public sealed class LabelElement : ElementBase {
-        [JsonProperty("label")] private string _label;
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "label")] private string _label;
 
         [JsonIgnore]
         public string Label {
@@ -48,10 +48,10 @@ namespace MergeApi.Models.Elements {
             set => _label = value.Replace("\n", "\\n");
         }
 
-        [JsonProperty("size")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "size")]
         public int Size { get; set; }
 
-        [JsonProperty("style")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "style")]
         public LabelStyle Style { get; set; }
 
         public override T CreateView<T>() {

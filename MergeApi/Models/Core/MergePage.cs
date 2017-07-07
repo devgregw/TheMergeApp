@@ -42,7 +42,7 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Core {
     public sealed class MergePage : ModelBase {
-        [JsonProperty("hidden")] private string _hidden;
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "hidden")] private string _hidden;
 
         [JsonIgnore]
         public bool Hidden {
@@ -50,7 +50,7 @@ namespace MergeApi.Models.Core {
             set => _hidden = value.ToString();
         }
 
-        [JsonProperty("leadersOnly")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "leadersOnly")]
         private string _leadersOnly;
 
         [JsonIgnore]
@@ -59,17 +59,17 @@ namespace MergeApi.Models.Core {
             set => _leadersOnly = value.ToString();
         }
 
-        [JsonProperty("content")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "content")]
         [JsonConverter(typeof(ClassableListJsonConverter<ElementBase>))]
         public List<ElementBase> Content { get; set; }
 
-        [JsonProperty("buttonLabel")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "buttonLabel")]
         public string ButtonLabel { get; set; }
 
-        [JsonProperty("importance")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "importance")]
         public Importance Importance { get; set; }
 
-        [JsonProperty("buttonAction")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "buttonAction")]
         [JsonConverter(typeof(ClassableJsonConverter))]
         public ActionBase ButtonAction { get; set; }
 

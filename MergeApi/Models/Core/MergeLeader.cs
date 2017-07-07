@@ -40,26 +40,26 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Core {
     public sealed class MergeLeader : IIdentifiable, INamable, IThemeable {
-        [JsonProperty("role")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "role")]
         public string Role { get; set; }
 
-        [JsonProperty("icon")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "icon")]
         public string Icon { get; set; }
 
-        [JsonProperty("contactmediums")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "contactmediums")]
         [JsonConverter(typeof(ClassableListJsonConverter<MediumBase>))]
         public List<MediumBase> ContactMediums { get; set; }
 
-        [JsonProperty("id")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "id")]
         public string Id { get; set; }
 
-        [JsonProperty("name")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "name")]
         public string Name { get; set; }
 
-        [JsonProperty("color")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "color")]
         public string Color { get; set; }
 
-        [JsonProperty("theme")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "theme")]
         public Theme Theme { get; set; }
     }
 }

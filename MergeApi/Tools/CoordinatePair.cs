@@ -50,10 +50,10 @@ namespace MergeApi.Tools {
             Longitude = lng;
         }
 
-        [JsonProperty("latitude")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "latitude")]
         public decimal Latitude { get; set; }
 
-        [JsonProperty("longitude")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "longitude")]
         public decimal Longitude { get; set; }
 
         public override string ToString() {

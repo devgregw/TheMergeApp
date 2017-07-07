@@ -41,10 +41,10 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Elements {
     public sealed class ButtonElement : ElementBase {
-        [JsonProperty("label")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "label")]
         public string Label { get; set; }
 
-        [JsonProperty("action")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "action")]
         [JsonConverter(typeof(ClassableJsonConverter))]
         public ActionBase Action { get; set; }
 

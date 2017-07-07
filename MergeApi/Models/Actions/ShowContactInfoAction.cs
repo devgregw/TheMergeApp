@@ -47,13 +47,13 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Actions {
     public sealed class ShowContactInfoAction : ActionBase {
-        [JsonProperty("groupId")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "groupId")]
         public string GroupId1 { get; set; }
 
-        [JsonProperty("name")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "name")]
         public string Name2 { get; set; }
 
-        [JsonProperty("contactMediums")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "contactMediums")]
         [JsonConverter(typeof(ClassableListJsonConverter<MediumBase>))]
         public List<MediumBase> ContactMediums2 { get; set; }
 

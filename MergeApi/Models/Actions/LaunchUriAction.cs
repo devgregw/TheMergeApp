@@ -39,7 +39,7 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Actions {
     public sealed class LaunchUriAction : ActionBase {
-        [JsonProperty("uri")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "uri")]
         public string Uri1 { get; set; }
 
         public static LaunchUriAction FromUri(string uri) {

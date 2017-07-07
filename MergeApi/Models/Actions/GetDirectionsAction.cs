@@ -44,16 +44,16 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Actions {
     public sealed class GetDirectionsAction : ActionBase {
-        [JsonProperty("eventId")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "eventId")]
         public string EventId1 { get; set; }
 
-        [JsonProperty("groupId")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "groupId")]
         public string GroupId2 { get; set; }
 
-        [JsonProperty("address")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "address")]
         public string Address3 { get; set; }
 
-        [JsonProperty("coordinates")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "coordinates")]
         public CoordinatePair Coordinates4 { get; set; }
 
         public static GetDirectionsAction FromEventId(string eventId) {

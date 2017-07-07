@@ -42,7 +42,7 @@ namespace MergeApi.Framework.Abstractions {
     public abstract class ElementBase : IClassable, IValidatable {
         private string _class;
 
-        [JsonProperty("class")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "class")]
         public string Class {
             get => GetType().FullName;
             set {

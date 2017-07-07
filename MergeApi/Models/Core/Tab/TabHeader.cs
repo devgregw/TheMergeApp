@@ -37,10 +37,10 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Core.Tab {
     public sealed class TabHeader : IIdentifiable {
-        [JsonProperty("tab")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "tab")]
         public Framework.Enumerations.Tab Tab { get; set; }
 
-        [JsonProperty("source")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "source")]
         public string Image { get; set; }
 
         [Obsolete("Do not use this.")]

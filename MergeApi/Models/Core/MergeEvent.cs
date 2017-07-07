@@ -30,6 +30,7 @@
 #region USINGS
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MergeApi.Framework.Abstractions;
 using MergeApi.Framework.Enumerations;
@@ -40,36 +41,36 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Core {
     public sealed class MergeEvent : ModelBase {
-        [JsonProperty("startDate")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "startDate")]
         public DateTime? StartDate { get; set; }
 
-        [JsonProperty("endDate")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "endDate")]
         public DateTime? EndDate { get; set; }
 
-        [JsonProperty("recurrenceRule")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "recurrenceRule")]
         public RecurrenceRule RecurrenceRule { get; set; }
 
-        [JsonProperty("location")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "location")]
         public string Location { get; set; }
 
-        [JsonProperty("address")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "address")]
         public string Address { get; set; }
 
-        [JsonProperty("uri")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "uri")]
         public string RegistrationUrl { get; set; }
 
-        [JsonProperty("registrationClosingDate")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "registrationClosingDate")]
         public DateTime? RegistrationClosingDate { get; set; }
 
         [JsonIgnore]
         public bool HasRegistration => !string.IsNullOrWhiteSpace(RegistrationUrl);
 
-        [JsonProperty("price")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "price")]
         public double? Price { get; set; }
 
         public override async Task<ValidationResult> ValidateAsync() {
             // ReSharper disable once PossibleInvalidOperationException
-            var days = DateTime.Now.Subtract(EndDate.Value).TotalDays;
+            var days = DateTime.Now.Subtract(RecurrenceRule == null ? EndDate.Value : RecurrenceRule.GetAllOccurrences(StartDate.Value, RecurrenceRule).Last()).TotalDays;
             return days >= 1d
                 ? new ValidationResult(this, ValidationResultType.OutdatedEvent, this)
                 : new ValidationResult(this);

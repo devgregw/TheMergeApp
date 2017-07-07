@@ -10,16 +10,16 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Tools {
     public sealed class RecurrenceRule {
-        [JsonProperty("frequency")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "frequency")]
         public RecurrenceFrequency Frequency { get; set; }
 
-        [JsonProperty("interval")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "interval")]
         public int Interval { get; set; }
 
-        [JsonProperty("end")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "end")]
         public DateTime? End { get; set; }
 
-        [JsonProperty("count")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "count")]
         public int? Count { get; set; }
 
         public static string GetRuleDescription(DateTime initial, RecurrenceRule rule) {

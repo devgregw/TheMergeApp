@@ -41,11 +41,11 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Actions {
     public sealed class TextAction : ActionBase {
-        [JsonProperty("contactMedium")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "contactMedium")]
         [JsonConverter(typeof(ClassableJsonConverter))]
         public PhoneNumberMedium ContactMedium1 { get; set; }
 
-        [JsonProperty("phoneNumber")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "phoneNumber")]
         public string PhoneNumber2 { get; set; }
 
         public static TextAction FromContactMedium(PhoneNumberMedium medium) {

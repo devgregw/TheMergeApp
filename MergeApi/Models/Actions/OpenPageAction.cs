@@ -43,7 +43,7 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Actions {
     public sealed class OpenPageAction : ActionBase {
-        [JsonProperty("pageId")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "pageId")]
         public string PageId1 { get; set; }
 
         public static OpenPageAction FromPageId(string pid) {

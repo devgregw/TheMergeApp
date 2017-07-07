@@ -39,9 +39,9 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Framework.Abstractions {
     public abstract class ModelBase : TargetableBase, IIdentifiable, IThemeable, IValidatable {
-        [JsonProperty("description")] private string _desc;
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "description")] private string _desc;
 
-        [JsonProperty("title")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "title")]
         public string Title { get; set; }
 
         [JsonIgnore]
@@ -50,19 +50,19 @@ namespace MergeApi.Framework.Abstractions {
             set => _desc = value.Replace("\n", "\\n");
         }
 
-        [JsonProperty("shortDescription")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "shortDescription")]
         public string ShortDescription { get; set; }
 
-        [JsonProperty("cover")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "cover")]
         public string CoverImage { get; set; }
 
-        [JsonProperty("id")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "id")]
         public string Id { get; set; }
 
-        [JsonProperty("color")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "color")]
         public string Color { get; set; }
 
-        [JsonProperty("theme")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "theme")]
         public Theme Theme { get; set; }
 
         public abstract Task<ValidationResult> ValidateAsync();

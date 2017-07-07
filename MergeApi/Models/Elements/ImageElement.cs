@@ -40,10 +40,10 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Elements {
     public sealed class ImageElement : ElementBase {
-        [JsonProperty("url")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "url")]
         public string Url { get; set; }
 
-        [JsonProperty("scaletype")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "scaletype")]
         public ScaleType ScaleType { get; set; }
 
         public override T CreateView<T>() {

@@ -31,6 +31,7 @@
 
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Firebase.Database;
 using MergeApi.Client;
@@ -45,22 +46,22 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Actions {
     public sealed class AddToCalendarAction : ActionBase {
-        [JsonProperty("eventId")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "eventId")]
         public string EventId1 { get; set; }
 
-        [JsonProperty("title")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "title")]
         public string Title2 { get; set; }
 
-        [JsonProperty("location")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "location")]
         public string Location2 { get; set; }
 
-        [JsonProperty("start")]
-        public DateTime StartDate2 { get; set; }
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "start")]
+        public DateTime? StartDate2 { get; set; }
 
-        [JsonProperty("end")]
-        public DateTime EndDate2 { get; set; }
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "end")]
+        public DateTime? EndDate2 { get; set; }
 
-        [JsonProperty("recurrenceRule")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "recurrenceRule")]
         public RecurrenceRule RecurrenceRule2 { get; set; }
 
         public static AddToCalendarAction FromEventId(string eventId) {
@@ -101,7 +102,7 @@ namespace MergeApi.Models.Actions {
                     }
                 }
                 case "2": {
-                    var days = DateTime.Now.Subtract(EndDate2).TotalDays;
+                    var days = DateTime.Now.Subtract(RecurrenceRule2 == null ? EndDate2.Value : RecurrenceRule.GetAllOccurrences(StartDate2.Value, RecurrenceRule2).Last()).TotalDays;
                     return days >= 1d
                         ? new ValidationResult(this, ValidationResultType.OutdatedAction, this)
                         : new ValidationResult(this);
@@ -115,7 +116,7 @@ namespace MergeApi.Models.Actions {
             return "Add to calendar: " +
                    (ParamGroup == "1"
                        ? "events/" + EventId1
-                       : $"\"{Title2}\" at {Location2} from {StartDate2.ToString("M/dd/yyyy h:mm tt", CultureInfo.CurrentUICulture)} to {EndDate2.ToString("M/dd/yyyy h:mm tt", CultureInfo.CurrentUICulture)}"
+                       : $"\"{Title2}\" at {Location2} from {StartDate2.Value.ToString("M/dd/yyyy h:mm tt", CultureInfo.CurrentUICulture)} to {EndDate2.Value.ToString("M/dd/yyyy h:mm tt", CultureInfo.CurrentUICulture)}"
                    );
         }
     }

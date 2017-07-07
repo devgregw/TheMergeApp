@@ -41,9 +41,9 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Core.Attendance {
     public sealed class AttendanceRecord : IIdentifiable {
-        [JsonProperty("date")] private string _date;
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "date")] private string _date;
 
-        [JsonProperty("leadersPresent")] private string _leaders;
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "leadersPresent")] private string _leaders;
 
         [JsonIgnore]
         public DateTime Date {
@@ -60,10 +60,10 @@ namespace MergeApi.Models.Core.Attendance {
             set => _leaders = value.ToString();
         }
 
-        [JsonProperty("groupId")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "groupId")]
         public string GroupId { get; set; }
 
-        [JsonProperty("students")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "students")]
         public List<string> Students { get; set; }
 
         [Obsolete("Do not use this.")]

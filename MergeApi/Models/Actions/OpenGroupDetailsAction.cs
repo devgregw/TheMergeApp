@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Actions {
     public sealed class OpenGroupDetailsAction : ActionBase {
-        [JsonProperty("groupId")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "groupId")]
         public string GroupId1 { get; set; }
 
         public static OpenGroupDetailsAction FromGroupId(string id) {
