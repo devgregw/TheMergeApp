@@ -6,10 +6,16 @@
         xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows"
         xmlns:editorFields="clr-namespace:Merge_Data_Utility.UI.Controls.EditorFields"
         mc:Ignorable="d"
-        Title="Action Code Viewer" Height="500" Width="500" WindowStartupLocation="CenterScreen">
+        Title="Action Code Viewer" Height="500" Width="500" MinHeight="500" MinWidth="500" WindowStartupLocation="CenterScreen">
     <Grid>
         <editorFields:ActionPickerField x:Name="actionField" VerticalAlignment="Top" Margin="5"/>
-        <Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,30,0,0" Click="CreateAction">Create Action From Code</Button>
-        <TextBox x:Name="codeBox" AcceptsReturn="True" Margin="0,55,0,0"></TextBox>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="5,30,5,-20">
+        <Button HorizontalAlignment="Left" Click="CreateAction">Create Action From Code</Button>
+            <CheckBox HorizontalAlignment="Left" Margin="5,0,0,0" VerticalContentAlignment="Center" IsChecked="True" Checked="Indent_Changed" Unchecked="Indent_Changed" Height="20">Indent</CheckBox>
+            <CheckBox HorizontalAlignment="Left" Margin="5,0,0,0" VerticalContentAlignment="Center" IsChecked="False" Checked="Wrap_Changed" Unchecked="Wrap_Changed" Height="20">Wrap</CheckBox>
+            <TextBlock x:Name="count" VerticalAlignment="Center" Margin="5,0,0,0">0</TextBlock>
+            <TextBlock x:Name="tooMany" Visibility="Collapsed" Foreground="Red" FontWeight="DemiBold"  VerticalAlignment="Center" Margin="5,0,0,0">Too long for notification action</TextBlock>
+        </StackPanel>
+        <TextBox x:Name="codeBox" AcceptsReturn="True" Margin="0,55,0,0" FontFamily="Consolas"/>
     </Grid>
 </Window>
