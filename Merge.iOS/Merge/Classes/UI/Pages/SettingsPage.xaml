@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:proj="clr-namespace:Merge.Classes.UI.Controls" x:Class="Merge.Classes.UI.SettingsPage">
+    <ContentPage.Content>
+        <TableView HorizontalOptions="Fill" VerticalOptions="Fill" Intent="Settings">
+            <TableRoot>
+                <TableSection Title="Filters">
+                    <ViewCell>
+                        <Button Clicked="ManageFilters_Clicked" Text="Change Settings" />
+                    </ViewCell>
+                </TableSection>
+                <TableSection x:Name="extrasSection" Title="Extras">
+                    <SwitchCell x:Name="cachingCell" OnChanged="Caching_Changed" Text="Enable Caching" />
+                    <SwitchCell x:Name="leaderFeaturesCell" Text="Enable Leader-Only Features"
+                                OnChanged="LeaderFeatures_Changed" />
+                    <ViewCell>
+                        <Button Clicked="ClearTips_Clicked" Text="Clear Dismissed Tips" />
+                    </ViewCell>
+                </TableSection>
+            </TableRoot>
+        </TableView>
+    </ContentPage.Content>
+</ContentPage>

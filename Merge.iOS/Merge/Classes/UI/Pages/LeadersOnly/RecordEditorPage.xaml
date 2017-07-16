@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Merge.Classes.UI.Pages.LeadersOnly.RecordEditorPage" Title="Record Editor">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout VerticalOptions="Start" Spacing="5" Margin="5">
+                <Label Text="Group ID" TextColor="Black" FontSize="18" />
+                <Label x:Name="groupId" TextColor="Gray" FontSize="14" />
+                <Label Text="Date" TextColor="Black" FontSize="18" />
+                <Label x:Name="date" TextColor="Gray" FontSize="14" />
+                <StackLayout Orientation="Horizontal" Spacing="5">
+                    <Label TextColor="Black" Text="Leaders were present" VerticalOptions="Center"
+                           HorizontalOptions="FillAndExpand" />
+                    <Switch x:Name="leadersPresent" />
+                </StackLayout>
+                <Label Text="Students" TextColor="Black" FontSize="18" />
+                <StackLayout x:Name="studentsList" Spacing="5" />
+                <Button x:Name="addStudentButton" Clicked="AddStudent" TextColor="Black" Text="Add Student"
+                        BackgroundColor="#ffd326" />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

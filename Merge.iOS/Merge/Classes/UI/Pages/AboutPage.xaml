@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Merge.Classes.UI.Pages.AboutPage" Title="About Merge">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Spacing="5">
+                <Image Aspect="AspectFill" HeightRequest="175" Source="LargeHeader.png" />
+                <StackLayout Spacing="5" Margin="5">
+                    <Label Text="The Merge App" FontSize="35" FontAttributes="Bold,Italic" TextColor="Black" />
+                    <Label x:Name="versionInfo" FontSize="12" TextColor="Gray" />
+                    <Label TextColor="Black" Text="Designed and developed by Greg Whatley for Pantego Bible Church" />
+                    <Label TextColor="Black"
+                           Text="May the Lord direct your hearts to the love of God and to the steadfastness of Christ." />
+                    <Label TextColor="Black" Text="2 Thessalonians 3:5 ESV" />
+                    <StackLayout Spacing="5" Orientation="Horizontal">
+                        <Button Clicked="Devgregw" BackgroundColor="#ffd326" TextColor="Black"
+                                HorizontalOptions="FillAndExpand" Text="devgregw.com" />
+                        <Button Clicked="Pantego" BackgroundColor="#ffd326" TextColor="Black"
+                                HorizontalOptions="FillAndExpand" Text="pantego.org" />
+                    </StackLayout>
+                    <Label TextColor="Black"
+                           Text="This app is licensed under the MIT license.  By using this app, you agree to the MIT license and all third-party licenses.  Tap 'Licenses' to learn more." />
+                    <Button Clicked="Licenses" BackgroundColor="#ffd326" TextColor="Black" HorizontalOptions="Fill"
+                            Text="Licenses" />
+                    <Button Clicked="ContactUs" BackgroundColor="#ffd326" TextColor="Black" HorizontalOptions="Fill"
+                            Text="Contact Us" />
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

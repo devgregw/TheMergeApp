@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Merge.Classes.UI.Controls.IconView">
+    <ContentView.Content>
+        <StackLayout Orientation="Horizontal">
+            <Image x:Name="icon" WidthRequest="24" HeightRequest="24" VerticalOptions="Start" HorizontalOptions="Start" />
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

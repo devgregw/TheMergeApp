@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{795F49D8-7F45-4919-AFE1-F2D019044CF5}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Merge</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\DataCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\VersionConsts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\MapAnnotation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\MergeGroupAnnotation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\Receivers\MergeActionReceiver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\Receivers\MergeElementReceiver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\Receivers\MergeLogReceiver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\TabPageDelegates.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Controls\BlankCardView.xaml.cs">
+      <DependentUpon>BlankCardView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Controls\DataView.xaml.cs">
+      <DependentUpon>DataView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Controls\IconView.xaml.cs">
+      <DependentUpon>IconView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Controls\MapView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Controls\TipView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\AboutPage.xaml.cs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\DataDetailPage.xaml.cs">
+      <DependentUpon>DataDetailPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\GenericTabPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\LeaderAuthenticationPage.xaml.cs">
+      <DependentUpon>LeaderAuthenticationPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\LeadersOnly\AttendanceListPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\LeadersOnly\GroupEditorPage.xaml.cs">
+      <DependentUpon>GroupEditorPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\LeadersOnly\LeaderResourcesPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\LeadersOnly\RecordEditorPage.xaml.cs">
+      <DependentUpon>RecordEditorPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\TargetingPage.xaml.cs">
+      <DependentUpon>TargetingPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\WelcomePage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Renderers\CardViewRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Renderers\MapViewRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Merge.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\AlertHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\ApiAccessor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\PreferenceHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\GroupsMapPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\ColorConsts.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\SettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Classes\UI\Controls\DataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\DataDetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Classes\UI\Controls\IconView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\LeaderAuthenticationPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\TargetingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Classes\UI\Controls\BlankCardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\AboutPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\LeadersOnly\GroupEditorPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\LeadersOnly\RecordEditorPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

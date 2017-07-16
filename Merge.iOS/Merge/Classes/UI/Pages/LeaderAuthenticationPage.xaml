@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helpers="clr-namespace:Merge.Classes.Helpers;assembly=MergeiOS"
+             xmlns:controls="clr-namespace:Merge.Classes.UI.Controls;assembly=MergeiOS"
+             x:Class="Merge.Classes.UI.Pages.LeaderAuthenticationPage">
+    <ContentPage.Content>
+        <ScrollView>
+            <Grid>
+                <StackLayout x:Name="credentialsLayout" VerticalOptions="Center" Spacing="5">
+                    <Label Text="Sign In" FontSize="34" TextColor="Black" HorizontalTextAlignment="Center"
+                           Margin="0,0,0,5" />
+                    <Entry x:Name="emailAddress" Keyboard="Email" Placeholder="Email address" PlaceholderColor="Gray"
+                           WidthRequest="250" HorizontalOptions="Center" />
+                    <Entry x:Name="password" IsPassword="True" Placeholder="Password" PlaceholderColor="Gray"
+                           WidthRequest="250" HorizontalOptions="Center" />
+                    <StackLayout Orientation="Horizontal" Spacing="5" HorizontalOptions="Center">
+                        <Button Clicked="Back_Clicked" WidthRequest="75" Text="Back" TextColor="Black"
+                                BackgroundColor="#ffd326" />
+                        <Button Clicked="SignIn_Clicked" WidthRequest="75" Text="Sign In" TextColor="Black"
+                                BackgroundColor="#ffd326" />
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Spacing="5" x:Name="indicator" Orientation="Horizontal" VerticalOptions="Center"
+                             HorizontalOptions="Center" IsVisible="false">
+                    <ActivityIndicator Color="Black" VerticalOptions="Center" IsRunning="True" />
+                    <Label VerticalOptions="Center" TextColor="Black">Signing in...</Label>
+                </StackLayout>
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

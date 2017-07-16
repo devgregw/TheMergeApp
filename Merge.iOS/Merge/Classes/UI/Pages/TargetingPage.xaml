@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helpers="clr-namespace:Merge.Classes.Helpers;assembly=MergeiOS"
+             x:Class="Merge.Classes.UI.Pages.TargetingPage" BackgroundColor="#F0EFF5">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Orientation="Vertical" HorizontalOptions="Fill" VerticalOptions="Start">
+                <Label
+                    Text="Specify your grade and gender so that we may filter events for you.  If you are a parent or group leader, select the grade(s) and gender(s) that apply to your students.  You change these at any time in the 'Settings' page."
+                    HorizontalOptions="Center" HorizontalTextAlignment="Center" Margin="10,20,10,10" TextColor="Black" />
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="5">
+                    <Button Clicked="Skip_Clicked" WidthRequest="75" Text="Skip" TextColor="Black"
+                            BackgroundColor="#ffd326" />
+                    <Button Clicked="Save_Clicked" WidthRequest="75" Text="Save" TextColor="Black"
+                            BackgroundColor="#ffd326" />
+                </StackLayout>
+                <TableView Intent="Settings">
+                    <TableRoot>
+                        <TableSection Title="Grade Levels" x:Name="gradesSection">
+                            <SwitchCell x:Name="seventhCell" Text="7th grade" />
+                            <SwitchCell x:Name="eighthCell" Text="8th grade" />
+                            <SwitchCell x:Name="ninthCell" Text="9th grade" />
+                            <SwitchCell x:Name="tenthCell" Text="10th grade" />
+                            <SwitchCell x:Name="eleventhCell" Text="11th grade" />
+                            <SwitchCell x:Name="twelfthCell" Text="12th grade" />
+                        </TableSection>
+                        <TableSection Title="Genders" x:Name="gendersSection">
+                            <SwitchCell x:Name="maleCell" Text="Male" />
+                            <SwitchCell x:Name="femaleCell" Text="Female" />
+                        </TableSection>
+                    </TableRoot>
+                </TableView>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Merge.Classes.UI.Pages.LeadersOnly.GroupEditorPage" Title="Group Editor">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout VerticalOptions="Start" Spacing="5" Margin="5">
+                <Label Text="Group ID" TextColor="Black" FontSize="18" />
+                <Label x:Name="groupId" TextColor="Gray" FontSize="14" />
+                <Label Text="Students" TextColor="Black" FontSize="18" />
+                <StackLayout x:Name="studentsList" Spacing="5" />
+                <Button Clicked="AddStudent" TextColor="Black" BackgroundColor="#ffd326" Text="Add Student" />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,151 @@
+{
+  "images": [
+    {
+      "orientation": "portrait",
+      "extent": "full-screen",
+      "minimum-system-version": "7.0",
+      "scale": "2x",
+      "size": "640x960",
+      "idiom": "iphone",
+      "filename": "launch-2x.png"
+    },
+    {
+      "orientation": "portrait",
+      "extent": "full-screen",
+      "minimum-system-version": "7.0",
+      "subtype": "retina4",
+      "scale": "2x",
+      "size": "640x1136",
+      "idiom": "iphone",
+      "filename": "launch-retina4.png"
+    },
+    {
+      "orientation": "portrait",
+      "extent": "full-screen",
+      "minimum-system-version": "7.0",
+      "scale": "1x",
+      "size": "768x1024",
+      "idiom": "ipad",
+      "filename": "launch-ipadportrait-1x.png"
+    },
+    {
+      "orientation": "landscape",
+      "extent": "full-screen",
+      "minimum-system-version": "7.0",
+      "scale": "1x",
+      "size": "1024x768",
+      "idiom": "ipad",
+      "filename": "launch-ipadlandscape-1x.png"
+    },
+    {
+      "orientation": "portrait",
+      "extent": "full-screen",
+      "minimum-system-version": "7.0",
+      "scale": "2x",
+      "size": "1536x2048",
+      "idiom": "ipad",
+      "filename": "launch-ipadportrait-2x.png"
+    },
+    {
+      "orientation": "landscape",
+      "extent": "full-screen",
+      "minimum-system-version": "7.0",
+      "scale": "2x",
+      "size": "2048x1536",
+      "idiom": "ipad",
+      "filename": "launch-ipadlandscape-2x.png"
+    },
+    {
+      "orientation": "portrait",
+      "extent": "full-screen",
+      "scale": "1x",
+      "size": "320x480",
+      "idiom": "iphone",
+      "filename": "launch-1x.png"
+    },
+    {
+      "orientation": "portrait",
+      "extent": "full-screen",
+      "scale": "2x",
+      "size": "640x960",
+      "idiom": "iphone",
+      "filename": "launch-2x.png"
+    },
+    {
+      "orientation": "portrait",
+      "extent": "full-screen",
+      "subtype": "retina4",
+      "scale": "2x",
+      "size": "640x1136",
+      "idiom": "iphone",
+      "filename": "launch-retina4.png"
+    },
+    {
+      "orientation": "portrait",
+      "extent": "full-screen",
+      "minimum-system-version": "8.0",
+      "subtype": "667h",
+      "scale": "2x",
+      "size": "750x1334",
+      "idiom": "iphone",
+      "filename": "launch-portrait-retinahd47.png"
+    },
+    {
+      "orientation": "portrait",
+      "extent": "full-screen",
+      "minimum-system-version": "8.0",
+      "subtype": "736h",
+      "scale": "3x",
+      "size": "1242x2208",
+      "idiom": "iphone",
+      "filename": "launch-portrait-retinahd57.png"
+    },
+    {
+      "orientation": "portrait",
+      "extent": "full-screen",
+      "scale": "1x",
+      "size": "768x1024",
+      "idiom": "ipad",
+      "filename": "launch-ipadportrait-1x.png"
+    },
+    {
+      "orientation": "portrait",
+      "extent": "full-screen",
+      "scale": "2x",
+      "size": "1536x2048",
+      "idiom": "ipad",
+      "filename": "launch-ipadportrait-2x.png"
+    },
+    {
+      "orientation": "landscape",
+      "extent": "full-screen",
+      "scale": "1x",
+      "size": "1024x768",
+      "idiom": "ipad",
+      "filename": "launch-ipadlandscape-1x.png"
+    },
+    {
+      "orientation": "landscape",
+      "extent": "full-screen",
+      "scale": "2x",
+      "size": "2048x1536",
+      "idiom": "ipad",
+      "filename": "launch-ipadlandscape-2x.png"
+    },
+    {
+      "orientation": "landscape",
+      "extent": "full-screen",
+      "minimum-system-version": "8.0",
+      "subtype": "736h",
+      "scale": "3x",
+      "size": "2208x1242",
+      "idiom": "iphone",
+      "filename": "launch-landscape-retina57.png"
+    }
+  ],
+  "properties": {},
+  "info": {
+    "version": 1,
+    "author": ""
+  }
+}
