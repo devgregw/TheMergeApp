@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project MergeApi:  ActionBase.cs (in Solution MergeApi)
-// Created by Greg Whatley on 03/20/2017 at 6:44 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:42 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -72,13 +72,14 @@ namespace MergeApi.Framework.Abstractions {
 
         public abstract void Invoke();
 
+        public static ActionBase FromJson(string json) => JsonConvert.DeserializeObject<ActionWrapper>(
+            @"{""code"":" + json + "}");
+
         private class ActionWrapper {
-            [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "code")] [JsonConverter(typeof(ClassableJsonConverter))] private ActionBase _action;
+            [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "code")]
+            [JsonConverter(typeof(ClassableJsonConverter))] private ActionBase _action;
 
             public static implicit operator ActionBase(ActionWrapper w) => w._action;
         }
-
-        public static ActionBase FromJson(string json) => JsonConvert.DeserializeObject<ActionWrapper>(
-            @"{""code"":" + json + "}");
     }
 }

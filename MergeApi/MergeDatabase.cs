@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project MergeApi:  MergeDatabase.cs (in Solution MergeApi)
-// Created by Greg Whatley on 05/07/2017 at 3:44 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:42 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -31,7 +31,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -120,7 +119,8 @@ namespace MergeApi.Client {
             LogReceiver.Log(LogLevel.Debug, "MergeDatabase.DeleteStorageReferenceAsync",
                 $"Deleting storage reference: {fileName}");
             using (var client = new HttpClient()) {
-                var r = await client.GetStringAsync($"https://merge.devgregw.com/content/manager.php?name={fileName}&action=delete");
+                var r = await client.GetStringAsync(
+                    $"https://merge.devgregw.com/content/manager.php?name={fileName}&action=delete");
                 LogReceiver.Log(LogLevel.Debug, "MergeDatabase.DeleteStorageReferenceAsync", $"Response: {r}");
             }
         }
@@ -217,7 +217,8 @@ namespace MergeApi.Client {
             await q.PostAsync(data);
         }
 
-        private static async Task InternalDeleteAsync<T>(T item, string firebaseKey, bool  deleteAssets) where T : IIdentifiable {
+        private static async Task InternalDeleteAsync<T>(T item, string firebaseKey, bool deleteAssets)
+            where T : IIdentifiable {
             ThrowIfNotInitialized();
             LogReceiver.Log(LogLevel.Verbose, "MergeDatabase.DeleteAsync",
                 $"Deleting {typeof(T).Name}: {item.Id} ({firebaseKey})");

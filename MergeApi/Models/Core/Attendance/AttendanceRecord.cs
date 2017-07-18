@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project MergeApi:  AttendanceRecord.cs (in Solution MergeApi)
-// Created by Greg Whatley on 03/20/2017 at 6:44 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:42 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -41,9 +41,11 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Core.Attendance {
     public sealed class AttendanceRecord : IIdentifiable {
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "date")] private string _date;
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "date")]
+        private string _date;
 
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "leadersPresent")] private string _leaders;
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "leadersPresent")]
+        private string _leaders;
 
         [JsonIgnore]
         public DateTime Date {

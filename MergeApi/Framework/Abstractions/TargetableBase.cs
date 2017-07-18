@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project MergeApi:  TargetableBase.cs (in Solution MergeApi)
-// Created by Greg Whatley on 03/29/2017 at 1:47 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:42 AM.
 // 
 // The MIT License (MIT)
 // 

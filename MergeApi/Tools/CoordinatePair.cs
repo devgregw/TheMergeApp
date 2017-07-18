@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project MergeApi:  CoordinatePair.cs (in Solution MergeApi)
-// Created by Greg Whatley on 03/20/2017 at 6:44 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:43 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -36,11 +36,6 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Tools {
     public sealed class CoordinatePair {
-        public static double GetDistanceBetween(CoordinatePair one, CoordinatePair two) {
-            return Math.Sqrt(Math.Pow(Convert.ToDouble(one.Latitude - two.Latitude), 2) +
-                             Math.Pow(Convert.ToDouble(one.Longitude - two.Longitude), 2));
-        }
-
         public CoordinatePair() { }
 
         public CoordinatePair(decimal lat, decimal lng) {
@@ -55,6 +50,11 @@ namespace MergeApi.Tools {
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "longitude")]
         public decimal Longitude { get; set; }
+
+        public static double GetDistanceBetween(CoordinatePair one, CoordinatePair two) {
+            return Math.Sqrt(Math.Pow(Convert.ToDouble(one.Latitude - two.Latitude), 2) +
+                             Math.Pow(Convert.ToDouble(one.Longitude - two.Longitude), 2));
+        }
 
         public override string ToString() {
             return $"({Latitude}, {Longitude})";

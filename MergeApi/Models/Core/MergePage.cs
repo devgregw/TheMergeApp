@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project MergeApi:  MergePage.cs (in Solution MergeApi)
-// Created by Greg Whatley on 03/20/2017 at 6:44 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:42 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -42,16 +42,17 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Core {
     public sealed class MergePage : ModelBase {
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "hidden")] private string _hidden;
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "hidden")]
+        private string _hidden;
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "leadersOnly")]
+        private string _leadersOnly;
 
         [JsonIgnore]
         public bool Hidden {
             get => bool.TryParse(_hidden, out var result) && result;
             set => _hidden = value.ToString();
         }
-
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "leadersOnly")]
-        private string _leadersOnly;
 
         [JsonIgnore]
         public bool LeadersOnly {

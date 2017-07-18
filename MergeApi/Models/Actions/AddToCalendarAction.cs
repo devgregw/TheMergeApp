@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project MergeApi:  AddToCalendarAction.cs (in Solution MergeApi)
-// Created by Greg Whatley on 03/20/2017 at 6:44 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:42 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -72,7 +72,8 @@ namespace MergeApi.Models.Actions {
             };
         }
 
-        public static AddToCalendarAction FromEventInfo(string title, string loc, DateTime start, DateTime end, RecurrenceRule rule) {
+        public static AddToCalendarAction FromEventInfo(string title, string loc, DateTime start, DateTime end,
+            RecurrenceRule rule) {
             Utilities.AssertCondition(s => !string.IsNullOrWhiteSpace(s), title, loc);
             Utilities.AssertCondition(end > start, end);
             return new AddToCalendarAction {
@@ -102,7 +103,9 @@ namespace MergeApi.Models.Actions {
                     }
                 }
                 case "2": {
-                    var days = DateTime.Now.Subtract(RecurrenceRule2 == null ? EndDate2.Value : RecurrenceRule.GetAllOccurrences(StartDate2.Value, RecurrenceRule2).Last()).TotalDays;
+                    var days = DateTime.Now.Subtract(RecurrenceRule2 == null
+                        ? EndDate2.Value
+                        : RecurrenceRule.GetAllOccurrences(StartDate2.Value, RecurrenceRule2).Last()).TotalDays;
                     return days >= 1d
                         ? new ValidationResult(this, ValidationResultType.OutdatedAction, this)
                         : new ValidationResult(this);

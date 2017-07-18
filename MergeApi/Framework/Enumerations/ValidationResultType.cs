@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project MergeApi:  ValidationResultType.cs (in Solution MergeApi)
-// Created by Greg Whatley on 03/30/2017 at 6:37 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:42 AM.
 // 
 // The MIT License (MIT)
 // 

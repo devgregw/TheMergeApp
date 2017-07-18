@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project MergeApi:  TabTip.cs (in Solution MergeApi)
-// Created by Greg Whatley on 03/20/2017 at 6:44 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:42 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -38,7 +38,8 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Core.Tab {
     public sealed class TabTip : TargetableBase, IIdentifiable {
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "persistent")] private string _persistent;
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "persistent")]
+        private string _persistent;
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "message")]
         public string Message { get; set; }
