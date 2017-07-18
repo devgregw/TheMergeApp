@@ -33,7 +33,7 @@ namespace Merge.Android.Helpers {
 
         public const string MiniVersion = "0100";
 
-        public const string Classification = "PRE-ALPHA";
+        public const string Classification = "GENERAL AVAILABILITY";
 
         public const int Update = 21;
     }
