@@ -33,6 +33,6 @@ namespace Merge.Classes.Helpers {
 
         public const int Update = 8;
 
-        public const string Classification = "PRE-ALPHA";
+        public const string Classification = "GENERAL AVAILABILITY";
     }
 }

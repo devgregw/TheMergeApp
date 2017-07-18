@@ -33,16 +33,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoreLocation;
-using Foundation;
 using Merge.Classes.Helpers;
 using Merge.Classes.UI.Controls;
 using Merge.Classes.UI.Pages;
+using Merge.iOS;
 using MergeApi.Models.Core;
 using MergeApi.Models.Core.Tab;
 using MergeApi.Tools;
-using ObjCRuntime;
 using Xamarin.Forms;
-using Merge.iOS;
 
 #endregion
 
@@ -108,9 +106,8 @@ namespace Merge.Classes {
         public void SetItems(IEnumerable<MergeGroup> value) => DataCache.Groups = value;
 
         public double TransformForSorting(MergeGroup input) {
-            if (CLLocationManager.LocationServicesEnabled) {
+            if (CLLocationManager.LocationServicesEnabled)
                 AppDelegate.LocationManager.StartMonitoringSignificantLocationChanges();
-            }
             if (MergeLocationDelegate.Location == null) return 0;
             var c = MergeLocationDelegate.Location.Coordinate;
             AppDelegate.LocationManager.StopMonitoringSignificantLocationChanges();

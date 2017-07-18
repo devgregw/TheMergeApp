@@ -30,20 +30,14 @@
 #region USINGS
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using CoreLocation;
 using Foundation;
 using MapKit;
-using Merge.Classes.Helpers;
-using Merge.Classes.UI;
 using Merge.Classes.UI.Controls;
 using MergeApi.Client;
 using MergeApi.Models.Actions;
 using MergeApi.Models.Core;
-using UIKit;
 using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
 
 #endregion
 
@@ -52,10 +46,11 @@ namespace Merge.Classes.UI {
         public GroupsMapPage() {
             Title = "Merge Groups";
             new Action(async () => {
-                new NSObject().InvokeOnMainThread(() => ((App)Application.Current).ShowLoader("Loading..."));
+                new NSObject().InvokeOnMainThread(() => ((App) Application.Current).ShowLoader("Loading..."));
                 var groups = (await MergeDatabase.ListAsync<MergeGroup>()).ToList();
-                new NSObject().InvokeOnMainThread(((App)Application.Current).HideLoader);
-                Content = new MapView(groups.Select(g => new MergeGroupAnnotation(g)).Cast<MKAnnotation>().ToList(), a => OpenGroupDetailsAction.FromGroupId(((MergeGroupAnnotation)a).Group.Id).Invoke(), true, true) {
+                new NSObject().InvokeOnMainThread(((App) Application.Current).HideLoader);
+                Content = new MapView(groups.Select(g => new MergeGroupAnnotation(g)).Cast<MKAnnotation>().ToList(),
+                    a => OpenGroupDetailsAction.FromGroupId(((MergeGroupAnnotation) a).Group.Id).Invoke(), true, true) {
                     HorizontalOptions = LayoutOptions.Fill,
                     VerticalOptions = LayoutOptions.Fill
                 };

@@ -53,20 +53,23 @@ namespace Merge.Classes.UI.Controls {
         }
 
         public DataView(MergePage p) : this() {
-            Initialize(p.Title, p.ShortDescription, p.CoverImage, () => Navigation.PushAsync(new DataDetailPage(p), true), p.LeadersOnly
+            Initialize(p.Title, p.ShortDescription, p.CoverImage,
+                () => Navigation.PushAsync(new DataDetailPage(p), true), p.LeadersOnly
                     ? new IconView(Images.PasswordProtected, new Label {
                         Text = "Leaders Only",
                         TextColor = Color.Black,
                         FontSize = 14d
                     })
-                    : null, p.ButtonAction != null ? new Button {
+                    : null, p.ButtonAction != null
+                    ? new Button {
                         Text = p.ButtonLabel,
                         TextColor = p.Color.ToFormsColor().ContrastColor(p.Theme),
                         BackgroundColor = p.Color.ToFormsColor(),
                         BorderWidth = 1d,
                         BorderColor = p.Color.ToFormsColor().ContrastColor(p.Theme),
                         Command = new Command(p.ButtonAction.Invoke)
-                    } : null);
+                    }
+                    : null);
         }
 
         public DataView(MergeGroup g) : this() {

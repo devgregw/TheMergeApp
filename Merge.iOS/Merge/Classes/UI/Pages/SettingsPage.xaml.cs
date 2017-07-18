@@ -30,6 +30,7 @@
 #region USINGS
 
 using System;
+using Firebase.CloudMessaging;
 using Foundation;
 using Merge.Classes.Helpers;
 using Merge.Classes.UI.Pages;
@@ -82,7 +83,7 @@ namespace Merge.Classes.UI {
                 PreferenceHelper.LeaderUsername = "";
                 PreferenceHelper.LeaderPassword = "";
                 PreferenceHelper.AuthenticationState = PreferenceHelper.LeaderAuthenticationState.NoAttempt;
-                Firebase.CloudMessaging.Messaging.SharedInstance.Unsubscribe("/topics/verified_leader");
+                Messaging.SharedInstance.Unsubscribe("/topics/verified_leader");
             }
             _initializing = false;
         }

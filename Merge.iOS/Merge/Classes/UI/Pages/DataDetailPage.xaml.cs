@@ -75,8 +75,7 @@ namespace Merge.Classes.UI.Pages {
             AddLabel(Images.Info, e.Description, true, true);
             AddLabel(Images.Cost, e.Price.GetValueOrDefault(0d) == 0d ? "Free" : $"${e.Price}");
 
-            string MakeDateString(DateTime start, DateTime end)
-            {
+            string MakeDateString(DateTime start, DateTime end) {
                 return
                     $"Starts on {start.ToLongDateString()} at {start.ToString("h:mm tt", CultureInfo.CurrentUICulture)}\nand ends on {end.ToLongDateString()} at {end.ToString("h:mm tt", CultureInfo.CurrentUICulture)}";
             }
@@ -120,11 +119,12 @@ namespace Merge.Classes.UI.Pages {
 
         public DataDetailPage(MergePage p) : this() {
             if (p.LeadersOnly && !PreferenceHelper.IsValidLeader) {
-                AlertHelper.ShowAlert("Unauthorized", "You are not authorized to view this page.  If you believe this is an error, turn on leader-only features in Settings or contact us.",
+                AlertHelper.ShowAlert("Unauthorized",
+                    "You are not authorized to view this page.  If you believe this is an error, turn on leader-only features in Settings or contact us.",
                     async (a, i) => {
-                        if (i == a.CancelButtonIndex)
+                        if (i == a.CancelButtonIndex) {
                             await Navigation.PopAsync(true);
-                        else if (i == a.FirstOtherButtonIndex) {
+                        } else if (i == a.FirstOtherButtonIndex) {
                             await Navigation.PopAsync(true);
                             EmailAction.FromAddress("students@pantego.org").Invoke();
                         } else {
@@ -144,8 +144,8 @@ namespace Merge.Classes.UI.Pages {
                 if (!(v is Button || v is Label))
                     v.Margin = new Thickness(-6, 0, -6, 0);
                 if (v is Button) {
-                    ((Button)v).BackgroundColor = Color;
-                    ((Button)v).TextColor = Color.ContrastColor(Theme);
+                    ((Button) v).BackgroundColor = Color;
+                    ((Button) v).TextColor = Color.ContrastColor(Theme);
                 } else if (v is WebView) {
                     v.WidthRequest = UIApplication.SharedApplication.KeyWindow.Bounds.Width;
                     v.HeightRequest = UIApplication.SharedApplication.KeyWindow.Bounds.Width / 3 * 2;
@@ -170,7 +170,8 @@ namespace Merge.Classes.UI.Pages {
             AddLabel(Images.Location, g.Address);
             AddLabel(Images.Home, $"Hosted by {g.Host}");
             dataList.Children.Add(new MapView(new List<MKAnnotation> {
-                new MapAnnotation(g.Coordinates.Manipulate(p => new CLLocationCoordinate2D(Convert.ToDouble(p.Latitude), Convert.ToDouble(p.Longitude))))
+                new MapAnnotation(g.Coordinates.Manipulate(
+                    p => new CLLocationCoordinate2D(Convert.ToDouble(p.Latitude), Convert.ToDouble(p.Longitude))))
             }, a => { }, false, false) {
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 HeightRequest = UIApplication.SharedApplication.KeyWindow.Bounds.Width,
@@ -190,7 +191,7 @@ namespace Merge.Classes.UI.Pages {
             _menuItems.Add("Contact Us", EmailAction.FromAddress("students@pantego.org").Invoke);
             ToolbarItems.Add(new ToolbarItem("More", Images.MoreVertical, () => AlertHelper.ShowSheet(null, (s, i) => {
                 if (i != s.CancelButtonIndex)
-                    _menuItems.ElementAt((int)i).Value();
+                    _menuItems.ElementAt((int) i).Value();
             }, "Close", null, _menuItems.Keys.ToArray())));
         }
 

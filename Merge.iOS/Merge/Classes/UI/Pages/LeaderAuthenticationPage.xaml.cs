@@ -31,6 +31,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Firebase.CloudMessaging;
 using Merge.Classes.Helpers;
 using Merge.iOS;
 using MergeApi.Client;
@@ -60,7 +61,7 @@ namespace Merge.Classes.UI.Pages {
             PreferenceHelper.LeaderPassword = "";
             PreferenceHelper.AuthenticationState = PreferenceHelper.LeaderAuthenticationState.NoAttempt;
             PreferenceHelper.LeaderFeaturesEnabled = false;
-            Firebase.CloudMessaging.Messaging.SharedInstance.Unsubscribe("/topics/verified_leader");
+            Messaging.SharedInstance.Unsubscribe("/topics/verified_leader");
             await Navigation.PopModalAsync();
             _callback(false);
         }
@@ -85,7 +86,7 @@ namespace Merge.Classes.UI.Pages {
                 PreferenceHelper.AuthenticationState = PreferenceHelper.LeaderAuthenticationState.Successful;
                 PreferenceHelper.LeaderUsername = u;
                 PreferenceHelper.LeaderPassword = p;
-                Firebase.CloudMessaging.Messaging.SharedInstance.Subscribe("/topics/verified_leader");
+                Messaging.SharedInstance.Subscribe("/topics/verified_leader");
                 await Navigation.PopModalAsync();
                 _callback(true);
             } catch {

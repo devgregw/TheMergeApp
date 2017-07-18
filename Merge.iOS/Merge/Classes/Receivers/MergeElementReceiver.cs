@@ -30,12 +30,10 @@
 #region USINGS
 
 using System;
-using AVKit;
 using Merge.Classes.Helpers;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Framework.Interfaces.Receivers;
 using MergeApi.Models.Elements;
-using UIKit;
 using Xamarin.Forms;
 
 #endregion
@@ -76,8 +74,8 @@ namespace Merge.Classes.Receivers {
         public T CreateVideoElement<T>(VideoElement element) {
             return (dynamic) new WebView {
                 Source = element.Vendor == VideoVendor.YouTube
-                             ? $"https://www.youtube.com/embed/{element.VideoId}"
-                             : $"https://player.vimeo.com/video/{element.VideoId}"
+                    ? $"https://www.youtube.com/embed/{element.VideoId}"
+                    : $"https://player.vimeo.com/video/{element.VideoId}"
             };
         }
     }

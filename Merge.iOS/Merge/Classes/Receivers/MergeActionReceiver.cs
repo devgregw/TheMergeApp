@@ -45,7 +45,6 @@ using MergeApi.Framework.Abstractions;
 using MergeApi.Framework.Interfaces;
 using MergeApi.Framework.Interfaces.Receivers;
 using MergeApi.Models.Actions;
-using MergeApi.Models.Core;
 using MergeApi.Models.Mediums;
 using MergeApi.Tools;
 using UIKit;
@@ -307,7 +306,8 @@ namespace Merge.Classes.Receivers {
 
         public async void InvokeOpenGroupDetailsActionAsync(OpenGroupDetailsAction action) {
             try {
-                await ((NavigationPage)Application.Current.MainPage).PushAsync(new DataDetailPage(await GetOrLoad(action.GroupId1, () => DataCache.Groups, v => DataCache.Groups = v)));
+                await ((NavigationPage) Application.Current.MainPage).PushAsync(new DataDetailPage(
+                    await GetOrLoad(action.GroupId1, () => DataCache.Groups, v => DataCache.Groups = v)));
             } catch (Exception ex) {
                 ShowErrorAlert("Open Group Details", "An error occurred while loading content.", ex);
             }
@@ -315,7 +315,8 @@ namespace Merge.Classes.Receivers {
 
         public async void InvokeOpenEventDetailsActionAsync(OpenEventDetailsAction action) {
             try {
-                await ((NavigationPage)Application.Current.MainPage).PushAsync(new DataDetailPage(await GetOrLoad(action.EventId1, () => DataCache.Events, v => DataCache.Events = v)));
+                await ((NavigationPage) Application.Current.MainPage).PushAsync(new DataDetailPage(
+                    await GetOrLoad(action.EventId1, () => DataCache.Events, v => DataCache.Events = v)));
             } catch (Exception ex) {
                 ShowErrorAlert("Open Event Details", "An error occurred while loading content.", ex);
             }
@@ -323,7 +324,8 @@ namespace Merge.Classes.Receivers {
 
         public async void InvokeOpenPageActionAsync(OpenPageAction action) {
             try {
-                await ((NavigationPage)Application.Current.MainPage).PushAsync(new DataDetailPage(await GetOrLoad(action.PageId1, () => DataCache.Pages, v => DataCache.Pages = v)));
+                await ((NavigationPage) Application.Current.MainPage).PushAsync(new DataDetailPage(
+                    await GetOrLoad(action.PageId1, () => DataCache.Pages, v => DataCache.Pages = v)));
             } catch (Exception ex) {
                 ShowErrorAlert("Open Page", "An error occurred while loading content.", ex);
             }

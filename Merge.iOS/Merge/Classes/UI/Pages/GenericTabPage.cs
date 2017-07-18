@@ -163,7 +163,8 @@ namespace Merge.Classes.UI.Pages {
             _list.Children.Clear();
             foreach (var v in views)
                 _list.Children.Add(v);
-            await ((ScrollView) Content).ScrollToAsync(0, ScrollYs.TryGetValue(_delegate.GetTab(), out var y) ? y : 0d, false);
+            await ((ScrollView) Content).ScrollToAsync(0, ScrollYs.TryGetValue(_delegate.GetTab(), out var y) ? y : 0d,
+                false);
             if (fade)
                 await _list.FadeTo(1d);
         }
