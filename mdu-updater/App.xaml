@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:mdu_updater"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
     </Application.Resources>
 </Application>
