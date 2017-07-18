@@ -90,7 +90,7 @@ namespace Merge.Classes {
 
         public View TransformIntoView(MergePage input) => new DataView(input);
 
-        public bool DoesPassThroughFilter(MergePage input) => (PreferenceHelper.IsValidLeader || !input.LeadersOnly) &&
+        public bool DoesPassThroughFilter(MergePage input) => !input.LeadersOnly &&
                                                               input.CheckTargeting(PreferenceHelper.GradeLevels,
                                                                   PreferenceHelper.Genders);
 

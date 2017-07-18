@@ -82,6 +82,8 @@ namespace Merge.iOS {
         public override bool FinishedLaunching(UIApplication app, NSDictionary options) {
             if (options != null)
                 LaunchedShortcutItem = options[UIApplication.LaunchOptionsShortcutItemKey] as UIApplicationShortcutItem;
+            var userAgent = NSDictionary.FromObjectsAndKeys(new [] { FromObject("Mozilla/5.0 (" + (UIDevice.CurrentDevice.Model.Contains("iPad") ? "iPad" : "iPhone") + "; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A403 Safari/8536.25") }, new [] { FromObject("UserAgent") });
+            NSUserDefaults.StandardUserDefaults.RegisterDefaults(userAgent);
             UITabBar.Appearance.BarTintColor = ColorConsts.PrimaryUiColor;
             Forms.Init();
             LoadApplication(new App());

@@ -75,9 +75,9 @@ namespace Merge.Classes.Receivers {
 
         public T CreateVideoElement<T>(VideoElement element) {
             return (dynamic) new WebView {
-                Source = (element.Vendor == VideoVendor.YouTube
-                             ? "https://www.youtube.com/embed/"
-                             : "https://player.vimeo.com/video/") + element.VideoId
+                Source = element.Vendor == VideoVendor.YouTube
+                             ? $"https://www.youtube.com/embed/{element.VideoId}"
+                             : $"https://player.vimeo.com/video/{element.VideoId}"
             };
         }
     }

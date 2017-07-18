@@ -212,10 +212,9 @@ namespace Merge.Classes.UI.Pages {
                         .First(h => (int) h.Tab == _delegate.GetTab()).Image)),
                     Aspect = Aspect.AspectFill
                 });
-            var nothing = !all.Any();
             var nothingCard =
-                new BlankCardView(new IconView(nothing ? Images.NoContent : Images.NoVisibleContent, new Label {
-                    Text = "No content",
+                new BlankCardView(new IconView(Images.NoContent, new Label {
+                    Text = "No content available",
                     TextColor = Color.Black,
                     FontSize = 18d
                 }));

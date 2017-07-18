@@ -42,6 +42,7 @@ using Merge.Classes.UI;
 using Merge.Classes.UI.Pages;
 using MergeApi.Client;
 using MergeApi.Framework.Abstractions;
+using MergeApi.Framework.Interfaces;
 using MergeApi.Framework.Interfaces.Receivers;
 using MergeApi.Models.Actions;
 using MergeApi.Models.Core;
@@ -100,7 +101,7 @@ namespace Merge.Classes.Receivers {
             switch (action.ParamGroup) {
                 case "1":
                     try {
-                        var e = await LoadAsync(async () => await MergeDatabase.GetAsync<MergeEvent>(action.EventId1));
+                        var e = await GetOrLoad(action.EventId1, () => DataCache.Events, v => DataCache.Events = v);
                         InternalInvoke(e.StartDate.Value, e.EndDate.Value,
                             string.IsNullOrWhiteSpace(e.Address) ? e.Location : e.Address, e.Title, e.RecurrenceRule);
                     } catch (Exception ex) {
@@ -132,7 +133,7 @@ namespace Merge.Classes.Receivers {
             switch (action.ParamGroup) {
                 case "1":
                     try {
-                        var e = await LoadAsync(async () => await MergeDatabase.GetAsync<MergeEvent>(action.EventId1));
+                        var e = await GetOrLoad(action.EventId1, () => DataCache.Events, v => DataCache.Events = v);
                         if (string.IsNullOrWhiteSpace(e.Address))
                             ShowSimpleAlert("Get Directions",
                                 $"Directions to \"{e.Title}\" cannot be computed because the event's address is unspecified.");
@@ -144,7 +145,7 @@ namespace Merge.Classes.Receivers {
                     break;
                 case "2":
                     try {
-                        var g = await LoadAsync(async () => await MergeDatabase.GetAsync<MergeGroup>(action.GroupId2));
+                        var g = await GetOrLoad(action.GroupId2, () => DataCache.Groups, v => DataCache.Groups = v);
                         await InternalInvokeWithAddress(g.Address);
                     } catch (Exception ex) {
                         ShowErrorAlert("Get Directions", "An error occurred while loading content.", ex);
@@ -251,7 +252,7 @@ namespace Merge.Classes.Receivers {
             switch (action.ParamGroup) {
                 case "1":
                     try {
-                        var g = await LoadAsync(async () => await MergeDatabase.GetAsync<MergeGroup>(action.GroupId1));
+                        var g = await GetOrLoad(action.GroupId1, () => DataCache.Groups, v => DataCache.Groups = v);
                         items = MakeItems(g.ContactMediums);
                         name = g.Name;
                     } catch (Exception ex) {
@@ -306,11 +307,7 @@ namespace Merge.Classes.Receivers {
 
         public async void InvokeOpenGroupDetailsActionAsync(OpenGroupDetailsAction action) {
             try {
-                var group = (DataCache.Groups == null || DataCache.Groups.All(g => g.Id != action.GroupId1)
-                    ? await LoadAsync(async () => DataCache.Groups = await MergeDatabase.ListAsync<MergeGroup>())
-                    : DataCache.Groups)
-                    .First(g => g.Id == action.GroupId1);
-                await ((NavigationPage)Application.Current.MainPage).PushAsync(new DataDetailPage(group));
+                await ((NavigationPage)Application.Current.MainPage).PushAsync(new DataDetailPage(await GetOrLoad(action.GroupId1, () => DataCache.Groups, v => DataCache.Groups = v)));
             } catch (Exception ex) {
                 ShowErrorAlert("Open Group Details", "An error occurred while loading content.", ex);
             }
@@ -318,11 +315,7 @@ namespace Merge.Classes.Receivers {
 
         public async void InvokeOpenEventDetailsActionAsync(OpenEventDetailsAction action) {
             try {
-                var @event = (DataCache.Events == null || DataCache.Events.All(e => e.Id != action.EventId1)
-                        ? await LoadAsync(async () => DataCache.Events = await MergeDatabase.ListAsync<MergeEvent>())
-                        : DataCache.Events)
-                    .First(e => e.Id == action.EventId1);
-                await ((NavigationPage)Application.Current.MainPage).PushAsync(new DataDetailPage(@event));
+                await ((NavigationPage)Application.Current.MainPage).PushAsync(new DataDetailPage(await GetOrLoad(action.EventId1, () => DataCache.Events, v => DataCache.Events = v)));
             } catch (Exception ex) {
                 ShowErrorAlert("Open Event Details", "An error occurred while loading content.", ex);
             }
@@ -330,11 +323,7 @@ namespace Merge.Classes.Receivers {
 
         public async void InvokeOpenPageActionAsync(OpenPageAction action) {
             try {
-                var page = (DataCache.Pages == null || DataCache.Pages.All(p => p.Id != action.PageId1)
-                        ? await LoadAsync(async () => DataCache.Pages = await MergeDatabase.ListAsync<MergePage>())
-                        : DataCache.Pages)
-                    .First(p => p.Id == action.PageId1);
-                await ((NavigationPage)Application.Current.MainPage).PushAsync(new DataDetailPage(page));
+                await ((NavigationPage)Application.Current.MainPage).PushAsync(new DataDetailPage(await GetOrLoad(action.PageId1, () => DataCache.Pages, v => DataCache.Pages = v)));
             } catch (Exception ex) {
                 ShowErrorAlert("Open Page", "An error occurred while loading content.", ex);
             }
@@ -365,6 +354,14 @@ namespace Merge.Classes.Receivers {
 
         public void HideLoadingScreen() {
             ((App) Application.Current).HideLoader();
+        }
+
+        public async Task<T> GetOrLoad<T>(string id, Func<IEnumerable<T>> getter,
+            Func<IEnumerable<T>, IEnumerable<T>> setter) where T : IIdentifiable {
+            return (getter() == null || getter().All(i => i.Id != id)
+                    ? await LoadAsync(async () => setter(await MergeDatabase.ListAsync<T>()))
+                    : getter())
+                .First(i => i.Id == id);
         }
 
         public async Task<T> LoadAsync<T>(Func<Task<T>> task) {
