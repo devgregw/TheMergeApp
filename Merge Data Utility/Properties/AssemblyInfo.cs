@@ -32,6 +32,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
+using Merge_Data_Utility;
 
 #endregion
 
@@ -85,5 +86,5 @@ using System.Windows;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("2.0.0.0")]
+[assembly: AssemblyVersion(VersionInfo.VersionString)]
+[assembly: AssemblyFileVersion(VersionInfo.VersionString)]
