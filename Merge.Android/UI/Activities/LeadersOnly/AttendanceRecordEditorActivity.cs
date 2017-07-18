@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Project Merge.Android:  RecordEditorActivity.cs (in Solution Merge.Android)
+// Project Merge.Android:  AttendanceRecordEditorActivity.cs (in Solution Merge.Android)
 // Created by Greg Whatley on 06/30/2017 at 9:20 AM.
 // 
 // The MIT License (MIT)
@@ -54,9 +54,9 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
         private TextView _date, _groupId;
         private AttendanceGroup _group;
         private CheckBox _leadersPresent;
+        private IMenu _menu;
         private AttendanceRecord _record;
         private LinearLayout _studentsList;
-        private IMenu _menu;
 
         public void OnClick(View v) {
             if (v.Id == _addStudentButton.Id) {
@@ -75,7 +75,8 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
         }
 
         public override bool OnPrepareOptionsMenu(IMenu menu) {
-            menu.Add(0, 1, 0, "Save Changes").SetEnabled(!Intent.HasExtra("recordJson")).SetShowAsAction(ShowAsAction.Always);
+            menu.Add(0, 1, 0, "Save Changes").SetEnabled(!Intent.HasExtra("recordJson"))
+                .SetShowAsAction(ShowAsAction.Always);
             return base.OnPrepareOptionsMenu(menu);
         }
 

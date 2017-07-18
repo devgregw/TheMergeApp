@@ -47,8 +47,8 @@ using Merge.Android.UI.Activities;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Models.Actions;
 using MergeApi.Models.Core;
-using Newtonsoft.Json;
 using MergeApi.Tools;
+using Newtonsoft.Json;
 using Utilities = Merge.Android.Helpers.Utilities;
 
 #endregion
@@ -63,24 +63,26 @@ namespace Merge.Android.UI.Views {
                 p.Color.ToAndroidColor(), p.Theme,
                 !p.LeadersOnly
                     ? null
-                    : new IconView(Context, Resource.Drawable.PasswordProtected, "Leaders Only"), p.ButtonAction != null ? new Button(Context) {
-                    Text = p.ButtonLabel
-                }.Manipulate(b => {
-                    if (!SdkChecker.Lollipop) return b;
-                    b.SetTextColor(p.Color.ToAndroidColor().ContrastColor(p.Theme));
-                    b.BackgroundTintList = ColorStateList.ValueOf(p.Color.ToAndroidColor());
-                    b.Click += (s, e) => {
-                        OpenPageAction pageAction;
-                        if ((pageAction = p.ButtonAction as OpenPageAction) != null) {
-                            if (pageAction.PageId1 == p.Id)
-                                ShowDetailsWithTransition();
+                    : new IconView(Context, Resource.Drawable.PasswordProtected, "Leaders Only"), p.ButtonAction != null
+                    ? new Button(Context) {
+                        Text = p.ButtonLabel
+                    }.Manipulate(b => {
+                        if (!SdkChecker.Lollipop) return b;
+                        b.SetTextColor(p.Color.ToAndroidColor().ContrastColor(p.Theme));
+                        b.BackgroundTintList = ColorStateList.ValueOf(p.Color.ToAndroidColor());
+                        b.Click += (s, e) => {
+                            OpenPageAction pageAction;
+                            if ((pageAction = p.ButtonAction as OpenPageAction) != null)
+                                if (pageAction.PageId1 == p.Id)
+                                    ShowDetailsWithTransition();
+                                else
+                                    p.ButtonAction.Invoke();
                             else
                                 p.ButtonAction.Invoke();
-                        } else
-                            p.ButtonAction.Invoke();
-                    };
-                    return b;
-                }) : null);
+                        };
+                        return b;
+                    })
+                    : null);
 
         public DataCard(Context context, MergeEvent e) : base(context) =>
             Initialize(e.Title, e.ShortDescription, JsonConvert.SerializeObject(e), "event", e.CoverImage,
@@ -94,13 +96,17 @@ namespace Merge.Android.UI.Views {
 
         public DataCard(Context context, IAttributeSet attrs, int defStyleAttr) : base(context, attrs, defStyleAttr) { }
 
+        public void OnClick(View v) {
+            if (v.Id == Resource.Id.card) ShowDetailsWithTransition();
+        }
+
         private void ShowDetailsWithTransition() {
             if (string.IsNullOrWhiteSpace(_type)) {
                 Toast.MakeText(Context, "Invalid data.", ToastLength.Short).Show();
                 return;
             }
             var options =
-                ActivityOptionsCompat.MakeSceneTransitionAnimation((Activity)Context,
+                ActivityOptionsCompat.MakeSceneTransitionAnimation((Activity) Context,
                     FindViewById<ImageView>(Resource.Id.image), "imageTransition");
             var intent = new Intent(Context, typeof(DataDetailActivity));
             intent.PutExtra("json", _json);
@@ -108,12 +114,6 @@ namespace Merge.Android.UI.Views {
             intent.PutExtra("url", _url);
             intent.PutExtra("type", _type);
             Context.StartActivity(intent, options.ToBundle());
-        }
-
-        public void OnClick(View v) {
-            if (v.Id == Resource.Id.card) {
-                ShowDetailsWithTransition();
-            }
         }
 
         private void Initialize(string title, string desc, string json, string type, string url, Color color,

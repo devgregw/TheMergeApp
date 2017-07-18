@@ -56,8 +56,6 @@ namespace Merge.Android.UI.Fragments {
         private List<AttendanceRecord> _records;
         private int _state;
 
-        public AttendanceGroup SelectedGroup { get; private set; }
-
         public AttendanceListFragment(Context c) {
             _context = c;
             _groups = new List<AttendanceGroup>();
@@ -66,10 +64,13 @@ namespace Merge.Android.UI.Fragments {
             _arguments = new Dictionary<int, object>();
         }
 
+        public AttendanceGroup SelectedGroup { get; private set; }
+
         private void SetItems(Dictionary<string, string> items) {
             (ListAdapter as ArrayAdapter<String>)?.Clear();
             _items = items;
-            ListAdapter = new ArrayAdapter<string>(_context, global::Android.Resource.Layout.SimpleListItem1, _items.Keys.ToList());
+            ListAdapter = new ArrayAdapter<string>(_context, global::Android.Resource.Layout.SimpleListItem1,
+                _items.Keys.ToList());
         }
 
         private void SetState(int state, bool load, object argument) {
@@ -107,7 +108,10 @@ namespace Merge.Android.UI.Fragments {
                         SelectedGroup = _groups.First(g => g.Id == argument.ToString());
                         var sorted = _records.Where(r => r.GroupId == argument.ToString()).ToList();
                         sorted.Sort((x, y) => DateTime.Compare(y.Date, x.Date));
-                        SetItems(new Dictionary<string, string> {{ "Edit Group", "edit" }, {"Add Record", $"add:{argument}"}}
+                        SetItems(new Dictionary<string, string> {
+                                {"Edit Group", "edit"},
+                                {"Add Record", $"add:{argument}"}
+                            }
                             .Concat(sorted.ToDictionary(g => g.Date.ToLongDateString(), JsonConvert.SerializeObject))
                             .ToDictionary(p => p.Key, p => p.Value));
                         break;

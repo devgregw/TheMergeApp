@@ -30,13 +30,10 @@
 #region USINGS
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Android.App;
 using Android.Runtime;
 using Android.Util;
 using Firebase.Auth;
-using Firebase.Messaging;
 using Merge.Android.Helpers;
 using Merge.Android.Receivers;
 using MergeApi.Client;

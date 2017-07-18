@@ -47,7 +47,6 @@ using MergeApi.Framework.Abstractions;
 using MergeApi.Framework.Interfaces;
 using MergeApi.Framework.Interfaces.Receivers;
 using MergeApi.Models.Actions;
-using MergeApi.Models.Core;
 using MergeApi.Models.Mediums;
 using MergeApi.Tools;
 using Newtonsoft.Json;
@@ -61,12 +60,6 @@ using Uri = Android.Net.Uri;
 namespace Merge.Android.Receivers {
     public sealed class MergeActionInvocationReceiver : IActionInvocationReceiver {
         private Context _context;
-
-        private async Task<T> GetOrLoad<T>(string id, Func<IEnumerable<T>> getter, Func<IEnumerable<T>, IEnumerable<T>> setter) where T : IIdentifiable {
-            return (getter() == null || getter().All(i => i.Id != id)
-                ? await LoadAsync(async () => setter(await MergeDatabase.ListAsync<T>()))
-                : getter()).First(i => i.Id == id);
-        }
 
         public async void InvokeAddToCalendarActionAsync(AddToCalendarAction action) {
             /*var intentBuilder = new Func<DateTime, DateTime, string, string, RecurrenceRule, Intent>((start, end, loc, title, rule) => {
@@ -99,32 +92,32 @@ namespace Merge.Android.Receivers {
             StartActivity(intent);*/
             var adder = new Action<DateTime, DateTime, string, string, RecurrenceRule>(
                 (start, end, loc, title, rule) => {
-                        var uri = Uri.Parse("content://com.android.calendar/events");
-                        var values = new ContentValues();
-                        values.Put(CalendarContract.EventsColumns.CalendarId, 1);
-                        values.Put(CalendarContract.EventsColumns.Title, title);
-                        values.Put(CalendarContract.EventsColumns.EventLocation, loc);
-                        values.Put(CalendarContract.EventsColumns.EventTimezone, TimeZone.Default.ID);
-                        var begin = Calendar.Instance;
-                        var calEnd = Calendar.Instance;
-                        calEnd.Set(end.Year, end.Month - 1, end.Day, end.Hour, end.Minute);
-                        begin.Set(start.Year, start.Month - 1, start.Day, start.Hour, start.Minute);
-                        values.Put(CalendarContract.EventsColumns.Dtstart, begin.TimeInMillis);
-                        if (rule == null)
-                            values.Put(CalendarContract.EventsColumns.Dtend, calEnd.TimeInMillis);
-                        else {
-                            values.Put(CalendarContract.EventsColumns.Duration,
-                                $"P{(calEnd.TimeInMillis - begin.TimeInMillis) / 1000}S");
-                            var rrule = $"FREQ={rule.Frequency.ToString().ToUpper()};INTERVAL={rule.Interval}";
-                            if (rule.End.HasValue)
+                    var uri = Uri.Parse("content://com.android.calendar/events");
+                    var values = new ContentValues();
+                    values.Put(CalendarContract.EventsColumns.CalendarId, 1);
+                    values.Put(CalendarContract.EventsColumns.Title, title);
+                    values.Put(CalendarContract.EventsColumns.EventLocation, loc);
+                    values.Put(CalendarContract.EventsColumns.EventTimezone, TimeZone.Default.ID);
+                    var begin = Calendar.Instance;
+                    var calEnd = Calendar.Instance;
+                    calEnd.Set(end.Year, end.Month - 1, end.Day, end.Hour, end.Minute);
+                    begin.Set(start.Year, start.Month - 1, start.Day, start.Hour, start.Minute);
+                    values.Put(CalendarContract.EventsColumns.Dtstart, begin.TimeInMillis);
+                    if (rule == null) {
+                        values.Put(CalendarContract.EventsColumns.Dtend, calEnd.TimeInMillis);
+                    } else {
+                        values.Put(CalendarContract.EventsColumns.Duration,
+                            $"P{(calEnd.TimeInMillis - begin.TimeInMillis) / 1000}S");
+                        var rrule = $"FREQ={rule.Frequency.ToString().ToUpper()};INTERVAL={rule.Interval}";
+                        if (rule.End.HasValue)
                             rrule +=
-                                    $";UNTIL={rule.End.Value.ToUniversalTime().ToString("yyyyMMdd'T'HHmmss'Z'", CultureInfo.CurrentUICulture)}";
-                                //$";UNTIL={end.ToUniversalTime().ToString("u", CultureInfo.CurrentUICulture).Replace("-", "").Replace(" ", "T").Replace(":", "")}";
-                            else if (rule.Count.HasValue)
-                                rrule += $";COUNT={rule.Count - 1}";
-                            values.Put(CalendarContract.EventsColumns.Rrule, rrule);
-                            Console.WriteLine("RRULE: " + rrule);
-                        }
+                                $";UNTIL={rule.End.Value.ToUniversalTime().ToString("yyyyMMdd'T'HHmmss'Z'", CultureInfo.CurrentUICulture)}";
+                        //$";UNTIL={end.ToUniversalTime().ToString("u", CultureInfo.CurrentUICulture).Replace("-", "").Replace(" ", "T").Replace(":", "")}";
+                        else if (rule.Count.HasValue)
+                            rrule += $";COUNT={rule.Count - 1}";
+                        values.Put(CalendarContract.EventsColumns.Rrule, rrule);
+                        Console.WriteLine("RRULE: " + rrule);
+                    }
                     try {
                         _context.ContentResolver.Insert(uri, values);
                         Toast.MakeText(_context, $"\"{title}\" was added to your calendar.", ToastLength.Long).Show();
@@ -142,7 +135,8 @@ namespace Merge.Android.Receivers {
                         string.IsNullOrWhiteSpace(e.Address) ? e.Location : e.Address, e.Title, e.RecurrenceRule);
                     break;
                 case "2":
-                    adder(action.StartDate2.Value, action.EndDate2.Value, action.Location2, action.Title2, action.RecurrenceRule2);
+                    adder(action.StartDate2.Value, action.EndDate2.Value, action.Location2, action.Title2,
+                        action.RecurrenceRule2);
                     break;
             }
         }
@@ -252,10 +246,10 @@ namespace Merge.Android.Receivers {
                 var result = new Dictionary<string, MediumBase>();
                 foreach (var medium in mediums)
                     if (medium is EmailAddressMedium) {
-                        var email = (EmailAddressMedium)medium;
+                        var email = (EmailAddressMedium) medium;
                         result.Add($"Email {email.Who} ({email.Kind.ToString()})", email);
                     } else if (medium is PhoneNumberMedium) {
-                        var phone = (PhoneNumberMedium)medium;
+                        var phone = (PhoneNumberMedium) medium;
                         result.Add($"Call {phone.Who} ({phone.Kind.ToString()})", phone);
                         if (phone.CanReceiveSMS)
                             result.Add($"Text {phone.Who} ({phone.Kind.ToString()})", phone);
@@ -282,13 +276,13 @@ namespace Merge.Android.Receivers {
                     var item = strings[e.Which];
                     if (item.Contains("Email")) {
                         items.TryGetValue(item, out var value);
-                        EmailAction.FromContactMedium((EmailAddressMedium)value).Invoke();
+                        EmailAction.FromContactMedium((EmailAddressMedium) value).Invoke();
                     } else if (item.Contains("Call") || item.Contains("Text")) {
                         items.TryGetValue(item, out var value);
                         if (item.Contains("Call"))
-                            CallAction.FromContactMedium((PhoneNumberMedium)value).Invoke();
+                            CallAction.FromContactMedium((PhoneNumberMedium) value).Invoke();
                         else
-                            TextAction.FromContactMedium((PhoneNumberMedium)value).Invoke();
+                            TextAction.FromContactMedium((PhoneNumberMedium) value).Invoke();
                     }
                 })
                 .SetCancelable(true)
@@ -299,15 +293,15 @@ namespace Merge.Android.Receivers {
                     foreach (var medium in items.Values)
                         if (medium is EmailAddressMedium) {
                             msg +=
-                                $"{(medium as EmailAddressMedium).Who + " (" + ((EmailAddressMedium)medium).Kind.ToString().ToLower() + ")"}\n {(medium as EmailAddressMedium).Address}\n\n";
+                                $"{(medium as EmailAddressMedium).Who + " (" + ((EmailAddressMedium) medium).Kind.ToString().ToLower() + ")"}\n {(medium as EmailAddressMedium).Address}\n\n";
                         } else if (medium is PhoneNumberMedium) {
-                            if (((PhoneNumberMedium)medium).CanReceiveSMS) {
-                                if (dupes.Contains((PhoneNumberMedium)medium))
+                            if (((PhoneNumberMedium) medium).CanReceiveSMS) {
+                                if (dupes.Contains((PhoneNumberMedium) medium))
                                     continue;
-                                dupes.Add((PhoneNumberMedium)medium);
+                                dupes.Add((PhoneNumberMedium) medium);
                             }
                             msg +=
-                                $"{(medium as PhoneNumberMedium).Who + " (" + ((PhoneNumberMedium)medium).Kind.ToString().ToLower() + ")"}\n {(medium as PhoneNumberMedium).PhoneNumber}\n\n";
+                                $"{(medium as PhoneNumberMedium).Who + " (" + ((PhoneNumberMedium) medium).Kind.ToString().ToLower() + ")"}\n {(medium as PhoneNumberMedium).PhoneNumber}\n\n";
                         }
                     msg = msg.Remove(msg.Length - 2);
                     new AlertDialog.Builder(_context).SetTitle($"Contact {name}")
@@ -350,6 +344,13 @@ namespace Merge.Android.Receivers {
             intent.PutExtra("url", p.CoverImage);
             intent.PutExtra("type", "page");
             StartActivity(intent);
+        }
+
+        private async Task<T> GetOrLoad<T>(string id, Func<IEnumerable<T>> getter,
+            Func<IEnumerable<T>, IEnumerable<T>> setter) where T : IIdentifiable {
+            return (getter() == null || getter().All(i => i.Id != id)
+                ? await LoadAsync(async () => setter(await MergeDatabase.ListAsync<T>()))
+                : getter()).First(i => i.Id == id);
         }
 
         public void SetContext(Context c) {

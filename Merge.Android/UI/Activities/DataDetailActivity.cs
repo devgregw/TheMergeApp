@@ -46,7 +46,6 @@ using Android.Support.V7.View.Menu;
 using Android.Util;
 using Android.Views;
 using Android.Views.Animations;
-using Android.Webkit;
 using Android.Widget;
 using Merge.Android.Helpers;
 using Merge.Android.Receivers;
@@ -55,11 +54,11 @@ using MergeApi.Client;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Models.Actions;
 using MergeApi.Models.Core;
+using MergeApi.Tools;
 using Newtonsoft.Json;
+using AlertDialog = Android.Support.V7.App.AlertDialog;
 using Orientation = Android.Widget.Orientation;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
-using MergeApi.Tools;
-using AlertDialog = Android.Support.V7.App.AlertDialog;
 using Utilities = Merge.Android.Helpers.Utilities;
 
 #endregion
@@ -185,7 +184,7 @@ namespace Merge.Android.UI.Activities {
             }
             _pageContent.RemoveAllViews();
             await Task.Run(() => {
-                foreach (var e in _page.Content) {
+                foreach (var e in _page.Content)
                     new Handler(MainLooper).Post(() => {
                         var view = e.CreateView<View>();
                         _pageContent.AddView(view);
@@ -195,7 +194,6 @@ namespace Merge.Android.UI.Activities {
                                     Resources.DisplayMetrics)))
                         });
                     });
-                }
             });
         }
 
@@ -248,16 +246,18 @@ namespace Merge.Android.UI.Activities {
                 isFree));
 
             string MakeDateString(DateTime start, DateTime end) {
-                return $"Starts on {start.ToLongDateString()} at {start.ToString("h:mm tt", CultureInfo.CurrentUICulture)} and ends on {end.ToLongDateString()} at {end.ToString("h:mm tt", CultureInfo.CurrentUICulture)}";
+                return
+                    $"Starts on {start.ToLongDateString()} at {start.ToString("h:mm tt", CultureInfo.CurrentUICulture)} and ends on {end.ToLongDateString()} at {end.ToString("h:mm tt", CultureInfo.CurrentUICulture)}";
             }
-            
+
             var dateString = MakeDateString(e.StartDate.Value, e.EndDate.Value);
             if (e.RecurrenceRule != null) {
                 var begin = RecurrenceRule.GetNextOccurrence(e.StartDate.Value, e.RecurrenceRule);
                 if (begin.HasValue) {
                     var diff = e.EndDate.Value - e.StartDate.Value;
                     var end = begin.Value.AddMilliseconds(diff.TotalMilliseconds);
-                    dateString = MakeDateString(begin.Value, end) + $"\n{RecurrenceRule.GetRuleDescription(e.StartDate.Value, e.RecurrenceRule)}";
+                    dateString = MakeDateString(begin.Value, end) +
+                                 $"\n{RecurrenceRule.GetRuleDescription(e.StartDate.Value, e.RecurrenceRule)}";
                 }
             }
             _dataLayout.AddView(new IconView(this, Resource.Drawable.DateTime,
