@@ -159,13 +159,13 @@ namespace Merge.Classes.UI.Pages {
         private async Task SetViews(IReadOnlyCollection<View> views, bool fade, bool loading = false) {
             _isLoading = loading;
             if (fade)
-                await Content.FadeTo(0d);
+                await _list.FadeTo(0d);
             _list.Children.Clear();
             foreach (var v in views)
                 _list.Children.Add(v);
             await ((ScrollView) Content).ScrollToAsync(0, ScrollYs.TryGetValue(_delegate.GetTab(), out var y) ? y : 0d, false);
             if (fade)
-                await Content.FadeTo(1d);
+                await _list.FadeTo(1d);
         }
 
         public sealed override async void Resume() {

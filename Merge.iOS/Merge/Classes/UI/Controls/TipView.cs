@@ -57,7 +57,7 @@ namespace Merge.Classes.UI.Controls {
                 messageLayout.Children.Add(new IconView(Images.TipHasAction, new Label {
                     Text = "Tap to open",
                     FontSize = 14d,
-                    TextColor = Color.Gray
+                    TextColor = Color.FromRgba(0, 0, 0, 153)
                 }));
                 GestureRecognizers.Add(new TapGestureRecognizer {
                     Command = new Command(tip.Action.Invoke)

@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\VersionConsts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\MapAnnotation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\MergeGroupAnnotation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\MergeLocationDelegate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\Receivers\MergeActionReceiver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\Receivers\MergeElementReceiver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\Receivers\MergeLogReceiver.cs" />

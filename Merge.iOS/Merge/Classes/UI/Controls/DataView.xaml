@@ -7,7 +7,7 @@
         <StackLayout BackgroundColor="White" Orientation="Vertical">
             <Image HorizontalOptions="Fill" x:Name="cover" Aspect="AspectFill" />
             <StackLayout x:Name="content" Margin="5,0,5,5">
-                <Label x:Name="title" FontSize="20" TextColor="Black" LineBreakMode="WordWrap"
+                <Label x:Name="title" FontSize="25" FontAttributes="Bold" TextColor="Black" LineBreakMode="WordWrap"
                        HorizontalOptions="Start" VerticalOptions="Start" />
                 <Label x:Name="description" FontSize="14" TextColor="Black" LineBreakMode="WordWrap"
                        HorizontalOptions="Start" VerticalOptions="Start" />

@@ -33,13 +33,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoreLocation;
+using Foundation;
 using Merge.Classes.Helpers;
 using Merge.Classes.UI.Controls;
 using Merge.Classes.UI.Pages;
 using MergeApi.Models.Core;
 using MergeApi.Models.Core.Tab;
 using MergeApi.Tools;
+using ObjCRuntime;
 using Xamarin.Forms;
+using Merge.iOS;
 
 #endregion
 
@@ -104,24 +107,13 @@ namespace Merge.Classes {
 
         public void SetItems(IEnumerable<MergeGroup> value) => DataCache.Groups = value;
 
-        public sealed class LocationDelegate : CLLocationManagerDelegate {
-            public static CLLocation Location { get; set; }
-
-            public override void LocationsUpdated(CLLocationManager manager, CLLocation[] locations) {
-                Location = locations.Last();
-                manager.StopMonitoringSignificantLocationChanges();
-            }
-        }
-
         public double TransformForSorting(MergeGroup input) {
             if (CLLocationManager.LocationServicesEnabled) {
-                var manager = new CLLocationManager();
-                manager.RequestWhenInUseAuthorization();
-                manager.Delegate = new LocationDelegate();
-                manager.StartMonitoringSignificantLocationChanges();
+                AppDelegate.LocationManager.StartMonitoringSignificantLocationChanges();
             }
-            if (LocationDelegate.Location == null) return 0;
-            var c = LocationDelegate.Location.Coordinate;
+            if (MergeLocationDelegate.Location == null) return 0;
+            var c = MergeLocationDelegate.Location.Coordinate;
+            AppDelegate.LocationManager.StopMonitoringSignificantLocationChanges();
             return Math.Sqrt(Math.Pow(c.Latitude - Convert.ToDouble(input.Coordinates.Latitude), 2) +
                              Math.Pow(c.Longitude - Convert.ToDouble(input.Coordinates.Longitude), 2));
         }

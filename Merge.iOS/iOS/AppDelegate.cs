@@ -30,10 +30,12 @@
 #region USINGS
 
 using System;
+using CoreLocation;
 using Firebase.Auth;
 using Firebase.CloudMessaging;
 using Firebase.InstanceID;
 using Foundation;
+using Merge.Classes;
 using Merge.Classes.Helpers;
 using Merge.Classes.Receivers;
 using MergeApi.Client;
@@ -52,6 +54,7 @@ namespace Merge.iOS {
     public class AppDelegate : FormsApplicationDelegate, IMessageSender, IUNUserNotificationCenterDelegate {
         private bool _finishedLaunching;
         public static FirebaseAuthLink AuthLink { get; set; }
+        public static CLLocationManager LocationManager { get; set; }
 
         public UIApplicationShortcutItem LaunchedShortcutItem { get; set; }
 
@@ -100,6 +103,11 @@ namespace Merge.iOS {
                 UIApplication.SharedApplication.RegisterUserNotificationSettings(settings);
             }
             UIApplication.SharedApplication.RegisterForRemoteNotifications();
+            if (CLLocationManager.LocationServicesEnabled) {
+                LocationManager = new CLLocationManager();
+                LocationManager.Delegate = new MergeLocationDelegate();
+                LocationManager.RequestWhenInUseAuthorization();
+            }
             InstanceId.Notifications.ObserveTokenRefresh((s, e) => {
                 Console.WriteLine($"[FIREBASE] instance ID refreshed: {InstanceId.SharedInstance.Token}");
             });
