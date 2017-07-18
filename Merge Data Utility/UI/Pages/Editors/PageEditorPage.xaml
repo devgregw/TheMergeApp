@@ -12,7 +12,7 @@
     <ScrollViewer Background="White">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5">
             <editorFields:ModelBaseFieldCollectionControl x:Name="baseCtrls" Type="page" />
-            <Separator Margin="10"/>
+            <Separator Margin="10" />
             <editorFields:FieldHeader Title="Hidden"
                                       Description="If you choose to make this page hidden, it will not appear on the home tab." />
             <CheckBox x:Name="hiddenBox">Hidden</CheckBox>
@@ -25,19 +25,19 @@
             </ComboBox>
             <editorFields:FieldHeader Title="Leaders Only"
                                       Description="This page can be restricted leaders who have signed into the Merge app." />
-            <CheckBox x:Name="leadersOnly" Content="Leaders Only"/>
-            <Separator Margin="10"/>
+            <CheckBox x:Name="leadersOnly" Content="Leaders Only" />
+            <Separator Margin="10" />
             <editorFields:FieldHeader Title="Button"
                                       Description="Use the following two fields to set up a button that can be clicked from this page's tile.  If no button is configured, a default will be created instead." />
             <TextBlock>Label</TextBlock>
             <TextBox x:Name="buttonLabel" HorizontalAlignment="Left" Width="250" />
             <TextBlock>Action</TextBlock>
             <editorFields:ActionPickerField x:Name="buttonAction" />
-            <Separator Margin="10"/>
+            <Separator Margin="10" />
             <editorFields:FieldHeader Title="Content"
                                       Description="Pages are dynamic, which means they contain extra content elements.  Buttons, labels, images, and videos are currently supported.  Pages require either a description, content elements, or both." />
             <editorFields:ListField x:Name="contentList" />
-            <Separator Margin="10"/>
+            <Separator Margin="10" />
             <editorFields:FieldHeader Title="All done!"
                                       Description="Review the information above and click 'Publish' in the upper-left corner to publish this object.  Alternatively, click 'Save as Draft' to save it for later."
                                       Margin="0,0,0,20" />

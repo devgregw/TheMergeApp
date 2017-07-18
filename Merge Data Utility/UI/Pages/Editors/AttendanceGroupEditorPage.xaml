@@ -14,14 +14,14 @@
         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5">
             <editorFields:FieldHeader Title="ID" Description="This is a unique identifier for this object." />
             <editorFields:IdField x:Name="idField" />
-            <Separator Margin="10"/>
+            <Separator Margin="10" />
             <editorFields:FieldHeader Title="Leaders"
                                       Description="Make a list of the leaders of this group." />
             <editorFields:ListField x:Name="leadersList" />
             <editorFields:FieldHeader Title="Students"
                                       Description="Make a list of the students who are included in this group." />
             <editorFields:ListField x:Name="studentsList" />
-            <Separator Margin="10"/>
+            <Separator Margin="10" />
             <editorFields:FieldHeader Title="Grade Level"
                                       Description="Specify this group's grade level." />
             <ComboBox x:Name="gradeBox" HorizontalAlignment="Left" Width="150">
@@ -38,7 +38,7 @@
                 <ComboBoxItem>Male</ComboBoxItem>
                 <ComboBoxItem>Female</ComboBoxItem>
             </ComboBox>
-            <Separator Margin="10"/>
+            <Separator Margin="10" />
             <editorFields:FieldHeader Title="All done!"
                                       Description="Review the information above and click 'Publish' in the upper-left corner to publish this object.  Alternatively, click 'Save as Draft' to save it for later."
                                       Margin="0,0,0,20" />

@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  DataValidation.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/30/2017 at 6:12 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -91,12 +91,14 @@ namespace Merge_Data_Utility.Tools {
                         var page = v.GetSubject<MergePage>();
                         foreach (var b in buttons) {
                             ValidationResult validation = await b.ValidateAsync(),
-                                             subvalidation = validation.GetParameter<ValidationResult>(),
-                                             subvalidation2 = subvalidation.GetParameter<ValidationResult>();
+                                subvalidation = validation.GetParameter<ValidationResult>(),
+                                subvalidation2 = subvalidation.GetParameter<ValidationResult>();
                             var choice1 = GetUserChoice($"Fix pages/{page.Id} - Data Validation",
                                 $"Element {buttons.IndexOf(b) + 1} of {buttons.Count}: {GetResultDescription(validation.ResultType)}: {GetResultDescription(subvalidation.ResultType)}: {GetResultDescription(subvalidation2.ResultType)}",
-                                new [] { "Reconfigure the action",
-                                "See more choices"});
+                                new[] {
+                                    "Reconfigure the action",
+                                    "See more choices"
+                                });
                             if (choice1 == 0) {
                                 var copy = b;
                                 var ci = page.Content.IndexOf(copy);
@@ -107,8 +109,9 @@ namespace Merge_Data_Utility.Tools {
                                 page.Content[ci] = copy;
                             } else if (choice1 == 1) {
                                 await GetRepairFunc(subvalidation2)(subvalidation2);
-                            } else
+                            } else {
                                 await DefaultError(null);
+                            }
                         }
                         try {
                             await MergeDatabase.UpdateAsync(page);

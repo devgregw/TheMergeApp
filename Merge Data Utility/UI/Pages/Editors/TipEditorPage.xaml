@@ -14,7 +14,7 @@
         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5">
             <editorFields:FieldHeader Title="ID" Description="This is a unique identifier for this object." />
             <editorFields:IdField x:Name="idField" />
-            <Separator Margin="10"/>
+            <Separator Margin="10" />
             <editorFields:FieldHeader Title="Tab" Description="Specify the tab that this tip will appear on." />
             <ComboBox x:Name="tab" HorizontalAlignment="Left" Width="150">
                 <ComboBoxItem Tag="Home">Home</ComboBoxItem>
@@ -23,21 +23,21 @@
             </ComboBox>
             <editorFields:FieldHeader Title="Message" Description="Specify the message this tip will display." />
             <TextBox x:Name="message" HorizontalAlignment="Left" Width="350" />
-            <Separator Margin="10"/>
+            <Separator Margin="10" />
             <editorFields:FieldHeader Title="Action"
                                       Description="Optionally, specify an action to be invoked when a user taps the tip." />
             <editorFields:ActionPickerField x:Name="action" />
             <editorFields:FieldHeader Title="Persistent"
                                       Description="If this tip is marked as persistent, it cannot be dismissed by a user and will stay on-screen until it is deleted.  If not, the tip can be dismissed by a user." />
             <CheckBox x:Name="persistent">Persistent</CheckBox>
-            <Separator Margin="10"/>
+            <Separator Margin="10" />
             <editorFields:FieldHeader Title="Grades"
                                       Description="Choose the grade levels that this tip is intended for. Users outside of the target audience will not see this tip in the app (if filters are enabled)." />
             <editorFields:GradesSelector x:Name="gradesField" />
             <editorFields:FieldHeader Title="Genders"
                                       Description="Choose the genders that this tip is intended for. Users outside of the target audience will not see this tip in the app (if filters are enabled)." />
             <editorFields:GenderSelector x:Name="gendersField" />
-            <Separator Margin="10"/>
+            <Separator Margin="10" />
             <editorFields:FieldHeader Title="All done!"
                                       Description="Review the information above and click 'Publish' in the upper-left corner to publish this object.  Alternatively, click 'Save as Draft' to save it for later."
                                       Margin="0,0,0,20" />

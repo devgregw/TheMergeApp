@@ -5,6 +5,7 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows.Choosers"
                   mc:Ignorable="d"
-                  Icon="/Merge Data Utility;component/shadow-64.png" Title="Custom Contact Medium" Height="400" Width="400" ResizeMode="NoResize"
+                  Icon="/Merge Data Utility;component/shadow-64.png" Title="Custom Contact Medium" Height="400"
+                  Width="400" ResizeMode="NoResize"
                   WindowStartupLocation="CenterScreen" ShowsNavigationUI="False">
 </NavigationWindow>

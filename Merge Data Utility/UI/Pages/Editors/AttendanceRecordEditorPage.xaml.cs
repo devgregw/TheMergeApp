@@ -1,27 +1,56 @@
-﻿using System;
+﻿#region LICENSE
+
+// Project Merge Data Utility:  AttendanceRecordEditorPage.xaml.cs (in Solution Merge Data Utility)
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
+// 
+// The MIT License (MIT)
+// 
+// Copyright (c) 2017 Greg Whatley
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#endregion
+
+#region USINGS
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Merge_Data_Utility.UI.Pages.Base;
-using Merge_Data_Utility.UI.Windows;
 using MergeApi.Client;
 using MergeApi.Models.Core.Attendance;
+using Merge_Data_Utility.UI.Pages.Base;
+using Merge_Data_Utility.UI.Windows;
+using Xceed.Wpf.Toolkit.Primitives;
+
+#endregion
 
 namespace Merge_Data_Utility.UI.Pages.Editors {
     /// <summary>
-    /// Interaction logic for AttendanceRecordEditorPage.xaml
+    ///     Interaction logic for AttendanceRecordEditorPage.xaml
     /// </summary>
     public partial class AttendanceRecordEditorPage : EditorPage {
+        private AttendanceGroup _group;
+
         public AttendanceRecordEditorPage() {
             InitializeComponent();
         }
@@ -30,8 +59,6 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
             SetSource(src, false);
             DisableDrafting();
         }
-
-        private AttendanceGroup _group;
 
         private void SelectGroup(AttendanceGroup g) {
             content.IsEnabled = true;
@@ -46,22 +73,24 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
         }
 
         private void Browse(object sender, RoutedEventArgs e) {
-            var dialog = new ObjectChooserWindow(async () => (await MergeDatabase.ListAsync<AttendanceGroup>()).Select(g => new ListViewItem {
-                Content = $"{g.Summary} (attendance/groups/{g.Id})",
-                Tag = g
-            }));
+            var dialog = new ObjectChooserWindow(async () => (await MergeDatabase.ListAsync<AttendanceGroup>()).Select(
+                g => new ListViewItem {
+                    Content = $"{g.Summary} (attendance/groups/{g.Id})",
+                    Tag = g
+                }));
             dialog.ShowDialog();
             if (dialog.ObjectSelected)
                 SelectGroup(dialog.GetSelectedObject<AttendanceGroup>());
         }
 
-        private void StudentSelected(object sender, Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs e) {
+        private void StudentSelected(object sender, ItemSelectionChangedEventArgs e) {
             remove.IsEnabled = students.SelectedItem == null ||
-                               _group.StudentNames.Contains(((TextBlock)students.SelectedItem).Text);
+                               _group.StudentNames.Contains(((TextBlock) students.SelectedItem).Text);
         }
 
         private void AddStudent(object sender, RoutedEventArgs e) {
-            var dialog = new TextInputWindow("Add Student", "Enter student's name:", scope: InputScopeNameValue.PersonalFullName);
+            var dialog = new TextInputWindow("Add Student", "Enter student's name:",
+                scope: InputScopeNameValue.PersonalFullName);
             dialog.ShowDialog();
             if (!string.IsNullOrWhiteSpace(dialog.Input))
                 students.Items.Add(new TextBlock {
@@ -100,7 +129,7 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
         }
 
         protected override Task<object> MakeObject() {
-            return Task.FromResult((object)new AttendanceRecord {
+            return Task.FromResult((object) new AttendanceRecord {
                 // ReSharper disable once PossibleInvalidOperationException
                 Date = date.SelectedDate.Value,
                 GroupId = _group.Id,
@@ -110,17 +139,18 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
         }
 
         public override string GetIdentifier() {
-            return $"attendance/records/{date.SelectedDate?.ToString("MMddyyy") ?? "<no date>"}/{(_group == null ? "<no group>" : _group.Id)}";
+            return
+                $"attendance/records/{date.SelectedDate?.ToString("MMddyyy") ?? "<no date>"}/{(_group == null ? "<no group>" : _group.Id)}";
         }
 
         public override async Task<bool> Publish() {
             var res = ValidateInput();
-            if (!res.IsInputValid)
+            if (!res.IsInputValid) {
                 res.Display(Window);
-            else {
+            } else {
                 var reference = GetLoaderReference();
                 reference.StartLoading("Processing...");
-                var o = (AttendanceRecord)await MakeObject();
+                var o = (AttendanceRecord) await MakeObject();
                 try {
                     if (students.Items.Count > _group.StudentNames.Count) {
                         MessageBox.Show(Window,

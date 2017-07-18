@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows"
         xmlns:other="clr-namespace:Merge_Data_Utility.UI.Controls.Other"
         mc:Ignorable="d"
-        Icon="/Merge Data Utility;component/shadow-64.png" Title="Attendance Manager" Height="500" Width="500" WindowStartupLocation="CenterScreen" MinHeight="500"
+        Icon="/Merge Data Utility;component/shadow-64.png" Title="Attendance Manager" Height="500" Width="500"
+        WindowStartupLocation="CenterScreen" MinHeight="500"
         MinWidth="500">
     <Grid>
         <Grid.Background>
@@ -32,7 +33,7 @@
                 </TabItem>
                 <TabItem Header="Groups">
                     <ScrollViewer>
-                        <StackPanel x:Name="groupsList" VerticalAlignment="Top" Margin="5"/>
+                        <StackPanel x:Name="groupsList" VerticalAlignment="Top" Margin="5" />
                     </ScrollViewer>
                 </TabItem>
             </TabControl>

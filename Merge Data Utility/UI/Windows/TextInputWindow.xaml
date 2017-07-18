@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows"
         mc:Ignorable="d"
-        Icon="/Merge Data Utility;component/shadow-64.png" Title="Input" Height="125" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Icon="/Merge Data Utility;component/shadow-64.png" Title="Input" Height="125" Width="400" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
     <Grid Margin="5">
         <StackPanel>
             <TextBlock x:Name="message">Input:</TextBlock>

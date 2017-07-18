@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows"
-        mc:Ignorable="d" Icon="/Merge Data Utility;component/shadow-64.png" Title="Configure Action" Height="500" Width="450" ResizeMode="NoResize"
+        mc:Ignorable="d" Icon="/Merge Data Utility;component/shadow-64.png" Title="Configure Action" Height="500"
+        Width="450" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Border BorderBrush="Black" BorderThickness="0,0,0,1" VerticalAlignment="Top">

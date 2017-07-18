@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  NotificationManagerWindow.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 05/13/2017 at 9:11 AM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -34,8 +34,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Merge_Data_Utility.Tools;
@@ -55,41 +53,6 @@ namespace Merge_Data_Utility.UI.Windows {
             Loaded += Reload;
         }
 
-        public sealed class NotificationInfo {
-            [JsonProperty("id")]
-            public string Id { get; set; }
-
-            [JsonProperty("successful")]
-            public int Successful { get; set; }
-
-            [JsonProperty("failed")]
-            public int Failed { get; set; }
-
-            [JsonProperty("remaining")]
-            public int Remaining { get; set; }
-
-            [JsonProperty("converted")]
-            public int Converted { get; set; }
-
-            [JsonProperty("send_after")]
-            public int SendAfter { get; set; }
-
-            [JsonProperty("headings")]
-            public IDictionary<string, string> Headings { get; set; }
-
-            [JsonProperty("contents")]
-            public IDictionary<string, string> Contents { get; set; }
-
-            [JsonProperty("canceled")]
-            public bool Canceled { get; set; }
-
-            public NotificationInfo Fix() {
-                //Headings["en"] = Encoding.Unicode.GetString(Encoding.Convert(Encoding.UTF8, Encoding.Unicode, Encoding.UTF8.GetBytes(Headings["en"])));
-                //Contents["en"] = Encoding.Unicode.GetString(Encoding.Convert(Encoding.UTF8, Encoding.Unicode, Encoding.UTF8.GetBytes(Contents["en"])));
-                return this;
-            }
-        }
-
         private async void Reload(object sender, RoutedEventArgs e) {
             var reference = new LoaderReference(content);
             reference.StartLoading("Crunching the latest data...");
@@ -107,16 +70,16 @@ namespace Merge_Data_Utility.UI.Windows {
                     await web.DownloadStringTaskAsync(
                         "https://onesignal.com/api/v1/notifications?app_id=b52deecc-3f20-4904-a3f0-fd8e9aabb2b3"));
                 all.AddRange(json.Value<JArray>("notifications").Select(obj => obj.ToObject<NotificationInfo>().Fix()));
-                foreach (var n in all) {
+                foreach (var n in all)
                     if (n.SendAfter.ToDateTime() > DateTime.Now)
                         scheduled.Add(n);
                     else if (n.Remaining > 0)
                         inProgress.Add(n);
-                }
                 json = JObject.Parse(
                     await web.DownloadStringTaskAsync(
                         $"https://onesignal.com/api/v1/notifications?app_id=b52deecc-3f20-4904-a3f0-fd8e9aabb2b3&offset={inProgress.Count + scheduled.Count}"));
-                var history = json.Value<JArray>("notifications").Select(obj => obj.ToObject<NotificationInfo>().Fix()).ToList();
+                var history = json.Value<JArray>("notifications").Select(obj => obj.ToObject<NotificationInfo>().Fix())
+                    .ToList();
                 inProgress.ForEach(n => inProgressList.Children.Add(new NotificationControl(n, true)));
                 scheduled.ForEach(n => scheduledList.Children.Add(new NotificationControl(n, true)));
                 history.ForEach(n => historyList.Children.Add(new NotificationControl(n, false)));
@@ -155,6 +118,41 @@ namespace Merge_Data_Utility.UI.Windows {
 
         private void OpenDashboard(object sender, RoutedEventArgs e) {
             Process.Start("https://www.onesignal.com");
+        }
+
+        public sealed class NotificationInfo {
+            [JsonProperty("id")]
+            public string Id { get; set; }
+
+            [JsonProperty("successful")]
+            public int Successful { get; set; }
+
+            [JsonProperty("failed")]
+            public int Failed { get; set; }
+
+            [JsonProperty("remaining")]
+            public int Remaining { get; set; }
+
+            [JsonProperty("converted")]
+            public int Converted { get; set; }
+
+            [JsonProperty("send_after")]
+            public int SendAfter { get; set; }
+
+            [JsonProperty("headings")]
+            public IDictionary<string, string> Headings { get; set; }
+
+            [JsonProperty("contents")]
+            public IDictionary<string, string> Contents { get; set; }
+
+            [JsonProperty("canceled")]
+            public bool Canceled { get; set; }
+
+            public NotificationInfo Fix() {
+                //Headings["en"] = Encoding.Unicode.GetString(Encoding.Convert(Encoding.UTF8, Encoding.Unicode, Encoding.UTF8.GetBytes(Headings["en"])));
+                //Contents["en"] = Encoding.Unicode.GetString(Encoding.Convert(Encoding.UTF8, Encoding.Unicode, Encoding.UTF8.GetBytes(Contents["en"])));
+                return this;
+            }
         }
     }
 }

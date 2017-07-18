@@ -34,7 +34,7 @@
                 <TextBlock>End Date</TextBlock>
                 <xctk:DateTimePicker x:Name="endBox" Format="Custom" FormatString="dddd, MMMM d, yyyy h:mm tt" />
                 <TextBlock>Recurrence</TextBlock>
-                <editorFields:RecurrenceField x:Name="recurrenceField"/>
+                <editorFields:RecurrenceField x:Name="recurrenceField" />
             </StackPanel>
         </other:SpecialRadioButton>
     </StackPanel>

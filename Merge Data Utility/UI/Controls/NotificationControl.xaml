@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="200" d:DesignWidth="500" Margin="0,0,0,5">
     <UserControl.Effect>
-        <DropShadowEffect Opacity="0.75" ShadowDepth="2" Direction="270"/>
+        <DropShadowEffect Opacity="0.75" ShadowDepth="2" Direction="270" />
     </UserControl.Effect>
     <Border BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}">
         <StackPanel Background="White">

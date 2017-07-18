@@ -9,7 +9,7 @@
     <StackPanel Background="White">
         <local:FieldHeader Title="ID" Description="This is a unique identifier for this ${type}." />
         <local:IdField x:Name="idField" />
-        <Separator Margin="10"/>
+        <Separator Margin="10" />
         <local:FieldHeader Title="Title"
                            Description="Try to keep the title short.  You can give more detail in 'Short Description' and 'Description'." />
         <TextBox x:Name="titleBox" Width="250" HorizontalAlignment="Left" MaxLines="1" SpellCheck.IsEnabled="True" />
@@ -20,18 +20,18 @@
                            Description="Describe this ${type} as much as you want." />
         <TextBox x:Name="descBox" Width="450" HorizontalAlignment="Left" SpellCheck.IsEnabled="True" Height="115"
                  TextWrapping="Wrap" />
-        <Separator Margin="10"/>
+        <Separator Margin="10" />
         <local:FieldHeader Title="Grades"
                            Description="Choose the grade levels that this ${type} is intended for. Users outside of the target audience will not see this ${type} in the app (if filters are enabled)." />
         <local:GradesSelector x:Name="gradesField" />
         <local:FieldHeader Title="Genders"
                            Description="Choose the genders that this ${type} is intended for. Users outside of the target audience will not see this ${type} in the app (if filters are enabled)." />
         <local:GenderSelector x:Name="gendersField" />
-        <Separator Margin="10"/>
+        <Separator Margin="10" />
         <local:FieldHeader Title="Cover Image"
                            Description="For the best look, the image should be at least 1920x1080 pixels (a 16:9 ratio), although the app can work with abnormally-sized images.  PNG format is also required.  For best performance, avoid resolutions >= 3840x2160 pixels and files >= 5 MB in size.  Also, avoid transparency because it may cause the image to not display as intended." />
         <local:ImageUploader x:Name="coverField" />
-        <Separator Margin="10"/>
+        <Separator Margin="10" />
         <local:FieldHeader Title="Color"
                            Description="For the best appearance, choose a color that fits with the cover image. Various elements in the app will be colorized according to this value. If you want, some suggested colors can be automatically extracted from the cover image." />
         <local:ColorPickerField x:Name="colorField" />

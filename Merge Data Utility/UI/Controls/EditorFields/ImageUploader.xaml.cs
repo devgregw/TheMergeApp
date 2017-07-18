@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  ImageUploader.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/20/2017 at 6:42 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -30,16 +30,11 @@
 #region USINGS
 
 using System;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using MergeApi.Client;
 using Merge_Data_Utility.Tools;
-using Merge_Data_Utility.UI.Windows.Choosers;
 using Microsoft.Win32;
 
 #endregion
@@ -50,12 +45,6 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
     /// </summary>
     public partial class ImageUploader : UserControl {
         private string _original = "";
-
-        private enum State {
-            Empty,
-            FileSelected,
-            NotModified
-        }
 
         private State _state = State.Empty;
 
@@ -78,7 +67,7 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
             var localPath = Value;
             //if (_shouldConvert) localPath = ImageConverter.ConvertToPng(localPath);
             //File.Copy(localPath, "Cache\\upload.png", true);
-            return (await FileUploader.PutStorageReferenceAsync(/*"Cache\\upload.png"*/localPath, name + ".png")).Url;
+            return (await FileUploader.PutStorageReferenceAsync( /*"Cache\\upload.png"*/localPath, name + ".png")).Url;
         }
 
         private void coverBrowse_Click(object sender, RoutedEventArgs e) {
@@ -94,9 +83,9 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
 
         public void SetOriginalValue(string v) {
             Value = v;
-            if (v.Contains(@"\"))
+            if (v.Contains(@"\")) {
                 _state = State.FileSelected;
-            else {
+            } else {
                 _original = v;
                 _state = State.NotModified;
             }
@@ -116,6 +105,12 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
                 Value = _original;
                 _state = State.NotModified;
             }
+        }
+
+        private enum State {
+            Empty,
+            FileSelected,
+            NotModified
         }
     }
 }

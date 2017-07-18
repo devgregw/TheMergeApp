@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  UpdatePromptPage.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/20/2017 at 6:42 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -30,9 +30,7 @@
 #region USINGS
 
 using System.Diagnostics;
-using System.IO;
 using System.IO.Compression;
-using System.IO.Packaging;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -67,7 +65,8 @@ namespace Merge_Data_Utility.UI.Pages {
                 var button = new Button {
                     Content = "Later"
                 };
-                button.Click += (s, e) => NavigationService.Navigate(skip ? (Page)new MainPage(tab) : new AuthenticationPage());
+                button.Click +=
+                    (s, e) => NavigationService.Navigate(skip ? (Page) new MainPage(tab) : new AuthenticationPage());
                 Grid.SetColumn(button, 2);
                 grid.Children.Add(button);
             }

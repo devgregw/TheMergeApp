@@ -7,13 +7,14 @@
         xmlns:other="clr-namespace:Merge_Data_Utility.UI.Controls.Other"
         xmlns:editorFields="clr-namespace:Merge_Data_Utility.UI.Controls.EditorFields"
         mc:Ignorable="d"
-        Icon="/Merge Data Utility;component/shadow-64.png" Title="Input" Height="250" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Icon="/Merge Data Utility;component/shadow-64.png" Title="Input" Height="250" Width="450" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
     <other:ContentControl x:Name="content">
         <Grid Margin="5">
             <StackPanel>
                 <TextBlock x:Name="message">Select file:</TextBlock>
                 <Grid>
-                    <TextBox IsReadOnly="True" x:Name="pathBox" Margin="0,0,55,0"/>
+                    <TextBox IsReadOnly="True" x:Name="pathBox" Margin="0,0,55,0" />
                     <Button HorizontalAlignment="Right" Click="Browse_Click">Browse...</Button>
                 </Grid>
             </StackPanel>

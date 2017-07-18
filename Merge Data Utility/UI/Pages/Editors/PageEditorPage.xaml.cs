@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  PageEditorPage.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/20/2017 at 6:45 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -35,7 +35,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using MergeApi.Client;
 using MergeApi.Framework.Abstractions;
 using MergeApi.Framework.Enumerations;
@@ -44,7 +43,6 @@ using MergeApi.Models.Core;
 using MergeApi.Tools;
 using Merge_Data_Utility.Tools;
 using Merge_Data_Utility.UI.Pages.Base;
-using Merge_Data_Utility.UI.Windows;
 using Merge_Data_Utility.UI.Windows.Choosers;
 
 #endregion
@@ -111,7 +109,7 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
             var errors = new List<string>();
             bool hasDescription = !string.IsNullOrWhiteSpace(baseCtrls.descBox.Text),
                 hasElements = contentList.Count > 0;
-            
+
             errors.AddRange(baseCtrls.GetValidationErrors(hasElements, true));
             errors.Add(string.IsNullOrWhiteSpace(buttonLabel.Text) && buttonAction.SelectedAction != null
                 ? "If a button action is specified, a label must be specified."

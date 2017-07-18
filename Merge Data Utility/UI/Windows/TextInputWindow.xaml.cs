@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  TextInputWindow.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/20/2017 at 6:42 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -29,8 +29,13 @@
 
 #region USINGS
 
+#region USINGS
+
 using System.Windows;
 using System.Windows.Input;
+
+#endregion
+
 // ReSharper disable MemberCanBePrivate.Global
 
 #endregion

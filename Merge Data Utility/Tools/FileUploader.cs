@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  FileUploader.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/20/2017 at 6:42 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -29,16 +29,16 @@
 
 #region USINGS
 
-
-
 #endregion
 
+#region USINGS
+
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using MergeApi.Tools;
 using MergeApi.Client;
+using MergeApi.Tools;
+
+#endregion
 
 namespace Merge_Data_Utility.Tools {
     public static class FileUploader {

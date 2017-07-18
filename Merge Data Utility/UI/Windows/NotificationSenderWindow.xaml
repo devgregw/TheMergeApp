@@ -7,37 +7,44 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:editorFields="clr-namespace:Merge_Data_Utility.UI.Controls.EditorFields"
         mc:Ignorable="d"
-        Icon="/Merge Data Utility;component/shadow-64.png" Title="Send a Notification" Height="650" Width="700" MinHeight="500" MinWidth="500" ResizeMode="CanResize"
+        Icon="/Merge Data Utility;component/shadow-64.png" Title="Send a Notification" Height="650" Width="700"
+        MinHeight="500" MinWidth="500" ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <Menu.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Toggle Player ID" Click="PlayerId"/>
+                    <MenuItem Header="Toggle Player ID" Click="PlayerId" />
                 </ContextMenu>
             </Menu.ContextMenu>
-            <Button Content="Send" FontSize="18" Click="Send"/>
-            <TextBox x:Name="player" Width="250" Visibility="Collapsed"/>
+            <Button Content="Send" FontSize="18" Click="Send" />
+            <TextBox x:Name="player" Width="250" Visibility="Collapsed" />
         </Menu>
         <ScrollViewer Margin="0,30,0,0" x:Name="scroller">
             <StackPanel Margin="5" VerticalAlignment="Top">
-                <editorFields:FieldHeader Title="Import Data" Description="You may choose to important an existing event or page and copy its title, short description, cover image, etc. to the corresponding fields here."/>
+                <editorFields:FieldHeader Title="Import Data"
+                                          Description="You may choose to important an existing event or page and copy its title, short description, cover image, etc. to the corresponding fields here." />
                 <Button Click="Import" HorizontalAlignment="Left">Import...</Button>
-                <editorFields:FieldHeader Title="Title" Description="Specify this notification's title."/>
-                <TextBox x:Name="titleBox" Width="250" HorizontalAlignment="Left" MaxLines="1" SpellCheck.IsEnabled="True" />
-                <editorFields:FieldHeader Title="Message" Description="Specify this notification's message."/>
-                <TextBox x:Name="messageBox" Width="350" HorizontalAlignment="Left" MaxLines="1" SpellCheck.IsEnabled="True" />
-                <editorFields:FieldHeader Title="Action" Description="Optionally, specify an action to be invoked when the notification is tapped or opened."/>
-                <editorFields:ActionPickerField x:Name="action"/>
-                <editorFields:FieldHeader Title="Cover Image" Description="Optionally, specify an image to be displayed in this notification's expanded view."/>
-                <editorFields:ImageUploader x:Name="cover"/>
+                <editorFields:FieldHeader Title="Title" Description="Specify this notification's title." />
+                <TextBox x:Name="titleBox" Width="250" HorizontalAlignment="Left" MaxLines="1"
+                         SpellCheck.IsEnabled="True" />
+                <editorFields:FieldHeader Title="Message" Description="Specify this notification's message." />
+                <TextBox x:Name="messageBox" Width="350" HorizontalAlignment="Left" MaxLines="1"
+                         SpellCheck.IsEnabled="True" />
+                <editorFields:FieldHeader Title="Action"
+                                          Description="Optionally, specify an action to be invoked when the notification is tapped or opened." />
+                <editorFields:ActionPickerField x:Name="action" />
+                <editorFields:FieldHeader Title="Cover Image"
+                                          Description="Optionally, specify an image to be displayed in this notification's expanded view." />
+                <editorFields:ImageUploader x:Name="cover" />
                 <editorFields:FieldHeader Title="Grades"
-                                   Description="Choose the grade levels that this notification is intended for. Users outside of the target audience will not receive this notification (if filters are enabled)." />
+                                          Description="Choose the grade levels that this notification is intended for. Users outside of the target audience will not receive this notification (if filters are enabled)." />
                 <editorFields:GradesSelector x:Name="gradesField" />
                 <editorFields:FieldHeader Title="Genders"
-                                   Description="Choose the genders that this notification is intended for. Users outside of the target audience will not receive this notification (if filters are enabled)." />
+                                          Description="Choose the genders that this notification is intended for. Users outside of the target audience will not receive this notification (if filters are enabled)." />
                 <editorFields:GenderSelector x:Name="gendersField" />
-                <editorFields:FieldHeader Title="Platforms" Description="Specify the platforms that this notification is intended for.  Users outside of the target audience will not receive this notification."/>
+                <editorFields:FieldHeader Title="Platforms"
+                                          Description="Specify the platforms that this notification is intended for.  Users outside of the target audience will not receive this notification." />
                 <StackPanel Orientation="Horizontal" Height="40">
                     <xctk:CheckListBox x:Name="platformsBox" HorizontalAlignment="Left">
                         <TextBlock TextWrapping="Wrap" Text="Android" />
@@ -48,12 +55,15 @@
                         <Button Content="Select None" Click="PlatformsSelectNone_Click" />
                     </StackPanel>
                 </StackPanel>
-                <editorFields:FieldHeader Title="Badge" Description="iOS and some Android devices can display a numbered badge next to the app's icon to indicate an unread notification."/>
+                <editorFields:FieldHeader Title="Badge"
+                                          Description="iOS and some Android devices can display a numbered badge next to the app's icon to indicate an unread notification." />
                 <CheckBox x:Name="badge">Enable Badge</CheckBox>
-                <editorFields:FieldHeader Title="Scheduling" Description="Optionally, specify a date and time to send this notification.  If disabled, the notification will be sent as soon as 'Send' is clicked."/>
+                <editorFields:FieldHeader Title="Scheduling"
+                                          Description="Optionally, specify a date and time to send this notification.  If disabled, the notification will be sent as soon as 'Send' is clicked." />
                 <CheckBox x:Name="scheduling" Checked="SchedulingCheck" Unchecked="SchedulingCheck">Enable Scheduling</CheckBox>
                 <TextBlock>Date and Time</TextBlock>
-                <xctk:DateTimePicker IsEnabled="False" x:Name="schedulingDateTime" Width="300" HorizontalAlignment="Left" Format="Custom"
+                <xctk:DateTimePicker IsEnabled="False" x:Name="schedulingDateTime" Width="300"
+                                     HorizontalAlignment="Left" Format="Custom"
                                      FormatString="dddd, MMMM d, yyyy h:mm tt" />
             </StackPanel>
         </ScrollViewer>

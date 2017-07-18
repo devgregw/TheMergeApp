@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows.Choosers"
         xmlns:other="clr-namespace:Merge_Data_Utility.UI.Controls.Other"
         mc:Ignorable="d"
-        Icon="/Merge Data Utility;component/shadow-64.png" Title="Contact Medium Browser" Height="400" Width="400" ResizeMode="NoResize"
+        Icon="/Merge Data Utility;component/shadow-64.png" Title="Contact Medium Browser" Height="400" Width="400"
+        ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <other:ContentControl x:Name="cc" Margin="0,0,0,22">

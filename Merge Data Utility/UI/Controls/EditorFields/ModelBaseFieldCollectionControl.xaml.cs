@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  ModelBaseFieldCollectionControl.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 04/21/2017 at 8:45 AM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -102,7 +102,11 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
             errors.Add(string.IsNullOrWhiteSpace(titleBox.Text) ? "The title is invalid." : "");
             errors.Add(string.IsNullOrWhiteSpace(sdescBox.Text) ? "The short description is invalid." : "");
             if (!descriptionOptional)
-                errors.Add(string.IsNullOrWhiteSpace(descBox.Text) ? page ? "A description is required if no content elements are configured." : "The description is invalid." : "");
+                errors.Add(string.IsNullOrWhiteSpace(descBox.Text)
+                    ? page
+                        ? "A description is required if no content elements are configured."
+                        : "The description is invalid."
+                    : "");
             errors.Add(gradesField.Value.Count == 0 ? "At least one grade level must be selected." : "");
             errors.Add(gendersField.Value.Count == 0 ? "At least one gender must be selected." : "");
             if (string.IsNullOrWhiteSpace(_source?.CoverImage))
@@ -123,7 +127,10 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
             x.Theme = themeField.SelectedTheme;
             if (draft) // don't upload the file yet!  this is just a draft!
                 x.CoverImage = coverField.Value;
-            else x.CoverImage = await coverField.PerformChangesAsync($"{x.GetType().Name.Replace("Merge", "")}_{idField.Id}".ToLower());
+            else
+                x.CoverImage =
+                    await coverField.PerformChangesAsync(
+                        $"{x.GetType().Name.Replace("Merge", "")}_{idField.Id}".ToLower());
         }
     }
 }

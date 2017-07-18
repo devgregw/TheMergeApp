@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  AttendanceControl.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 04/02/2017 at 8:07 AM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 

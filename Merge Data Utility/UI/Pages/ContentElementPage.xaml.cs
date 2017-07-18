@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  ContentElementPage.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/20/2017 at 6:45 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -270,7 +270,8 @@ namespace Merge_Data_Utility.UI.Pages {
                     _window.IsEnabled = false;
                     var file =
                         await imageUploader.PerformChangesAsync(
-                            $"ImageElement-{DateTime.Now.ToString("MMddyyyy\"-\"hhmmss", CultureInfo.CurrentUICulture)}".ToLower());
+                            $"ImageElement-{DateTime.Now.ToString("MMddyyyy\"-\"hhmmss", CultureInfo.CurrentUICulture)}"
+                                .ToLower());
                     _window.Element = new ImageElement {
                         ScaleType = ScaleType.Uniform,
                         Url = file

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows"
         xmlns:other="clr-namespace:Merge_Data_Utility.UI.Controls.Other"
         mc:Ignorable="d"
-        Icon="/Merge Data Utility;component/shadow-64.png" Title="Title" Height="400" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-       >
+        Icon="/Merge Data Utility;component/shadow-64.png" Title="Title" Height="400" Width="400"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <other:ContentControl />
 </Window>

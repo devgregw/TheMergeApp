@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  MainPage.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/20/2017 at 6:42 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -32,7 +32,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -47,7 +46,6 @@ using Merge_Data_Utility.UI.Pages.Base;
 using Merge_Data_Utility.UI.Pages.Editors;
 using Merge_Data_Utility.UI.Windows;
 using Merge_Data_Utility.UI.Windows.Choosers;
-using Newtonsoft.Json.Linq;
 using ValidationResult = MergeApi.Tools.ValidationResult;
 
 #endregion
@@ -237,6 +235,22 @@ namespace Merge_Data_Utility.UI.Pages {
             Process.Start("https://www.onesignal.com/");
         }
 
+        private void CheckForUpdates(object sender, RoutedEventArgs e) {
+            NavigationService.Navigate(new UpdateCheckPage(tabs.SelectedIndex, true));
+        }
+
+        private void ActionCodeViewer_Click(object sender, RoutedEventArgs e) {
+            new ActionCodeViewerWindow().ShowDialog();
+        }
+
+        private void NotificationComposer_Click(object sender, RoutedEventArgs e) {
+            Process.Start("https://console.firebase.google.com/project/the-merge-app/notification/compose");
+        }
+
+        private void FileBrowser_Click(object sender, RoutedEventArgs e) {
+            new FileBrowserWindow().ShowDialog();
+        }
+
         #region Handlers
 
         private void HandleNew(EditorPage p) {
@@ -268,21 +282,5 @@ namespace Merge_Data_Utility.UI.Pages {
         }
 
         #endregion
-
-        private void CheckForUpdates(object sender, RoutedEventArgs e) {
-            NavigationService.Navigate(new UpdateCheckPage(tabs.SelectedIndex, true));
-        }
-
-        private void ActionCodeViewer_Click(object sender, RoutedEventArgs e) {
-            new ActionCodeViewerWindow().ShowDialog();
-        }
-
-        private void NotificationComposer_Click(object sender, RoutedEventArgs e) {
-            Process.Start("https://console.firebase.google.com/project/the-merge-app/notification/compose");
-        }
-
-        private void FileBrowser_Click(object sender, RoutedEventArgs e) {
-            new FileBrowserWindow().ShowDialog();
-        }
     }
 }

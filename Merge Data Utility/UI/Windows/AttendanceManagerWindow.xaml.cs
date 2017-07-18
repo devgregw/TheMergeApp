@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  AttendanceManagerWindow.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 04/01/2017 at 3:01 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -106,7 +106,8 @@ namespace Merge_Data_Utility.UI.Windows {
         }
 
         private void NewRecord_Click(object sender, RoutedEventArgs e) {
-            new EditorWindow(EditorPage.GetPage(typeof(AttendanceRecord), null, false), async r => await Refresh()).ShowDialog();
+            new EditorWindow(EditorPage.GetPage(typeof(AttendanceRecord), null, false), async r => await Refresh())
+                .ShowDialog();
         }
 
         private void NewGroup_Click(object sender, RoutedEventArgs e) {

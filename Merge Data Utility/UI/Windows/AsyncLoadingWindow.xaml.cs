@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  AsyncLoadingWindow.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/31/2017 at 5:44 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 

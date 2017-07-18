@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows"
         xmlns:other="clr-namespace:Merge_Data_Utility.UI.Controls.Other"
         mc:Ignorable="d"
-        Icon="/Merge Data Utility;component/shadow-64.png" Title="Attendance Details" Height="500" Width="500" ResizeMode="NoResize"
+        Icon="/Merge Data Utility;component/shadow-64.png" Title="Attendance Details" Height="500" Width="500"
+        ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>

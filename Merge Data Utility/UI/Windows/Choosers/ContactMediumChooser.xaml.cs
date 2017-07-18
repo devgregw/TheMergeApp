@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  ContactMediumChooser.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/20/2017 at 6:42 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -104,9 +104,9 @@ namespace Merge_Data_Utility.UI.Windows.Choosers {
                             pair.Value
                         });
                 }
-                Extensions.ForEach(filtered, pair => list.Items.Add(new ListViewItem {
+                filtered.ForEach(pair => list.Items.Add(new ListViewItem {
                     Content =
-                        $"{pair.Key.ToFriendlyString()} ({Extensions.Sum(pair.Value, str => str + (pair.Value.Last() == str ? "" : ", "))})",
+                        $"{pair.Key.ToFriendlyString()} ({pair.Value.Sum(str => str + (pair.Value.Last() == str ? "" : ", "))})",
                     Tag = pair.Key
                 }));
                 lref.StopLoading();

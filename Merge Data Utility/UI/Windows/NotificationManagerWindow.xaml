@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows"
         xmlns:other="clr-namespace:Merge_Data_Utility.UI.Controls.Other"
         mc:Ignorable="d"
-        Icon="/Merge Data Utility;component/shadow-64.png" Title="Notification Manager" Height="500" Width="500" MinHeight="500" MinWidth="500"
+        Icon="/Merge Data Utility;component/shadow-64.png" Title="Notification Manager" Height="500" Width="500"
+        MinHeight="500" MinWidth="500"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.Background>
@@ -25,17 +26,17 @@
             <TabControl>
                 <TabItem Header="In Progress">
                     <ScrollViewer>
-                        <StackPanel x:Name="inProgressList" Margin="5"/>
+                        <StackPanel x:Name="inProgressList" Margin="5" />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="Scheduled">
                     <ScrollViewer>
-                        <StackPanel x:Name="scheduledList" Margin="5"/>
+                        <StackPanel x:Name="scheduledList" Margin="5" />
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="History">
                     <ScrollViewer>
-                        <StackPanel x:Name="historyList" Margin="5"/>
+                        <StackPanel x:Name="historyList" Margin="5" />
                     </ScrollViewer>
                 </TabItem>
             </TabControl>

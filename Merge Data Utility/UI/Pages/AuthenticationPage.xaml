@@ -10,7 +10,8 @@
       Title="Authentication">
     <Grid Background="White">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-138,0,0">
-            <Image Source="/Merge Data Utility;component/shadow-512.png" Height="128" Width="128" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+            <Image Source="/Merge Data Utility;component/shadow-512.png" Height="128" Width="128"
+                   VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,0,0,10" />
             <other:ContentControl x:Name="content">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock FontSize="34" FontWeight="Light" TextAlignment="Center">Sign in.</TextBlock>

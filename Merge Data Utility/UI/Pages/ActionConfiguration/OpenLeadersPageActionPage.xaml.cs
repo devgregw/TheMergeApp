@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  OpenLeadersPageActionPage.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/20/2017 at 6:42 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -29,8 +29,8 @@
 
 #region USINGS
 
+using System;
 using MergeApi.Framework.Abstractions;
-using MergeApi.Models.Actions;
 using Merge_Data_Utility.UI.Pages.Base;
 
 #endregion
@@ -43,6 +43,7 @@ namespace Merge_Data_Utility.UI.Pages.ActionConfiguration {
         public OpenLeadersPageActionPage() {
             InitializeComponent();
         }
+
         /*public OpenLeadersPageActionPage() : this(null) { }
 
         public OpenLeadersPageActionPage(OpenLeadersPageAction source) {
@@ -56,11 +57,11 @@ namespace Merge_Data_Utility.UI.Pages.ActionConfiguration {
             return new OpenLeadersPageAction();
         }*/
         public override void Update() {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override ActionBase GetAction() {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

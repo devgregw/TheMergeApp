@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
-// Project Merge Data Utility:  UploadedFileChooser.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/20/2017 at 6:42 PM.
+// Project Merge Data Utility:  FileBrowserWindow.xaml.cs (in Solution Merge Data Utility)
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -35,12 +35,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using Merge_Data_Utility.Tools;
 using MergeApi.Client;
 using MergeApi.Models.Core;
 using MergeApi.Models.Core.Tab;
 using MergeApi.Models.Elements;
 using MergeApi.Tools;
+using Merge_Data_Utility.Tools;
 
 #endregion
 
@@ -49,6 +49,11 @@ namespace Merge_Data_Utility.UI.Windows.Choosers {
     ///     Interaction logic for UploadedFileChooser.xaml
     /// </summary>
     public partial class FileBrowserWindow : Window {
+        public FileBrowserWindow() {
+            InitializeComponent();
+            Loaded += async (s, e) => await LoadFiles();
+        }
+
         private async Task<List<string>> GetUsedFilesAsync() {
             var files = new List<string>();
             var events = (await MergeDatabase.ListAsync<MergeEvent>()).ToList();
@@ -92,11 +97,12 @@ namespace Merge_Data_Utility.UI.Windows.Choosers {
                                     list.Items.Remove(list.Items.OfType<ListViewItem>()
                                         .First(i => i.Tag.ToString() == reference.Url));
                                     await MergeDatabase.DeleteStorageReferenceAsync(reference.Name);
-                                } else
+                                } else {
                                     MessageBox.Show(this,
                                         "This file cannot be deleted because it is currently in use by an event, Merge group, page, or tab header.",
                                         "File Browser", MessageBoxButton.OK, MessageBoxImage.Error,
                                         MessageBoxResult.OK);
+                                }
                             })
                         }
                     }
@@ -117,11 +123,6 @@ namespace Merge_Data_Utility.UI.Windows.Choosers {
             list.Items.Clear();
             files.ForEach(r => list.Items.Add(MakeItem(r, !used.Contains(r.Url))));
             reference.StopLoading();
-        }
-
-        public FileBrowserWindow() {
-            InitializeComponent();
-            Loaded += async (s, e) => await LoadFiles();
         }
 
         private async void Upload_Click(object sender, RoutedEventArgs e) {

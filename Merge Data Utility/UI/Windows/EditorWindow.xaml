@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows"
         mc:Ignorable="d"
         xmlns:other="clr-namespace:Merge_Data_Utility.UI.Controls.Other"
-        Icon="/Merge Data Utility;component/shadow-64.png" Title="Editor" Height="650" Width="700" MinHeight="500" MinWidth="500" ResizeMode="CanResize"
+        Icon="/Merge Data Utility;component/shadow-64.png" Title="Editor" Height="650" Width="700" MinHeight="500"
+        MinWidth="500" ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Menu VerticalAlignment="Top" x:Name="menu">

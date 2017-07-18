@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  ThemePickerField.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/20/2017 at 6:42 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -47,9 +47,7 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
         }
 
         public Theme SelectedTheme {
-            get {
-                return themeBox.SelectedItem.Manipulate(o => ((ComboBoxItem) o).Content.ToString().ToEnum<Theme>());
-            }
+            get { return themeBox.SelectedItem.Manipulate(o => ((ComboBoxItem) o).Content.ToString().ToEnum<Theme>()); }
             set => themeBox.SelectedIndex = value == Theme.Auto ? 0 : value == Theme.Light ? 1 : 2;
         }
 

@@ -5,5 +5,6 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows"
                   mc:Ignorable="d"
-                  Icon="/Merge Data Utility;component/shadow-64.png" Title="Palette" Height="300" Width="500" ShowsNavigationUI="False" ResizeMode="NoResize"
+                  Icon="/Merge Data Utility;component/shadow-64.png" Title="Palette" Height="300" Width="500"
+                  ShowsNavigationUI="False" ResizeMode="NoResize"
                   WindowStartupLocation="CenterScreen" />

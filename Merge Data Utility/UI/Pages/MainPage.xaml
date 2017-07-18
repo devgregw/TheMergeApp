@@ -60,7 +60,7 @@
                             <MenuItem Header="Exit" />
                         </MenuItem>
                         <MenuItem Header="Tools">
-                            <MenuItem Header="Action Code Viewer" Click="ActionCodeViewer_Click"/>
+                            <MenuItem Header="Action Code Viewer" Click="ActionCodeViewer_Click" />
                         </MenuItem>
                     </Menu>
                     <TabControl x:Name="tabs" Grid.Row="1" Margin="2.5,0,2.5,5">
@@ -155,9 +155,9 @@
             </GroupBox>
             <GroupBox Grid.Row="1" Header="Tools">
                 <StackPanel>
-                    <Button Content="Action Code Viewer" Margin="0,0,0,5" Click="ActionCodeViewer_Click"/>
-                    <Button Content="File Browser" Margin="0,0,0,5" Click="FileBrowser_Click"/>
-                    <Button Content="Notification Composer" Margin="0,0,0,5" Click="NotificationComposer_Click"/>
+                    <Button Content="Action Code Viewer" Margin="0,0,0,5" Click="ActionCodeViewer_Click" />
+                    <Button Content="File Browser" Margin="0,0,0,5" Click="FileBrowser_Click" />
+                    <Button Content="Notification Composer" Margin="0,0,0,5" Click="NotificationComposer_Click" />
                 </StackPanel>
             </GroupBox>
             <!--<GroupBox x:Name="notificationsBox" Grid.Row="1" Header="Notifications">

@@ -1,4 +1,34 @@
-﻿using MergeApi.Client;
+﻿#region LICENSE
+
+// Project Merge Data Utility:  NotificationSenderWindow.xaml.cs (in Solution Merge Data Utility)
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
+// 
+// The MIT License (MIT)
+// 
+// Copyright (c) 2017 Greg Whatley
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#endregion
+
+#region USINGS
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,32 +37,30 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using MergeApi.Models.Core;
+using MergeApi.Client;
 using MergeApi.Framework.Abstractions;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Models.Actions;
+using MergeApi.Models.Core;
 using Merge_Data_Utility.Tools;
 using Merge_Data_Utility.UI.Pages.Base;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+#endregion
+
 namespace Merge_Data_Utility.UI.Windows {
     /// <summary>
-    /// Interaction logic for NotificationSenderWindow.xaml
+    ///     Interaction logic for NotificationSenderWindow.xaml
     /// </summary>
     public partial class NotificationSenderWindow : Window {
         public NotificationSenderWindow() {
             InitializeComponent();
         }
+
+        private bool _usePlayerId => player.Visibility == Visibility.Visible;
 
         private async void Send(object sender, RoutedEventArgs e) {
             var errors = new List<string>();
@@ -42,14 +70,17 @@ namespace Merge_Data_Utility.UI.Windows {
                 errors.Add(gradesField.Value.Count == 0 ? "At least one grade level must be selected." : "");
                 errors.Add(gendersField.Value.Count == 0 ? "At least one gender must be selected." : "");
                 errors.Add(platformsBox.SelectedItems.Count == 0 ? "At least one platform must be selected." : "");
-            } else
+            } else {
                 errors.Add(string.IsNullOrWhiteSpace(player.Text) ? "No player ID specified." : "");
+            }
             if (scheduling.IsChecked.GetValueOrDefault(false))
-                errors.Add(schedulingDateTime.Value.GetValueOrDefault(DateTime.Now) <= DateTime.Now ? "The specified date and time is invalid." : "");
+                errors.Add(schedulingDateTime.Value.GetValueOrDefault(DateTime.Now) <= DateTime.Now
+                    ? "The specified date and time is invalid."
+                    : "");
             errors.RemoveAll(string.IsNullOrWhiteSpace);
-            if (errors.Any())
+            if (errors.Any()) {
                 new EditorPage.InputValidationResult(errors).Display(null);
-            else {
+            } else {
                 var reference = new LoaderReference(scroller);
                 reference.StartLoading("Processing...");
                 /*var options = new NotificationCreateOptions {
@@ -115,19 +146,21 @@ namespace Merge_Data_Utility.UI.Windows {
                     var dateTime = schedulingDateTime.Value.Value;
                     // ReSharper disable once PossibleInvalidOperationException
                     var offset = timeZone.IsDaylightSavingTime(dateTime) ? 5 : 6;
-                    options.Add(new JProperty("send_after", schedulingDateTime.Value.Value.ToString($"yyyy-MM-dd HH:mm:ss \"GMT-0{offset}00\"")));
+                    options.Add(new JProperty("send_after",
+                        schedulingDateTime.Value.Value.ToString($"yyyy-MM-dd HH:mm:ss \"GMT-0{offset}00\"")));
                 }
                 if (action.SelectedAction != null)
                     options.Add(new JProperty("action", JsonConvert.SerializeObject(action.SelectedAction)));
                 if (!string.IsNullOrWhiteSpace(cover.Value)) {
                     var url = await cover.PerformChangesAsync(
-                        $"OneSignal-Notification-{DateTime.Now.ToString("Mdyyyy\"-\"hmmtt", CultureInfo.CurrentUICulture)}".ToLower());
+                        $"OneSignal-Notification-{DateTime.Now.ToString("Mdyyyy\"-\"hmmtt", CultureInfo.CurrentUICulture)}"
+                            .ToLower());
                     options.Add(new JProperty("ios_attachments", new JObject(new JProperty("pic", url))));
                     options.Add(new JProperty("big_picture", url));
                 }
-                if (_usePlayerId)
+                if (_usePlayerId) {
                     options.Add(new JProperty("include_player_ids", new JArray(player.Text)));
-                else {
+                } else {
                     var segments = new JArray();
                     foreach (var grade in EnumConsts.AllGradeLevels)
                         if (gradesField.Value.Contains(grade))
@@ -147,11 +180,13 @@ namespace Merge_Data_Utility.UI.Windows {
                 var bytes = Encoding.UTF8.GetBytes(options.ToString());
                 var responseContent = "<nothing>";
                 try {
-                    using (var writer = await request.GetRequestStreamAsync())
+                    using (var writer = await request.GetRequestStreamAsync()) {
                         writer.Write(bytes, 0, bytes.Length);
-                    using (var response = (HttpWebResponse)await request.GetResponseAsync())
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                            responseContent = reader.ReadToEnd();
+                    }
+                    using (var response = (HttpWebResponse) await request.GetResponseAsync())
+                    using (var reader = new StreamReader(response.GetResponseStream())) {
+                        responseContent = reader.ReadToEnd();
+                    }
                 } catch (Exception ex) {
                     Debug.WriteLine($"ONESIGNAL EXCEPTION: {ex.GetType().FullName}: {ex.Message}\n{ex.StackTrace}");
                 }
@@ -163,7 +198,8 @@ namespace Merge_Data_Utility.UI.Windows {
 
         private void Import(object sender, RoutedEventArgs e) {
             var window = new ObjectChooserWindow(async () =>
-                (await MergeDatabase.ListAsync<MergeEvent>()).Cast<ModelBase>().Concat(await MergeDatabase.ListAsync<MergePage>()).Select(m => new ListViewItem {
+                (await MergeDatabase.ListAsync<MergeEvent>()).Cast<ModelBase>()
+                .Concat(await MergeDatabase.ListAsync<MergePage>()).Select(m => new ListViewItem {
                     Content = $"{(m is MergeEvent ? "Event" : "Page")}: {m.Title} ({m.Id})",
                     Tag = m
                 }));
@@ -173,7 +209,7 @@ namespace Merge_Data_Utility.UI.Windows {
             titleBox.Text = obj.Title;
             messageBox.Text = obj.ShortDescription;
             action.DefaultAction = obj is MergeEvent
-                ? (ActionBase)OpenEventDetailsAction.FromEventId(obj.Id)
+                ? (ActionBase) OpenEventDetailsAction.FromEventId(obj.Id)
                 : OpenPageAction.FromPageId(obj.Id);
             action.Reset();
             cover.SetOriginalValue(obj.CoverImage);
@@ -194,8 +230,6 @@ namespace Merge_Data_Utility.UI.Windows {
         private void SchedulingCheck(object sender, RoutedEventArgs e) {
             schedulingDateTime.IsEnabled = scheduling.IsChecked.GetValueOrDefault(false);
         }
-
-        private bool _usePlayerId => player.Visibility == Visibility.Visible;
 
         private void PlayerId(object sender, RoutedEventArgs e) {
             player.Visibility = player.Visibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;

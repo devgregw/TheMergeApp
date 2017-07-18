@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  CustomContactMediumPage.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/20/2017 at 6:42 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -29,7 +29,6 @@
 
 #region USINGS
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -131,12 +130,12 @@ namespace Merge_Data_Utility.UI.Pages {
                     _window.ContactMedium = PhoneNumberMedium.Create(nameBox.Text, phoneNumberBox.Text,
                         sms.IsChecked.GetValueOrDefault(false),
                         phoneType.SelectedItem.Manipulate(
-                            o => ((ComboBoxItem)o).Content.ToString().ToEnum<PhoneNumberKind>()));
+                            o => ((ComboBoxItem) o).Content.ToString().ToEnum<PhoneNumberKind>()));
                     break;
                 case 3:
                     _window.ContactMedium = EmailAddressMedium.Create(nameBox.Text, emailBox.Text,
                         emailType.SelectedItem.Manipulate(
-                            o => ((ComboBoxItem)o).Content.ToString().ToEnum<EmailAddressKind>()));
+                            o => ((ComboBoxItem) o).Content.ToString().ToEnum<EmailAddressKind>()));
                     break;
             }
             _window.Close();

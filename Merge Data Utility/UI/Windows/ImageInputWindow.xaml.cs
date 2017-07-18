@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  ImageInputWindow.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/25/2017 at 9:08 AM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -78,7 +78,8 @@ namespace Merge_Data_Utility.UI.Windows {
             var reference = new LoaderReference(content);
             reference.StartLoading("Processing...");
             ImageUrl = await field.PerformChangesAsync(
-                (_dt ? $"{_n}-{DateTime.Now.ToString("MMddyyyy\"-\"hhmmss", CultureInfo.CurrentUICulture)}" : _n).ToLower());
+                (_dt ? $"{_n}-{DateTime.Now.ToString("MMddyyyy\"-\"hhmmss", CultureInfo.CurrentUICulture)}" : _n)
+                .ToLower());
             Close();
         }
     }

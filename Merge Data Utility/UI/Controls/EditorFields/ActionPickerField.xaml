@@ -21,6 +21,6 @@
         <Button Grid.Column="2" Click="Configure">Configure</Button>
         <Button Grid.Column="4" Click="Clear">Clear</Button>
         <Button Grid.Column="6" Click="Reset">Reset</Button>
-        <Button x:Name="viewCodeButton"  Grid.Column="7" Click="ViewCode" Margin="5,0,0,0">View Code</Button>
+        <Button x:Name="viewCodeButton" Grid.Column="7" Click="ViewCode" Margin="5,0,0,0">View Code</Button>
     </Grid>
 </UserControl>

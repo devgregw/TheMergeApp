@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  AttendanceTools.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 04/01/2017 at 3:26 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 

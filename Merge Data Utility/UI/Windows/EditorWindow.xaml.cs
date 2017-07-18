@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  EditorWindow.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/20/2017 at 6:42 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -35,7 +35,6 @@ using System.Windows;
 using MergeApi.Client;
 using MergeApi.Models.Core;
 using MergeApi.Models.Elements;
-using MergeApi.Tools;
 using Merge_Data_Utility.Tools;
 using Merge_Data_Utility.UI.Pages.Base;
 using Merge_Data_Utility.UI.Pages.Editors;
@@ -85,7 +84,8 @@ namespace Merge_Data_Utility.UI.Windows {
                         .Where(e => !cast.HasSource || !cast.GetSource<MergePage>().Content.Contains(e)).ToList();
                     if (diff.Any()) {
                         foreach (var img in diff)
-                            await MergeDatabase.DeleteStorageReferenceAsync(img.Url.Replace("https://merge.devgregw.com/content/", ""));
+                            await MergeDatabase.DeleteStorageReferenceAsync(
+                                img.Url.Replace("https://merge.devgregw.com/content/", ""));
                         args.Cancel = false;
                         _safeClosing = true;
                         Close();

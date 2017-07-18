@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge Data Utility:  ActionPickerField.xaml.cs (in Solution Merge Data Utility)
-// Created by Greg Whatley on 03/20/2017 at 6:42 PM.
+// Created by Greg Whatley on 06/23/2017 at 10:45 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -44,15 +44,13 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
     public partial class ActionPickerField : UserControl {
         private ActionBase _action;
 
+        private bool _showView;
+
         public ActionPickerField() {
             InitializeComponent();
         }
 
         public ActionBase DefaultAction { get; set; }
-
-        public event EventHandler ActionSelected;
-
-        private bool _showView;
 
         public bool ShowViewCodeButton {
             get => _showView;
@@ -70,6 +68,8 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
                 box.Text = value?.ToFriendlyString();
             }
         }
+
+        public event EventHandler ActionSelected;
 
         public void Reset() {
             SelectedAction = DefaultAction;

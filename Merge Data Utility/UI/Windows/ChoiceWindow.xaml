@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Merge_Data_Utility.UI.Windows"
         mc:Ignorable="d"
-        Icon="/Merge Data Utility;component/shadow-64.png" Title="Choices" Height="500" Width="500" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-       >
+        Icon="/Merge Data Utility;component/shadow-64.png" Title="Choices" Height="500" Width="500"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <ScrollViewer Background="White" VerticalScrollBarVisibility="Auto">
         <StackPanel x:Name="list" VerticalAlignment="Center" HorizontalAlignment="Stretch">
             <TextBlock FontSize="34" FontWeight="Light" TextAlignment="Center" Margin="0,0,0,5">Select an option.</TextBlock>
