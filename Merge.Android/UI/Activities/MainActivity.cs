@@ -100,13 +100,10 @@ namespace Merge.Android.UI.Activities {
         private ViewApplier _applier;
         private int _currentHeader = -1;
         private DrawerLayout _drawerLayout;
-        private IEnumerable<MergeEvent> _events;
-        private IEnumerable<MergeGroup> _groups;
         private bool _headerRunning = true, _first = true;
         private Dictionary<int, TabHeader> _headers;
         private LinearLayout _mainList;
         private NavigationView _navView;
-        private IEnumerable<MergePage> _pages;
         private int _selectedTab = -1; // See consts above
         private List<TabTip> _tips;
         private Toolbar _toolbar;
@@ -120,9 +117,9 @@ namespace Merge.Android.UI.Activities {
         }
 
         private void Nullify() {
-            _events = null;
-            _groups = null;
-            _pages = null;
+            DataCache.Events = null;
+            DataCache.Groups = null;
+            DataCache.Pages = null;
             _headers = new Dictionary<int, TabHeader>();
             _tips = new List<TabTip>();
         }
@@ -205,12 +202,11 @@ namespace Merge.Android.UI.Activities {
                 if (content.Count > 0) {
                     _applier.Apply(image, content, !_first);
                 } else {
-                    var nothing = !all.Any();
                     var layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
                         ViewGroup.LayoutParams.WrapContent);
                     layoutParams.AddRule(LayoutRules.CenterHorizontal);
                     _applier.Apply(image, new BasicCard(this,
-                        new IconView(this, nothing ? Resource.Drawable.NoContent : Resource.Drawable.NoVisibleContent,
+                        new IconView(this, Resource.Drawable.NoContent,
                             "No content available", true, true) {
                             LayoutParameters = layoutParams
                         }), !_first);
@@ -226,19 +222,19 @@ namespace Merge.Android.UI.Activities {
             _selectedTab = tab;
             switch (tab) {
                 case TabHome:
-                    await HandleTab(() => _pages, v => _pages = v, TabHome, p => p.Importance,
-                        p => (PreferenceHelper.IsValidLeader || !p.LeadersOnly) &&
+                    await HandleTab(() => DataCache.Pages, v => DataCache.Pages = v, TabHome, p => p.Importance,
+                        p => !p.LeadersOnly &&
                              p.CheckTargeting(PreferenceHelper.GradeLevels, PreferenceHelper.Genders),
                         p => new DataCard(this, p));
                     break;
                 case TabEvents:
                     // ReSharper disable once PossibleInvalidOperationException
-                    await HandleTab(() => _events, v => _events = v, TabEvents, e => e.RecurrenceRule == null ? e.StartDate : RecurrenceRule.GetNextOccurrence(e.StartDate.Value, e.RecurrenceRule).GetValueOrDefault(DateTime.MaxValue),
+                    await HandleTab(() => DataCache.Events, v => DataCache.Events = v, TabEvents, e => e.RecurrenceRule == null ? e.StartDate : RecurrenceRule.GetNextOccurrence(e.StartDate.Value, e.RecurrenceRule).GetValueOrDefault(DateTime.MaxValue),
                         e => e.CheckTargeting(PreferenceHelper.GradeLevels, PreferenceHelper.Genders),
                         e => new DataCard(this, e));
                     break;
                 case TabGroups:
-                    await HandleTab(() => _groups, v => _groups = v, TabGroups, g => {
+                    await HandleTab(() => DataCache.Groups, v => DataCache.Groups = v, TabGroups, g => {
                             Location location = null;
                             if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) ==
                                 Permission.Granted || ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessCoarseLocation) ==
@@ -446,7 +442,6 @@ namespace Merge.Android.UI.Activities {
         protected override void OnResume() {
             InitializeGooglePlayServices();
             ((MergeActionInvocationReceiver)MergeDatabase.ActionInvocationReceiver).SetContext(this);
-            MergeApplication.UpdateTopics();
             base.OnResume();
         }
 

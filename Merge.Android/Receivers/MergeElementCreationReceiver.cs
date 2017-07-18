@@ -30,7 +30,9 @@
 #region USINGS
 
 using Android.Content;
+using Android.Content.Res;
 using Android.Graphics;
+using Android.OS;
 using Android.Views;
 using Android.Webkit;
 using Android.Widget;
@@ -57,12 +59,8 @@ namespace Merge.Android.Receivers {
         public T CreateButtonElement<T>(ButtonElement element) {
             var button = new Button(_context) {Text = element.Label};
             if (SdkChecker.Lollipop) {
-                button.SetBackgroundColor(_color);
-                button.SetTextColor(_theme == Theme.Dark
-                    ? Color.Black
-                    : _theme == Theme.Light
-                        ? Color.White
-                        : _color.ContrastColor());
+                button.BackgroundTintList = ColorStateList.ValueOf(_color);
+                button.SetTextColor(_color.ContrastColor(_theme));
             }
             button.Click += (s, e) => element.Action.Invoke();
             return (dynamic) button;
@@ -119,10 +117,10 @@ namespace Merge.Android.Receivers {
                 LayoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
                     _context.Resources.DisplayMetrics.WidthPixels / 2)
             };
-            wv.Settings.JavaScriptEnabled = true;
-            wv.LoadUrl((element.Vendor.ToString().ToLower() == "youtube"
-                           ? "https://www.youtube.com/embed/"
-                           : "https://player.vimeo.com/video/") + element.VideoId);
+                wv.Settings.JavaScriptEnabled = true;
+                wv.LoadUrl((element.Vendor.ToString().ToLower() == "youtube"
+                               ? "https://www.youtube.com/embed/"
+                               : "https://player.vimeo.com/video/") + element.VideoId);
             return (dynamic) wv;
         }
 

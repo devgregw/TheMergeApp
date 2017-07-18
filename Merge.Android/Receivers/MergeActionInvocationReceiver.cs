@@ -32,6 +32,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
@@ -43,6 +44,7 @@ using Merge.Android.Helpers;
 using Merge.Android.UI.Activities;
 using MergeApi.Client;
 using MergeApi.Framework.Abstractions;
+using MergeApi.Framework.Interfaces;
 using MergeApi.Framework.Interfaces.Receivers;
 using MergeApi.Models.Actions;
 using MergeApi.Models.Core;
@@ -59,6 +61,12 @@ using Uri = Android.Net.Uri;
 namespace Merge.Android.Receivers {
     public sealed class MergeActionInvocationReceiver : IActionInvocationReceiver {
         private Context _context;
+
+        private async Task<T> GetOrLoad<T>(string id, Func<IEnumerable<T>> getter, Func<IEnumerable<T>, IEnumerable<T>> setter) where T : IIdentifiable {
+            return (getter() == null || getter().All(i => i.Id != id)
+                ? await LoadAsync(async () => setter(await MergeDatabase.ListAsync<T>()))
+                : getter()).First(i => i.Id == id);
+        }
 
         public async void InvokeAddToCalendarActionAsync(AddToCalendarAction action) {
             /*var intentBuilder = new Func<DateTime, DateTime, string, string, RecurrenceRule, Intent>((start, end, loc, title, rule) => {
@@ -128,13 +136,13 @@ namespace Merge.Android.Receivers {
                 });
             switch (action.ParamGroup) {
                 case "1":
-                    var e = await LoadAsync(async () => await MergeDatabase.GetAsync<MergeEvent>(action.EventId1));
+                    var e = await GetOrLoad(action.EventId1, () => DataCache.Events, v => DataCache.Events = v);
                     // ReSharper disable once PossibleInvalidOperationException
                     adder(e.StartDate.Value, e.EndDate.Value,
                         string.IsNullOrWhiteSpace(e.Address) ? e.Location : e.Address, e.Title, e.RecurrenceRule);
                     break;
                 case "2":
-                    adder(action.StartDate2, action.EndDate2, action.Location2, action.Title2, action.RecurrenceRule2);
+                    adder(action.StartDate2.Value, action.EndDate2.Value, action.Location2, action.Title2, action.RecurrenceRule2);
                     break;
             }
         }
@@ -148,7 +156,7 @@ namespace Merge.Android.Receivers {
             Intent intent;
             switch (action.ParamGroup) {
                 case "1":
-                    var e = await LoadAsync(async () => await MergeDatabase.GetAsync<MergeEvent>(action.EventId1));
+                    var e = await GetOrLoad(action.EventId1, () => DataCache.Events, v => DataCache.Events = v);
                     if (string.IsNullOrWhiteSpace(e.Address)) {
                         MakeToast("No address specified!").Show();
                         return;
@@ -156,7 +164,7 @@ namespace Merge.Android.Receivers {
                     intent = intentBuilder(e.Address);
                     break;
                 case "2":
-                    var g = await LoadAsync(async () => await MergeDatabase.GetAsync<MergeGroup>(action.GroupId2));
+                    var g = await GetOrLoad(action.GroupId2, () => DataCache.Groups, v => DataCache.Groups = v);
                     intent = intentBuilder(g.Address);
                     break;
                 case "3":
@@ -258,7 +266,7 @@ namespace Merge.Android.Receivers {
             var name = "";
             switch (action.ParamGroup) {
                 case "1":
-                    var g = await LoadAsync(async () => await MergeDatabase.GetAsync<MergeGroup>(action.GroupId1));
+                    var g = await GetOrLoad(action.GroupId1, () => DataCache.Groups, v => DataCache.Groups = v);
                     items = maker(g.ContactMediums);
                     name = g.Name;
                     break;
@@ -315,7 +323,7 @@ namespace Merge.Android.Receivers {
         }
 
         public async void InvokeOpenEventDetailsActionAsync(OpenEventDetailsAction action) {
-            var e = await LoadAsync(async () => await MergeDatabase.GetAsync<MergeEvent>(action.EventId1));
+            var e = await GetOrLoad(action.EventId1, () => DataCache.Events, v => DataCache.Events = v);
             var intent = new Intent(_context, typeof(DataDetailActivity));
             intent.PutExtra("json", JsonConvert.SerializeObject(e));
             intent.PutExtra("title", e.Title);
@@ -325,7 +333,7 @@ namespace Merge.Android.Receivers {
         }
 
         public async void InvokeOpenGroupDetailsActionAsync(OpenGroupDetailsAction action) {
-            var g = await LoadAsync(async () => await MergeDatabase.GetAsync<MergeGroup>(action.GroupId1));
+            var g = await GetOrLoad(action.GroupId1, () => DataCache.Groups, v => DataCache.Groups = v);
             var intent = new Intent(_context, typeof(DataDetailActivity));
             intent.PutExtra("json", JsonConvert.SerializeObject(g));
             intent.PutExtra("title", g.Name);
@@ -335,7 +343,7 @@ namespace Merge.Android.Receivers {
         }
 
         public async void InvokeOpenPageActionAsync(OpenPageAction action) {
-            var p = await LoadAsync(async () => await MergeDatabase.GetAsync<MergePage>(action.PageId1));
+            var p = await GetOrLoad(action.PageId1, () => DataCache.Pages, v => DataCache.Pages = v);
             var intent = new Intent(_context, typeof(DataDetailActivity));
             intent.PutExtra("json", JsonConvert.SerializeObject(p));
             intent.PutExtra("title", p.Title);

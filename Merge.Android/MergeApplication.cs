@@ -55,36 +55,6 @@ namespace Merge.Android {
         public MergeApplication(IntPtr handle, JniHandleOwnership transfer) : base(handle, transfer) { }
         internal static FirebaseAuthLink AuthLink { get; set; }
 
-        public static void UpdateTopics() {
-            var grades = PreferenceHelper.GradeLevels.Count > 0
-                ? new List<GradeLevel>(PreferenceHelper.GradeLevels)
-                : EnumConsts.AllGradeLevels;
-            var genders = PreferenceHelper.Genders.Count > 0
-                ? new List<Gender>(PreferenceHelper.Genders)
-                : EnumConsts.AllGenders;
-            var newTags = grades.Select(grade => $"grade_{grade.ToString().ToLower()}")
-                .Concat(genders.Select(gender => $"gender_{gender.ToString().ToLower()}")).ToList();
-            var oldTags = PreferenceHelper.Tags.ToList();
-            if (PreferenceHelper.IsValidLeader)
-                newTags.Add("verified_leader");
-            List<string> sub = new List<string>(), unsub = new List<string>();
-            newTags.ForEach(t => {
-                if (!oldTags.Contains(t))
-                    sub.Add(t);
-            });
-            oldTags.ForEach(t => {
-                if (!newTags.Contains(t))
-                    unsub.Add(t);
-            });
-            PreferenceHelper.Tags = newTags.ToArray();
-            try {
-                sub.ForEach(FirebaseMessaging.Instance.SubscribeToTopic);
-                unsub.ForEach(FirebaseMessaging.Instance.UnsubscribeFromTopic);
-            } catch {
-                Log.Error("MergeApplication", "FirebaseApp not intialized!!");
-            }
-        }
-
         public override void OnCreate() {
             base.OnCreate();
             Log.Debug("MergeApplication", $"For debugging purposes: {GetString(Resource.String.google_app_id)}");

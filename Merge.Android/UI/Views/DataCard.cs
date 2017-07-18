@@ -30,6 +30,7 @@
 #region USINGS
 
 using System;
+using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.Content.Res;
@@ -44,8 +45,11 @@ using Android.Widget;
 using Merge.Android.Helpers;
 using Merge.Android.UI.Activities;
 using MergeApi.Framework.Enumerations;
+using MergeApi.Models.Actions;
 using MergeApi.Models.Core;
 using Newtonsoft.Json;
+using MergeApi.Tools;
+using Utilities = Merge.Android.Helpers.Utilities;
 
 #endregion
 
@@ -59,7 +63,24 @@ namespace Merge.Android.UI.Views {
                 p.Color.ToAndroidColor(), p.Theme,
                 !p.LeadersOnly
                     ? null
-                    : new IconView(Context, Resource.Drawable.PasswordProtected, "Leaders Only", true));
+                    : new IconView(Context, Resource.Drawable.PasswordProtected, "Leaders Only"), p.ButtonAction != null ? new Button(Context) {
+                    Text = p.ButtonLabel
+                }.Manipulate(b => {
+                    if (!SdkChecker.Lollipop) return b;
+                    b.SetTextColor(p.Color.ToAndroidColor().ContrastColor(p.Theme));
+                    b.BackgroundTintList = ColorStateList.ValueOf(p.Color.ToAndroidColor());
+                    b.Click += (s, e) => {
+                        OpenPageAction pageAction;
+                        if ((pageAction = p.ButtonAction as OpenPageAction) != null) {
+                            if (pageAction.PageId1 == p.Id)
+                                ShowDetailsWithTransition();
+                            else
+                                p.ButtonAction.Invoke();
+                        } else
+                            p.ButtonAction.Invoke();
+                    };
+                    return b;
+                }) : null);
 
         public DataCard(Context context, MergeEvent e) : base(context) =>
             Initialize(e.Title, e.ShortDescription, JsonConvert.SerializeObject(e), "event", e.CoverImage,
@@ -73,26 +94,30 @@ namespace Merge.Android.UI.Views {
 
         public DataCard(Context context, IAttributeSet attrs, int defStyleAttr) : base(context, attrs, defStyleAttr) { }
 
+        private void ShowDetailsWithTransition() {
+            if (string.IsNullOrWhiteSpace(_type)) {
+                Toast.MakeText(Context, "Invalid data.", ToastLength.Short).Show();
+                return;
+            }
+            var options =
+                ActivityOptionsCompat.MakeSceneTransitionAnimation((Activity)Context,
+                    FindViewById<ImageView>(Resource.Id.image), "imageTransition");
+            var intent = new Intent(Context, typeof(DataDetailActivity));
+            intent.PutExtra("json", _json);
+            intent.PutExtra("title", _title);
+            intent.PutExtra("url", _url);
+            intent.PutExtra("type", _type);
+            Context.StartActivity(intent, options.ToBundle());
+        }
+
         public void OnClick(View v) {
             if (v.Id == Resource.Id.card) {
-                if (string.IsNullOrWhiteSpace(_type)) {
-                    Toast.MakeText(Context, "Invalid data.", ToastLength.Short).Show();
-                    return;
-                }
-                var options =
-                    ActivityOptionsCompat.MakeSceneTransitionAnimation((Activity) Context,
-                        FindViewById<ImageView>(Resource.Id.image), "imageTransition");
-                var intent = new Intent(Context, typeof(DataDetailActivity));
-                intent.PutExtra("json", _json);
-                intent.PutExtra("title", _title);
-                intent.PutExtra("url", _url);
-                intent.PutExtra("type", _type);
-                Context.StartActivity(intent, options.ToBundle());
+                ShowDetailsWithTransition();
             }
         }
 
         private void Initialize(string title, string desc, string json, string type, string url, Color color,
-            Theme theme, IconView icon = null) {
+            Theme theme, params View[] extraViews) {
             _title = title;
             _json = json;
             _type = type;
@@ -113,8 +138,9 @@ namespace Merge.Android.UI.Views {
             var cardView = v.FindViewById<CardView>(Resource.Id.card);
             cardView.SetOnClickListener(this);
             //v.FindViewById<LinearLayout>(Resource.Id.dataCardRoot).SetBackgroundColor(color);
-            if (icon != null)
-                v.FindViewById<LinearLayout>(Resource.Id.ll1).AddView(icon);
+            var ll1 = v.FindViewById<LinearLayout>(Resource.Id.ll1);
+            foreach (var view in extraViews.Where(_ => _ != null))
+                ll1.AddView(view);
         }
     }
 }

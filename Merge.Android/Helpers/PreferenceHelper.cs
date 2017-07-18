@@ -36,6 +36,7 @@ using System.Linq;
 using Android.Content;
 using Android.Preferences;
 using Android.Widget;
+using Firebase.Messaging;
 using Merge.Android.UI.Activities;
 using MergeApi.Framework.Enumerations;
 using Object = Java.Lang.Object;
@@ -203,6 +204,7 @@ namespace Merge.Android.Helpers {
                         LeaderUsername = "";
                         LeaderPassword = "";
                         AuthenticationState = LeaderAuthenticationState.NoAttempt;
+                        FirebaseMessaging.Instance.UnsubscribeFromTopic("verified_leader");
                     }
             }
         }

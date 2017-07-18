@@ -72,17 +72,9 @@ namespace Merge.Android.UI.Fragments {
             ListAdapter = new ArrayAdapter<string>(_context, global::Android.Resource.Layout.SimpleListItem1, _items.Keys.ToList());
         }
 
-        private void UpdateMenu() {
-            var m = ((AttendanceManagerActivity) _context).Menu;
-            m?.Clear();
-            if (_state == StateRecords)
-                m?.Add(0, 12345, 1, "Edit Students");
-        }
-
         private void SetState(int state, bool load, object argument) {
             new Action(async () => {
                 _state = state;
-                UpdateMenu();
                 _arguments[_state] = argument;
                 (ListAdapter as ArrayAdapter<String>)?.Clear();
                 if (load) {
@@ -115,7 +107,7 @@ namespace Merge.Android.UI.Fragments {
                         SelectedGroup = _groups.First(g => g.Id == argument.ToString());
                         var sorted = _records.Where(r => r.GroupId == argument.ToString()).ToList();
                         sorted.Sort((x, y) => DateTime.Compare(y.Date, x.Date));
-                        SetItems(new Dictionary<string, string> {{"Add Record", $"add:{argument}"}}
+                        SetItems(new Dictionary<string, string> {{ "Edit Group", "edit" }, {"Add Record", $"add:{argument}"}}
                             .Concat(sorted.ToDictionary(g => g.Date.ToLongDateString(), JsonConvert.SerializeObject))
                             .ToDictionary(p => p.Key, p => p.Value));
                         break;
@@ -150,6 +142,12 @@ namespace Merge.Android.UI.Fragments {
                     SetState(StateRecords, false, group.Id);
                     break;
                 case StateRecords:
+                    if (data == "edit") {
+                        var editorIntent = new Intent(_context, typeof(AttendanceGroupEditorActivity));
+                        editorIntent.PutExtra("groupJson", JsonConvert.SerializeObject(SelectedGroup));
+                        _context.StartActivity(editorIntent);
+                        break;
+                    }
                     var intent = new Intent(_context, typeof(AttendanceRecordEditorActivity));
                     if (!data.StartsWith("add:"))
                         intent.PutExtra("recordJson", data);

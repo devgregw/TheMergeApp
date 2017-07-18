@@ -32,6 +32,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content.Res;
 using Android.Gms.Maps;
@@ -42,7 +43,10 @@ using Android.Support.Design.Widget;
 using Android.Support.V4.Content;
 using Android.Support.V7.App;
 using Android.Support.V7.View.Menu;
+using Android.Util;
 using Android.Views;
+using Android.Views.Animations;
+using Android.Webkit;
 using Android.Widget;
 using Merge.Android.Helpers;
 using Merge.Android.Receivers;
@@ -55,6 +59,7 @@ using Newtonsoft.Json;
 using Orientation = Android.Widget.Orientation;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 using MergeApi.Tools;
+using AlertDialog = Android.Support.V7.App.AlertDialog;
 using Utilities = Merge.Android.Helpers.Utilities;
 
 #endregion
@@ -153,6 +158,9 @@ namespace Merge.Android.UI.Activities {
 
         public override void OnBackPressed() {
             _fab.Visibility = ViewStates.Invisible;
+            _pageContent?.StartAnimation(new AlphaAnimation(1f, 0f) {
+                Duration = 250L
+            });
             base.OnBackPressed();
         }
 
@@ -166,7 +174,7 @@ namespace Merge.Android.UI.Activities {
             _menuHelper.SetForceShowIcon(true);
         }
 
-        private void SetupPageContent() {
+        private async void SetupPageContent() {
             ((MergeElementCreationReceiver) MergeDatabase.ElementCreationReceiver).SetColorInfo(
                 _page.Color.ToAndroidColor(), _page.Theme);
             if (_pageContent == null) {
@@ -176,8 +184,19 @@ namespace Merge.Android.UI.Activities {
                 _dataLayout.AddView(_pageContent);
             }
             _pageContent.RemoveAllViews();
-            foreach (var e in _page.Content)
-                _pageContent.AddView(e.CreateView<View>());
+            await Task.Run(() => {
+                foreach (var e in _page.Content) {
+                    new Handler(MainLooper).Post(() => {
+                        var view = e.CreateView<View>();
+                        _pageContent.AddView(view);
+                        _pageContent.AddView(new LinearLayout(this) {
+                            LayoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
+                                Convert.ToInt32(TypedValue.ApplyDimension(ComplexUnitType.Dip, 4f,
+                                    Resources.DisplayMetrics)))
+                        });
+                    });
+                }
+            });
         }
 
         private void Colorize(Color c, Theme t) {
@@ -192,6 +211,21 @@ namespace Merge.Android.UI.Activities {
         }
 
         private void SetupLayout(MergePage p) {
+            if (p.LeadersOnly && !PreferenceHelper.IsValidLeader) {
+                var dialog = new AlertDialog.Builder(this).SetTitle("Unauthorized")
+                    .SetMessage(
+                        "You are not authorized to view this page.  If you believe this is an error, turn on leader-only features in Settings or contact us.")
+                    .SetPositiveButton("Dismiss", (s, e) => Finish()).SetNegativeButton("Contact Us", (s, e) => {
+                        Finish();
+                        EmailAction.FromAddress("students@pantego.org").Invoke();
+                    }).SetNeutralButton("Settings", (s, e) => {
+                        Finish();
+                        StartActivity(typeof(SettingsActivity));
+                    }).SetCancelable(false).Create();
+                dialog.SetOnShowListener(AlertDialogColorOverride.Instance);
+                dialog.Show();
+                return;
+            }
             _page = p;
             SetupMenu(Resource.Menu.PageMenu);
             Colorize(p.Color.ToAndroidColor(), p.Theme);

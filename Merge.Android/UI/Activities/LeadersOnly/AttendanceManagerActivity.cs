@@ -49,22 +49,11 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
         private bool _done;
 
         private AttendanceListFragment _fragment;
-        public IMenu Menu { get; private set; }
-
-        public override bool OnPrepareOptionsMenu(IMenu menu) {
-            Menu = menu;
-            return base.OnPrepareOptionsMenu(menu);
-        }
 
         public override bool OnOptionsItemSelected(IMenuItem item) {
             switch (item.ItemId) {
                 case global::Android.Resource.Id.Home:
                     OnBackPressed();
-                    return true;
-                case 12345:
-                    var intent = new Intent(this, typeof(AttendanceGroupEditorActivity));
-                    intent.PutExtra("groupJson", JsonConvert.SerializeObject(_fragment.SelectedGroup));
-                    StartActivity(intent);
                     return true;
             }
             return base.OnOptionsItemSelected(item);

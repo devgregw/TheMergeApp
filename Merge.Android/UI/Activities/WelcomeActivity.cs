@@ -41,6 +41,7 @@ using Android.Support.V4.Content;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
+using Firebase.Messaging;
 using Merge.Android.Helpers;
 using MergeApi.Client;
 using MergeApi.Framework.Enumerations;
@@ -81,7 +82,7 @@ namespace Merge.Android.UI.Activities {
                     LaunchUriAction.FromUri("https://api.mergeonpoint.com/merge.android.html").Invoke();
                     ShowLegalDialog();
                 })
-                .SetNegativeButton("Back", (s, e) => ShowLeaderDialog()).Create();
+                .SetNegativeButton("Back", (s, e) => ShowWelcomeDialog()).Create();
             dialog.SetOnShowListener(AlertDialogColorOverride.Instance);
             dialog.Show();
             /*ShowSimpleDialog("Here's The Legal Stuff",
@@ -240,6 +241,7 @@ namespace Merge.Android.UI.Activities {
                     PreferenceHelper.LeaderPassword = "";
                     PreferenceHelper.Token = "";
                     PreferenceHelper.TokenExpiration = DateTime.MinValue;
+                    FirebaseMessaging.Instance.UnsubscribeFromTopic("verified_leaders");
                     Finish();
                 }).Create();
             dialog.SetOnShowListener(AlertDialogColorOverride.Instance);
@@ -274,12 +276,14 @@ namespace Merge.Android.UI.Activities {
                                 PreferenceHelper.LeaderAuthenticationState.Successful;
                             PreferenceHelper.LeaderUsername = u;
                             PreferenceHelper.LeaderPassword = p;
+                            FirebaseMessaging.Instance.SubscribeToTopic("verified_leaders");
                             if (leaderRoutine)
                                 Finish();
                             else
                                 ShowTargetingDialog();
                         } catch {
                             Toast.MakeText(this, "Your credentials are incorrect.", ToastLength.Long).Show();
+                            FirebaseMessaging.Instance.UnsubscribeFromTopic("verified_leaders");
                             PreferenceHelper.AuthenticationState = PreferenceHelper.LeaderAuthenticationState.Failed;
                             ShowLeaderAuthenticationDialog(leaderRoutine);
                         } finally {
@@ -287,6 +291,7 @@ namespace Merge.Android.UI.Activities {
                         }
                     })
                 .SetNegativeButton("Back", (s, e) => {
+                    FirebaseMessaging.Instance.UnsubscribeFromTopic("verified_leaders");
                     if (leaderRoutine)
                         ShowLeaderRoutineLeaderDialog();
                     else
