@@ -34,6 +34,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Net.Cache;
 using System.Windows;
 
 #endregion
@@ -47,6 +48,7 @@ namespace mdu_updater {
             InitializeComponent();
             Loaded += (s, e) => {
                 using (var client = new WebClient()) {
+                    client.CachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
                     client.DownloadFileCompleted += (ss, ee) => {
                         status.Text = "Applying update...";
                         progress.IsIndeterminate = true;
@@ -72,7 +74,7 @@ namespace mdu_updater {
                         progress.IsIndeterminate = false;
                         progress.Value = ee.ProgressPercentage;
                     };
-                    client.DownloadFileAsync(new Uri("http://api.mergeonpoint.com/console/latest.zip"), "update.zip");
+                    client.DownloadFileAsync(new Uri("https://merge.devgregw.com/utility/latest.zip"), "update.zip");
                 }
             };
         }
