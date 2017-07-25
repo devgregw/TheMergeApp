@@ -79,7 +79,7 @@ namespace Merge.Android.UI.Activities {
                     "By using the Merge app, you agree to the MIT license as well as all third-party licenses specified.  Tap 'Licenses' to learn more, or visit the 'About Merge' page after you complete the setup.")
                 .SetCancelable(false).SetPositiveButton("I Agree", (s, e) => { ShowLoggingDialog(); })
                 .SetNeutralButton("Licenses", (s, e) => {
-                    LaunchUriAction.FromUri("https://api.mergeonpoint.com/merge.android.html").Invoke();
+                    LaunchUriAction.FromUri("https://merge.devgregw.com/licenses").Invoke();
                     ShowLegalDialog();
                 })
                 .SetNegativeButton("Back", (s, e) => ShowWelcomeDialog()).Create();

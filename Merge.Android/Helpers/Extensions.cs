@@ -61,7 +61,11 @@ namespace Merge.Android.Helpers {
 
         #region Android.Graphics.Color
 
-        public static Color ContrastColor(this Color c, Theme t) => t == Theme.Dark ? Color.Black : t == Theme.Light ? Color.White : c.ContrastColor();
+        public static Color ContrastColor(this Color c, Theme t) => t == Theme.Dark
+            ? Color.Black
+            : t == Theme.Light
+                ? Color.White
+                : c.ContrastColor();
 
         public static Color ContrastColor(this Color c) {
             var a = 1 - (0.299 * c.R + 0.587 * c.G + 0.114 * c.B) / 255;

@@ -53,7 +53,7 @@ namespace Merge.Android.UI.Activities {
                     LaunchUriAction.FromUri("http://www.pantego.org").Invoke();
                     break;
                 case Resource.Id.aboutLicenses:
-                    LaunchUriAction.FromUri("https://api.mergeonpoint.com/merge.android.html").Invoke();
+                    LaunchUriAction.FromUri("https://merge.devgregw.com/licenses").Invoke();
                     break;
                 case Resource.Id.aboutSendFeedback:
                     EmailAction.FromAddress("devgregw@outlook.com").Invoke();
