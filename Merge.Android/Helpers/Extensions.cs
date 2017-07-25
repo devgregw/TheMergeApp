@@ -43,11 +43,8 @@ namespace Merge.Android.Helpers {
     public static class Extensions {
         #region System.DateTime
 
-        public static long GetMillisecondsSinceEpoch(this DateTime dt) {
-            //return new Java.Util.GregorianCalendar(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second).TimeInMillis;
-            //return Convert.ToInt64((dt.ToLocalTime() - new DateTime(1970, 1, 1, 0, 0, 0).ToLocalTime()).TotalMilliseconds);
-            return new SimpleDateFormat("M/d/yyyy h:mm:ss a").Parse(dt.ToString(CultureInfo.CurrentCulture)).Time;
-        }
+        public static long GetMillisecondsSinceEpoch(this DateTime dt) =>
+            new SimpleDateFormat("M/d/yyyy h:mm:ss a").Parse(dt.ToString(CultureInfo.CurrentCulture)).Time;
 
         #endregion
 
@@ -64,9 +61,7 @@ namespace Merge.Android.Helpers {
 
         #region Android.Graphics.Color
 
-        public static Color ContrastColor(this Color c, Theme t) {
-            return t == Theme.Dark ? Color.Black : t == Theme.Light ? Color.White : c.ContrastColor();
-        }
+        public static Color ContrastColor(this Color c, Theme t) => t == Theme.Dark ? Color.Black : t == Theme.Light ? Color.White : c.ContrastColor();
 
         public static Color ContrastColor(this Color c) {
             var a = 1 - (0.299 * c.R + 0.587 * c.G + 0.114 * c.B) / 255;
@@ -78,13 +73,9 @@ namespace Merge.Android.Helpers {
 
         #region System.String
 
-        public static T ToEnum<T>(this string s) {
-            return (T) Enum.Parse(typeof(T), s, true);
-        }
+        public static T ToEnum<T>(this string s) => (T) Enum.Parse(typeof(T), s, true);
 
-        public static Color ToAndroidColor(this string s) {
-            return Color.ParseColor(s);
-        }
+        public static Color ToAndroidColor(this string s) => Color.ParseColor(s);
 
         #endregion
     }
