@@ -95,7 +95,7 @@ namespace Merge.Classes.UI.Pages {
                 await SetView(false);
                 AlertHelper.ShowAlert("Invalid Credentials",
                     "The given credentials are invalid.  Try again or tap 'Back'.",
-                    (v, i) => { }, "OK");
+                    b => { }, "OK");
                 PreferenceHelper.AuthenticationState = PreferenceHelper.LeaderAuthenticationState.Failed;
             }
         }

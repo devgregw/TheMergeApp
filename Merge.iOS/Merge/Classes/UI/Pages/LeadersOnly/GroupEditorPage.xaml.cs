@@ -38,6 +38,7 @@ using Merge.iOS.Helpers;
 using MergeApi.Client;
 using MergeApi.Models.Core.Attendance;
 using Xamarin.Forms;
+using Xamarin.Forms.Platform.iOS;
 using Xamarin.Forms.Xaml;
 
 #endregion
@@ -55,15 +56,14 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
             _group = group;
             groupId.Text = $"{_group.Summary} ({_group.Id})";
             _group.StudentNames.ForEach(AddStudentToList);
-            ToolbarItems.Add(new ToolbarItem("Close", Images.Dismiss, () => {
-                AlertHelper.ShowAlert("Save Changes", "Do you want to save your changes before exiting?",
-                    async (a, i) => {
-                        if (i == a.CancelButtonIndex)
-                            await SaveAndExit();
-                        else if (i == a.FirstOtherButtonIndex)
-                            await Navigation.PopModalAsync();
-                    }, "Save", "Don't Save", "Cancel");
-            }));
+			this.AddToolbarItem("Close", Images.Dismiss, (s, e) => {
+				AlertHelper.ShowSheet(null, async b => {
+					if (b == "Save")
+						await SaveAndExit();
+					else if (b == "Don't Save")
+						await Navigation.PopModalAsync();
+				}, "Cancel", "Don't Save", ((ToolbarItem)s).ToUIBarButtonItem(), "Save");
+			});
             ToolbarItems.Add(new ToolbarItem("Save", Images.Save, async () => await SaveAndExit()));
         }
 
@@ -104,9 +104,9 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
 
         private void AddStudent(object sender, EventArgs e) {
             AlertHelper.ShowTextInputAlert("Add Student", "Type the student's name then tap 'Add'.", false, f => { },
-                (a, i) => {
-                    if (i == a.CancelButtonIndex)
-                        AddStudentToList(a.GetTextField(0).Text);
+                (b, i) => {
+                    if (b == "Add")
+                        AddStudentToList(i);
                 }, "Add", "Cancel");
         }
     }

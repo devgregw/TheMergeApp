@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -6,7 +6,7 @@
     <ContentPage.Content>
         <ScrollView x:Name="scroller" Orientation="Vertical" HorizontalOptions="Fill" VerticalOptions="Fill">
             <StackLayout x:Name="contentHost" Spacing="0" Orientation="Vertical" HorizontalOptions="FillAndExpand">
-                <Image x:Name="cover" HorizontalOptions="Fill" HeightRequest="175" Aspect="AspectFill" />
+                <Image x:Name="cover" HorizontalOptions="Fill" HeightRequest="200" Aspect="AspectFill" />
                 <StackLayout Orientation="Vertical" Spacing="0" HorizontalOptions="FillAndExpand">
                     <StackLayout x:Name="dataList" Orientation="Vertical" Spacing="8" HorizontalOptions="FillAndExpand"
                                  Margin="6,0,6,12" />

@@ -79,7 +79,7 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
             } catch {
                 AlertHelper.ShowAlert("Error",
                     "An error occurred while loading data.  Try checking your internet connection.",
-                    (a, i) => Navigation.PopAsync(), "OK");
+                    b => Navigation.PopAsync(), "OK");
             } finally {
                 if (_shouldShowLoader)
                     new NSObject().InvokeOnMainThread(() => ((App) Application.Current).HideLoader());

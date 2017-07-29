@@ -61,10 +61,10 @@ namespace Merge.Classes.UI.Pages {
                 dataList.WidthRequest = Width;
                 if (scroller.ScrollY < 0)
                     cover.Layout(new Rectangle(cover.Bounds.X, scroller.ScrollY, cover.Bounds.Width,
-                        175 - scroller.ScrollY));
+                        200 - scroller.ScrollY));
                 else
                     cover.Layout(new Rectangle(cover.Bounds.X, 0, cover.Bounds.Width,
-                        175));
+                        200));
             };
         }
 
@@ -107,8 +107,8 @@ namespace Merge.Classes.UI.Pages {
                     if (e.RegistrationClosingDate.GetValueOrDefault(DateTime.MaxValue) < DateTime.Now)
                         AlertHelper.ShowAlert("Event Registration",
                             $"The registration for \"{e.Title}\" has closed.  Do you want to view the registration page anyway?",
-                            (v, i) => {
-                                if (i == 1)
+                            b => {
+                                if (b == "Yes")
                                     Register();
                             }, "No", "Yes");
                     else
@@ -121,10 +121,10 @@ namespace Merge.Classes.UI.Pages {
             if (p.LeadersOnly && !PreferenceHelper.IsValidLeader) {
                 AlertHelper.ShowAlert("Unauthorized",
                     "You are not authorized to view this page.  If you believe this is an error, turn on leader-only features in Settings or contact us.",
-                    async (a, i) => {
-                        if (i == a.CancelButtonIndex) {
+                    async b => {
+                        if (b == "Dismiss") {
                             await Navigation.PopAsync(true);
-                        } else if (i == a.FirstOtherButtonIndex) {
+                        } else if (b == "Contact Us") {
                             await Navigation.PopAsync(true);
                             EmailAction.FromAddress("students@pantego.org").Invoke();
                         } else {
@@ -189,10 +189,12 @@ namespace Merge.Classes.UI.Pages {
 
         private void InitializeMenu() {
             _menuItems.Add("Contact Us", EmailAction.FromAddress("students@pantego.org").Invoke);
-            ToolbarItems.Add(new ToolbarItem("More", Images.MoreVertical, () => AlertHelper.ShowSheet(null, (s, i) => {
-                if (i != s.CancelButtonIndex)
-                    _menuItems.ElementAt((int) i).Value();
-            }, "Close", null, _menuItems.Keys.ToArray())));
+			this.AddToolbarItem("More", Images.MoreVertical, (s, e) => AlertHelper.ShowSheet(null, b => {
+				if (b != "Close") {
+					var items = _menuItems.Keys.ToArray();
+				_menuItems.ElementAt(Array.IndexOf(items, b)).Value();
+				}
+			}, "Close", null, null, _menuItems.Keys.ToArray()));
         }
 
         private void Colorize(Color c, Theme t) {

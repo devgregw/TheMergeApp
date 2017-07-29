@@ -39,6 +39,7 @@ using Merge.iOS.Helpers;
 using MergeApi.Client;
 using MergeApi.Models.Core.Attendance;
 using Xamarin.Forms;
+using Xamarin.Forms.Platform.iOS;
 using Xamarin.Forms.Xaml;
 
 #endregion
@@ -76,18 +77,17 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
                 AddStudentToList(name, checkedNames.Contains(name), enable);
             foreach (var name in checkedNames.Where(n => !group.StudentNames.Contains(n)))
                 AddStudentToList(name, true, enable);
-            ToolbarItems.Add(new ToolbarItem("Close", Images.Dismiss, async () => {
-                if (enable)
-                    AlertHelper.ShowAlert("Save Changes", "Do you want to save your changes before exiting?",
-                        async (a, i) => {
-                            if (i == a.CancelButtonIndex)
-                                await SaveAndExit();
-                            else if (i == a.FirstOtherButtonIndex)
-                                await Navigation.PopModalAsync();
-                        }, "Save", "Don't Save", "Cancel");
-                else
-                    await Navigation.PopModalAsync();
-            }));
+			this.AddToolbarItem("Close", Images.Dismiss, async (s, e) => {
+				if (enable)
+					AlertHelper.ShowSheet(null, async b => {
+						if (b == "Save")
+							await SaveAndExit();
+						else if (b == "Don't Save")
+							await Navigation.PopModalAsync();
+				}, "Cancel", "Don't Save", ((ToolbarItem)s).ToUIBarButtonItem(), "Save");
+				else
+					await Navigation.PopModalAsync();
+			});
             if (enable)
                 ToolbarItems.Add(new ToolbarItem("Save", Images.Save, async () => await SaveAndExit()));
         }
@@ -108,14 +108,14 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
         }
 
         private List<string> GetStudents() {
-            return studentsList.Children.OfType<StackLayout>().Select(layout => ((Label) layout.Children[1]).Text)
+            return studentsList.Children.OfType<StackLayout>().Select(layout => ((Label) layout.Children[0]).Text)
                 .ToList();
         }
 
         private bool IsStudentChecked(string name) {
             return (from layout in studentsList.Children.OfType<StackLayout>()
-                where ((Label) layout.Children[1]).Text == name
-                select ((Switch) layout.Children[0]).IsToggled).FirstOrDefault();
+                where ((Label) layout.Children[0]).Text == name
+                select ((Switch) layout.Children[1]).IsToggled).FirstOrDefault();
         }
 
         private void AddStudentToList(string name, bool check, bool enable) {
@@ -142,9 +142,9 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
 
         private void AddStudent(object sender, EventArgs e) {
             AlertHelper.ShowTextInputAlert("Add Student", "Type the student's name then tap 'Add'.", false, f => { },
-                (a, i) => {
-                    if (i == a.CancelButtonIndex)
-                        AddStudentToList(a.GetTextField(0).Text, true, true);
+                (b, i) => {
+                    if (b == "Add")
+                        AddStudentToList(i, true, true);
                 }, "Add", "Cancel");
         }
     }

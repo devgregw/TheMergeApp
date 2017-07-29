@@ -268,10 +268,12 @@ namespace Merge.Classes.Receivers {
             }
             if (items == null || name == null)
                 return;
-            AlertHelper.ShowSheet("Contact " + name, (s, i) => {
+            AlertHelper.ShowSheet("Contact " + name, b => {
                 var labels = items.Keys.ToArray();
                 var mediums = items.Values.ToArray();
-                if (i == 0) {
+				if (b == "Cancel")
+					return;
+                if (b == "View Info") {
                     var msg = "";
                     foreach (var medium in mediums)
                         if (medium is EmailAddressMedium) {
@@ -287,9 +289,7 @@ namespace Merge.Classes.Receivers {
                     AlertHelper.ShowAlert("Contact Info for " + name, msg, null, "Close", null);
                     return;
                 }
-                var ni = i - 1;
-                if (ni == labels.Length)
-                    return;
+				var ni = Array.IndexOf(items.Keys.ToArray(), b);
                 var item = labels[ni];
                 if (item.Contains("Email"))
                     EmailAction.FromContactMedium((EmailAddressMedium) mediums[ni]).Invoke();
@@ -297,7 +297,7 @@ namespace Merge.Classes.Receivers {
                     CallAction.FromContactMedium((PhoneNumberMedium) mediums[ni]).Invoke();
                 else if (item.Contains("Text"))
                     TextAction.FromContactMedium((PhoneNumberMedium) mediums[ni]).Invoke();
-            }, "Cancel", null, new[] {"View Info"}.Concat(items.Keys.ToArray()).ToArray());
+            }, "Cancel", null, null, new[] {"View Info"}.Concat(items.Keys.ToArray()).ToArray());
         }
 
         public void InvokeOpenGroupMapPageAction(OpenGroupMapPageAction action) {
@@ -338,11 +338,11 @@ namespace Merge.Classes.Receivers {
         }
 
         private void ShowErrorAlert(string title, string message, Exception error) {
-            AlertHelper.ShowAlert(title, $"{message}\n{error.Message} ({error.GetType().FullName})", null, "OK", null);
+			AlertHelper.ShowAlert(title, $"{message}\n{error.Message} ({error.GetType().FullName})", b => {}, "OK", null);
         }
 
         public void ShowSimpleAlert(string title, string message) {
-            AlertHelper.ShowAlert(title, message, null, "OK", null);
+			AlertHelper.ShowAlert(title, message, b => {}, "OK", null);
         }
 
         public void ShowBadParamGroupAlert(ActionBase action) {

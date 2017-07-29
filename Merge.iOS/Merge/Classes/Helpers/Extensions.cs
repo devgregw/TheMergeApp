@@ -34,13 +34,30 @@ using System.Collections.Generic;
 using System.Linq;
 using Foundation;
 using MergeApi.Framework.Enumerations;
+using MergeApi.Tools;
 using Newtonsoft.Json.Linq;
+using UIKit;
 using Xamarin.Forms;
 
 #endregion
 
 namespace Merge.Classes.Helpers {
     public static class Extensions {
+		public static UIViewController GetTopmostViewController(this UIWindow w) {
+			var controller = UIApplication.SharedApplication.KeyWindow.RootViewController;
+			while (controller.PresentedViewController != null)
+				controller = controller.PresentedViewController;
+			return controller;
+		}
+
+		public static void AddToolbarItem(this Page p, string text, string icon, EventHandler clicked) => p.ToolbarItems.Add(new ToolbarItem {
+			Text = text,
+			Icon = icon
+		}.Manipulate(i => {
+			i.Clicked += clicked;
+			return i;
+		}));
+
         public static NavigationPage WrapInNavigationPage(this Page p) => new NavigationPage(p);
 
         public static FontAttributes ToFontAttributes(this LabelStyle style) {

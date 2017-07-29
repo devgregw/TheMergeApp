@@ -1,11 +1,11 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Merge.Classes.UI.Controls.DataView" Margin="8,0,8,0">
     <ContentView.Content>
         <StackLayout BackgroundColor="White" Orientation="Vertical">
-            <Image HorizontalOptions="Fill" x:Name="cover" Aspect="AspectFill" />
+            <Image HorizontalOptions="Fill" x:Name="cover" HeightRequest="200" Aspect="AspectFill" />
             <StackLayout x:Name="content" Margin="5,0,5,5">
                 <Label x:Name="title" FontSize="25" FontAttributes="Bold" TextColor="Black" LineBreakMode="WordWrap"
                        HorizontalOptions="Start" VerticalOptions="Start" />

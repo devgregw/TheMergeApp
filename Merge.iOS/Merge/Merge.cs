@@ -43,6 +43,7 @@ using MergeApi.Framework.Abstractions;
 using MergeApi.Models.Actions;
 using MergeApi.Models.Core;
 using Xamarin.Forms;
+using Xamarin.Forms.Platform.iOS;
 using Application = Xamarin.Forms.Application;
 using ui = UIKit;
 
@@ -86,43 +87,35 @@ namespace Merge {
         public void InitMainPage() {
             _tabbedPage = new TabbedPage {
                 BackgroundColor = Color.FromHex(ColorConsts.PrimaryLightColor),
-                ToolbarItems = {
-                    new ToolbarItem("Menu", Images.MoreVertical, () => {
-                        var menuItems = new List<string> {
-                            "Refresh",
-                            "About Merge",
-                            "Settings",
-                            "Contact Us"
-                        };
-                        if (PreferenceHelper.IsValidLeader)
-                            menuItems.Add("Leader Resources");
-                        AlertHelper.ShowSheet("The Merge App",
-                            (s, i) => {
-                                if (i == s.CancelButtonIndex)
-                                    return;
-                                switch (i) {
-                                    case 0:
-                                        TabPageDelegates.Instance.Nullify();
-                                        ReInitTabs();
-                                        break;
-                                    case 1:
-                                        ((NavigationPage) MainPage).Navigation.PushAsync(new AboutPage());
-                                        break;
-                                    case 2:
-                                        ((NavigationPage) MainPage).Navigation.PushAsync(new SettingsPage());
-                                        break;
-                                    case 3:
-                                        EmailAction.FromAddress("students@pantego.org").Invoke();
-                                        break;
-                                    case 4:
-                                        ((NavigationPage) MainPage).Navigation.PushAsync(new LeaderResourcesPage());
-                                        break;
-                                }
-                            }, "Close", null, menuItems.ToArray());
-                    })
-                },
                 Title = "Merge"
             };
+			_tabbedPage.AddToolbarItem("Menu", Images.MoreVertical, (s, e) => {
+				var menuItems = new List<string> {
+							"Refresh",
+							"About Merge",
+							"Settings",
+							"Contact Us"
+						};
+				if (PreferenceHelper.IsValidLeader)
+					menuItems.Add("Leader Resources");
+				AlertHelper.ShowSheet("The Merge App",
+					b => {
+						if (b == "Close")
+							return;
+						var items = menuItems.ToArray();
+					if (b == items[0]) {
+						TabPageDelegates.Instance.Nullify();
+						ReInitTabs();
+					} else if (b == items[1])
+						((NavigationPage)MainPage).Navigation.PushAsync(new AboutPage());
+						else if (b == items[2])
+						((NavigationPage)MainPage).Navigation.PushAsync(new SettingsPage());
+						else if (b == items[3])
+						EmailAction.FromAddress("students@pantego.org").Invoke();
+						else if (b == items[4])
+					((NavigationPage)MainPage).Navigation.PushAsync(new LeaderResourcesPage());	
+					}, "Close", null, ((ToolbarItem)s).ToUIBarButtonItem(), menuItems.ToArray());
+			});
             _tabbedPage.Children.Add(new ContentPage {
                 BackgroundColor = Color.FromHex(ColorConsts.PrimaryLightColor)
             });

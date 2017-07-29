@@ -151,10 +151,10 @@ namespace Merge.iOS {
 
         private void ShowNotificationAlert(string title, string message, ActionBase action) {
             if (action == null)
-                AlertHelper.ShowAlert(title, message, (v, i) => { }, "Dismiss");
+				AlertHelper.ShowAlert(title, message, b => {}, "Dismiss");
             else
-                AlertHelper.ShowAlert(title, message, (v, i) => {
-                    if (i == v.CancelButtonIndex)
+                AlertHelper.ShowAlert(title, message, b => {
+                    if (b == "Open")
                         action.Invoke();
                 }, "Open", "Dismiss");
         }
