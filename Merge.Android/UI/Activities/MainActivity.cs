@@ -190,27 +190,26 @@ namespace Merge.Android.UI.Activities {
             }
             if (_selectedTab == tab) {
                 // If the user switched tabs, don't replace the content they're already viewing
-                var all = variableGetter().OrderBy(sorter).ToList();
+                var all = variableGetter().Where(filter).OrderBy(sorter).ToList();
                 var tips = _tips.Where(t => t.Tab == GetTabForInt(tab) &&
                                             t.CheckTargeting(PreferenceHelper.GradeLevels, PreferenceHelper.Genders) &&
                                             !PreferenceHelper.DismissedTips.Contains(t.Id));
-                var content = tips.Select(t => new TipCard(this, t)).Concat(all.Where(filter).Select(viewCreator))
+                var content = tips.Select(t => new TipCard(this, t)).Concat(all.Select(viewCreator))
                     .ToList();
                 var image = _headers.ContainsKey(tab) && _headers[tab] != null
                     ? CreateHeaderImageView(_headers[tab].Image)
                     : null;
-                if (content.Count > 0) {
-                    _applier.Apply(image, content, !_first);
-                } else {
+                if (all.Count == 0) {
                     var layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
                         ViewGroup.LayoutParams.WrapContent);
                     layoutParams.AddRule(LayoutRules.CenterHorizontal);
-                    _applier.Apply(image, new BasicCard(this,
+                    content.Add(new BasicCard(this,
                         new IconView(this, Resource.Drawable.NoContent,
                             "No content available", true, true) {
                             LayoutParameters = layoutParams
-                        }), !_first);
+                        }));
                 }
+                _applier.Apply(image, content, !_first);
             }
         }
 
