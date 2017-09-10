@@ -67,10 +67,12 @@ namespace Merge_Data_Utility.UI.Windows.Choosers {
 
                 #region Finding mediums...
 
+                var pl = (await MergeDatabase.ListAsync<MergePage>()).ToList();
+                var gl = (await MergeDatabase.ListAsync<MergeGroup>()).ToList();
                 var pages =
-                    (await MergeDatabase.ListAsync<MergePage>()).Where(p => !excludedIds.Contains(p.Id));
+                    !pl.Any() ? new List<MergePage>() : pl.Where(p => !excludedIds.Contains(p.Id));
                 var groups =
-                    (await MergeDatabase.ListAsync<MergeGroup>()).Where(g => !excludedIds.Contains(g.Id));
+                    !gl.Any() ? new List<MergeGroup>() : gl.Where(g => !excludedIds.Contains(g.Id));
                 //var leaders =
                 //(await MergeDatabase.ListLeadersAsync()).Items.Where(l => !excludedIds.Contains(l.Id));
                 foreach (var p in pages)
@@ -79,11 +81,14 @@ namespace Merge_Data_Utility.UI.Windows.Choosers {
                     if (((ButtonElement) e).Action is ShowContactInfoAction)
                         ((ShowContactInfoAction) ((ButtonElement) e).Action).ContactMediums2.ForEach(
                             m => rawMediums.Add(m, $"pages/{p.Id}"));
-                    else if (((ButtonElement) e).Action is CallAction)
+                    else if (((ButtonElement) e).Action is CallAction &&
+                             ((CallAction) ((ButtonElement) e).Action).ParamGroup == "1")
                         rawMediums.Add(((CallAction) ((ButtonElement) e).Action).ContactMedium1, $"pages/{p.Id}");
-                    else if (((ButtonElement) e).Action is TextAction)
+                    else if (((ButtonElement) e).Action is TextAction &&
+                             ((TextAction) ((ButtonElement) e).Action).ParamGroup == "1")
                         rawMediums.Add(((TextAction) ((ButtonElement) e).Action).ContactMedium1, $"pages/{p.Id}");
-                    else if (((ButtonElement) e).Action is EmailAction)
+                    else if (((ButtonElement) e).Action is EmailAction &&
+                             ((EmailAction) ((ButtonElement) e).Action).ParamGroup == "1")
                         rawMediums.Add(((EmailAction) ((ButtonElement) e).Action).ContactMedium1, $"pages/{p.Id}");
                 }
                 foreach (var g in groups)

@@ -29,18 +29,20 @@
 
 #region USINGS
 
-using System.Collections.Generic;
+using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Media;
+using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using MergeApi.Client;
-using MergeApi.Models.Core;
-using MergeApi.Models.Core.Tab;
-using MergeApi.Models.Elements;
 using MergeApi.Tools;
 using Merge_Data_Utility.Tools;
+using Microsoft.Win32;
 
 #endregion
 
@@ -54,21 +56,6 @@ namespace Merge_Data_Utility.UI.Windows.Choosers {
             Loaded += async (s, e) => await LoadFiles();
         }
 
-        private async Task<List<string>> GetUsedFilesAsync() {
-            var files = new List<string>();
-            var events = (await MergeDatabase.ListAsync<MergeEvent>()).ToList();
-            var groups = (await MergeDatabase.ListAsync<MergeGroup>()).ToList();
-            var pages = (await MergeDatabase.ListAsync<MergePage>()).ToList();
-            var headers = (await MergeDatabase.ListAsync<TabHeader>()).ToList();
-            files.AddRange(events.Select(e => e.CoverImage));
-            files.AddRange(groups.Select(g => g.CoverImage));
-            files.AddRange(pages.Select(p => p.CoverImage));
-            foreach (var strings in pages.Select(p => p.Content.OfType<ImageElement>().Select(i => i.Url)))
-                files.AddRange(strings);
-            files.AddRange(headers.Select(h => h.Image));
-            return files;
-        }
-
         private Button MakeButton(string content, RoutedEventHandler handler) {
             var b = new Button {
                 Content = content,
@@ -78,7 +65,7 @@ namespace Merge_Data_Utility.UI.Windows.Choosers {
             return b;
         }
 
-        private ListViewItem MakeItem(StorageReference reference, bool deletable) {
+        private ListViewItem MakeItem(StorageReference reference) {
             var layout = new StackPanel {
                 Children = {
                     new TextBlock {
@@ -87,22 +74,41 @@ namespace Merge_Data_Utility.UI.Windows.Choosers {
                     new StackPanel {
                         Orientation = Orientation.Horizontal,
                         Children = {
-                            MakeButton("Copy URL", (s, e) => Clipboard.SetText(reference.Url, TextDataFormat.Text)),
+                            MakeButton("Copy URL", async (s, e) => {
+                                SystemSounds.Beep.Play();
+                                Clipboard.SetText(reference.Url, TextDataFormat.Text);
+                                ((Button) s).Content = "Copied!";
+                                await Task.Run(() => Thread.Sleep(2000));
+                                ((Button) s).Content = "Copy URL";
+                            }),
+                            MakeButton("Download", (s, e) => {
+                                var ext = ImageConverter.GetExtension(reference.Url);
+                                var dialog = new SaveFileDialog {
+                                    Filter = $"{ext.ToUpper()} Files|*.{ext}",
+                                    Title = "Download File",
+                                    OverwritePrompt = true,
+                                    CreatePrompt = true
+                                };
+                                if (dialog.ShowDialog().GetValueOrDefault(false))
+                                    new AsyncLoadingWindow("Downloading File", "Please wait...",
+                                        new Func<object, Task<object>>(async o => {
+                                            using (var client = new WebClient()) {
+                                                File.WriteAllBytes(dialog.FileName,
+                                                    await client.DownloadDataTaskAsync(reference.Url));
+                                            }
+                                            MessageBox.Show("The file was saved successfully.", "Success",
+                                                MessageBoxButton.OK, MessageBoxImage.Information);
+                                            return null;
+                                        }), null).ShowDialog();
+                            }),
                             MakeButton("Open", (s, e) => Process.Start(reference.Url)),
                             MakeButton("Delete", async (s, e) => {
-                                if (deletable) {
-                                    if (MessageBox.Show(this, "Are you sure you want to delete this file?", "Confirm",
-                                            MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) !=
-                                        MessageBoxResult.Yes) return;
-                                    list.Items.Remove(list.Items.OfType<ListViewItem>()
-                                        .First(i => i.Tag.ToString() == reference.Url));
-                                    await MergeDatabase.DeleteStorageReferenceAsync(reference.Name);
-                                } else {
-                                    MessageBox.Show(this,
-                                        "This file cannot be deleted because it is currently in use by an event, Merge group, page, or tab header.",
-                                        "File Browser", MessageBoxButton.OK, MessageBoxImage.Error,
-                                        MessageBoxResult.OK);
-                                }
+                                if (MessageBox.Show(this, "Are you sure you want to delete this file?", "Confirm",
+                                        MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) !=
+                                    MessageBoxResult.Yes) return;
+                                list.Items.Remove(list.Items.OfType<ListViewItem>()
+                                    .First(i => i.Tag.ToString() == reference.Url));
+                                await MergeDatabase.DeleteStorageReferenceAsync(reference.Name, "uploads");
                             })
                         }
                     }
@@ -117,11 +123,13 @@ namespace Merge_Data_Utility.UI.Windows.Choosers {
         private async Task LoadFiles() {
             var reference = new LoaderReference(cc);
             reference.StartLoading("Loading files...");
-            var files = await MergeDatabase.ListStorageReferencesAsync();
-            reference.SetMessage("Scanning for important files...");
-            var used = await GetUsedFilesAsync();
+            var files = await MergeDatabase.ListStorageReferencesAsync("uploads");
             list.Items.Clear();
-            files.ForEach(r => list.Items.Add(MakeItem(r, !used.Contains(r.Url))));
+            files.ForEach(r => list.Items.Add(MakeItem(r)));
+            if (list.Items.Count == 0)
+                list.Items.Add(new ListViewItem {
+                    Content = "No files found"
+                });
             reference.StopLoading();
         }
 

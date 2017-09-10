@@ -14,17 +14,17 @@
             <editorFields:ModelBaseFieldCollectionControl x:Name="baseCtrls" Type="page" />
             <Separator Margin="10" />
             <editorFields:FieldHeader Title="Hidden"
-                                      Description="If you choose to make this page hidden, it will not appear on the home tab." />
+                                      Description="If you choose to make this page hidden, it will not appear on the app, but it can still be opened using an action." />
             <CheckBox x:Name="hiddenBox">Hidden</CheckBox>
             <editorFields:FieldHeader Title="Importance"
-                                      Description="Important announcements are bigger and prioritized." />
+                                      Description="Important pages are bigger and prioritized." />
             <ComboBox x:Name="importance" HorizontalAlignment="Left" Width="200">
                 <ComboBoxItem>Normal</ComboBoxItem>
                 <ComboBoxItem>Medium</ComboBoxItem>
                 <ComboBoxItem>High</ComboBoxItem>
             </ComboBox>
             <editorFields:FieldHeader Title="Leaders Only"
-                                      Description="This page can be restricted leaders who have signed into the Merge app." />
+                                      Description="This page can be restricted leaders who have signed into the Merge app.  Note:  If this is selected, the Grades and Geneders set will be ignored." />
             <CheckBox x:Name="leadersOnly" Content="Leaders Only" />
             <Separator Margin="10" />
             <editorFields:FieldHeader Title="Button"

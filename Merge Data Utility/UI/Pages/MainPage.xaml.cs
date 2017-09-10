@@ -42,8 +42,6 @@ using MergeApi.Models.Core;
 using MergeApi.Models.Core.Attendance;
 using Merge_Data_Utility.Tools;
 using Merge_Data_Utility.UI.Controls;
-using Merge_Data_Utility.UI.Pages.Base;
-using Merge_Data_Utility.UI.Pages.Editors;
 using Merge_Data_Utility.UI.Windows;
 using Merge_Data_Utility.UI.Windows.Choosers;
 using ValidationResult = MergeApi.Tools.ValidationResult;
@@ -85,7 +83,7 @@ namespace Merge_Data_Utility.UI.Pages {
             var content = c.ToList();
             content.ForEach(
                 i =>
-                    list.Children.Add(ModelControl.Create(i, false, o => HandleEdit(o, false),
+                    list.Children.Add(ModelControl.Create(i, false, o => HandleEdit((T) o, false),
                         o => HandleDelete((T) o, false))));
             if (list.Children.Count == 0)
                 list.Children.Add(new TextBlock {
@@ -152,23 +150,22 @@ namespace Merge_Data_Utility.UI.Pages {
             reference.StartLoading("Loading attendance...");
             var records = (await MergeDatabase.ListAsync<AttendanceRecord>()).ToList();
             var groups = (await MergeDatabase.ListAsync<AttendanceGroup>()).ToList();
-            var avg = AttendanceTools.GetAverageAttendance(records, groups);
-            attendanceAvg.Text = avg == null ? "No data" : $"{avg.Item1} students/week ({avg.Item2}%)";
-            var low = AttendanceTools.GetLowestRecordedAttendance(records);
-            var high = AttendanceTools.GetHighestRecordedAttendance(records);
-            var recent = AttendanceTools.GetMostRecentAttendance(records);
-            attendanceRecordLow.Text = low == null
-                ? "No data"
-                : $"{low.Item1} students ({low.Item2.ToShortDateString()})";
-            attendanceRecordHigh.Text = high == null
-                ? "No data"
-                : $"{high.Item1} students ({high.Item2.ToShortDateString()})";
-            attendanceRecent.Text = recent == null
-                ? "No data"
-                : $"{recent.Item1} students ({recent.Item2.ToShortDateString()})";
-            var totals = AttendanceTools.GetTotals(groups);
-            attendanceTotalGroups.Text = totals?.Item1.ToString() ?? "0";
-            attendanceTotalStudents.Text = totals?.Item2.ToString() ?? "0";
+            var overall = AttendanceTools.GetMetrics(records, groups, new List<MergeGroup>(),
+                new List<MergeGroupAttendanceRecord>());
+            attendanceAvg.Text =
+                $"{overall.AverageStudentCount} students/week ({overall.AverageAttendancePercentage}%)";
+            leaderAttendanceAvg.Text = $"{overall.AverageLeaderAttendancePercentage}%";
+            AttendanceTools.AttendanceWeekMetrics low = overall.LowestAttendanceWeek.GetMetrics(groups),
+                high = overall.HighestAttendanceWeek.GetMetrics(groups),
+                recent = overall.MostRecentAttendanceWeek.GetMetrics(groups);
+            attendanceRecordLow.Text =
+                low.Week == null ? "No data" : $"{low.TotalStudents} students on {low.Week.Date.ToShortDateString()} ({low.AverageAttendancePercentage}%)";
+            attendanceRecordHigh.Text =
+                high.Week == null ? "No data" : $"{high.TotalStudents} students on {high.Week.Date.ToShortDateString()} ({high.AverageAttendancePercentage}%)";
+            attendanceRecent.Text =
+                recent.Week == null ? "No data" : $"{recent.TotalStudents} students  on {recent.Week.Date.ToShortDateString()} ({recent.AverageAttendancePercentage}%)";
+            attendanceTotalGroups.Text = overall.Groups.Count.ToString();
+            attendanceTotalStudents.Text = overall.TotalStudents.ToString();
             reference.StopLoading();
         }
 
@@ -211,28 +208,21 @@ namespace Merge_Data_Utility.UI.Pages {
         }
 
         private void NewEvent_Click(object sender, RoutedEventArgs e) {
-            HandleNew(new EventEditorPage(null, false));
+            HandleNew<MergeEvent>();
         }
 
         private void NewMergeGroup_Click(object sender, RoutedEventArgs e) {
-            HandleNew(new GroupEditorPage(null, false));
+            HandleNew<MergeGroup>();
         }
 
         private void NewPage_Click(object sender, RoutedEventArgs e) {
-            HandleNew(new PageEditorPage(null, false));
+            HandleNew<MergePage>();
         }
 
         private void attendanceManager_Click(object sender, RoutedEventArgs e) {
-            new AttendanceManagerWindow().ShowDialog();
+            //new AttendanceManagerWindow().ShowDialog();
+            new AttendanceManagerWindow2().ShowDialog();
             InitializeAttendance();
-        }
-
-        private void notificationManager_Click(object sender, RoutedEventArgs e) {
-            new NotificationManagerWindow().Show();
-        }
-
-        private void notificationDashboard_Click(object sender, RoutedEventArgs e) {
-            Process.Start("https://www.onesignal.com/");
         }
 
         private void CheckForUpdates(object sender, RoutedEventArgs e) {
@@ -251,10 +241,18 @@ namespace Merge_Data_Utility.UI.Pages {
             new FileBrowserWindow().ShowDialog();
         }
 
+        private void ViewRoadmap(object sender, RoutedEventArgs e) {
+            Process.Start("https://trello.com/b/nAzvRa7R/roadmap");
+        }
+
+        private void Exit_Clicked(object sender, RoutedEventArgs e) {
+            Application.Current.Shutdown();
+        }
+
         #region Handlers
 
-        private void HandleNew(EditorPage p) {
-            new EditorWindow(p, EditorResult).Show();
+        private void HandleNew<T>() {
+            EditorWindow.Create(default(T), false, EditorResult).Show();
         }
 
         private void EditorResult(EditorWindow.ResultType result) {
@@ -263,20 +261,35 @@ namespace Merge_Data_Utility.UI.Pages {
             InitializeDrafts();
         }
 
-        private void HandleEdit(object source, bool draft) {
-            new EditorWindow(source, draft, EditorResult).Show();
+        private void HandleEdit<T>(T source, bool draft) {
+            EditorWindow.Create(source, draft, EditorResult).Show();
         }
 
         private async void HandleDelete<T>(T item, bool draft) where T : IIdentifiable {
             if (MessageBox.Show(this.GetWindow(),
                     $"Are you sure you want to delete this {(draft ? "draft" : "object")}?  This action cannot be undone.",
-                    $"Confirm", MessageBoxButton.YesNo, MessageBoxImage.Exclamation,
-                    MessageBoxResult.No) != MessageBoxResult.Yes) return;
+                    "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Exclamation,
+                    MessageBoxResult.No) == MessageBoxResult.No) return;
             if (draft) {
                 DraftManager.AutoDelete(item);
                 InitializeDrafts();
             } else {
+                var coreRef = new LoaderReference(coreBox);
+                coreRef.StartLoading("Deleting...");
+                if (typeof(T) == typeof(MergeGroup))
+                    if (MessageBox.Show(this.GetWindow(),
+                            "WARNING: If you delete this Merge group, its associated attendance data will be deleted too!  Do you want to continue anyway?",
+                            "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) ==
+                        MessageBoxResult.Yes) {
+                        (await MergeDatabase.ListAsync<MergeGroupAttendanceRecord>()).ForEach(
+                            async r => await MergeDatabase
+                                .DeleteAsync(r));
+                    } else {
+                        coreRef.StopLoading();
+                        return;
+                    }
                 await MergeDatabase.DeleteAsync(item);
+                coreRef.StopLoading();
                 InitializeCore();
             }
         }

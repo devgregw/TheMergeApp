@@ -41,6 +41,34 @@ using System.Windows.Media;
 
 namespace Merge_Data_Utility.Tools {
     public static class Extensions {
+        public static int IndexOf<TKey, TValue>(this IDictionary<TKey, TValue> dict,
+            KeyValuePair<TKey, TValue> item) => dict.Keys.ToList().IndexOf(item.Key);
+
+        public static IEnumerable<TSource> AsOne<TSource>(this IEnumerable<IEnumerable<TSource>> lists) {
+            var list = new List<TSource>();
+            foreach (var l in lists)
+                list.AddRange(l);
+            return list;
+        }
+
+        public static TSource Max<TSource>(this IEnumerable<TSource> enumerable, Func<TSource, IComparable> selector) {
+            var list = enumerable.ToList();
+            var indices = new Dictionary<int, IComparable>();
+            for (var i = 0; i < list.Count; i++)
+                indices.Add(i, selector(list[i]));
+            indices = indices.OrderBy(p => p.Value).ToDictionary(p => p.Key, p => p.Value);
+            return !list.Any() ? default(TSource) : list[indices.Last().Key];
+        }
+
+        public static TSource Min<TSource>(this IEnumerable<TSource> enumerable, Func<TSource, IComparable> selector) {
+            var list = enumerable.ToList();
+            var indices = new Dictionary<int, IComparable>();
+            for (var i = 0; i < list.Count; i++)
+                indices.Add(i, selector(list[i]));
+            indices = indices.OrderBy(p => p.Value).ToDictionary(p => p.Key, p => p.Value);
+            return !list.Any() ? default(TSource) : list[indices.First().Key];
+        }
+
         public static DateTime ToDateTime(this int ts) {
             return new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(ts).ToLocalTime();
         }

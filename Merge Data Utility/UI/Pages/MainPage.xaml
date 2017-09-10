@@ -57,10 +57,7 @@
                             </MenuItem>
                             <MenuItem Header="Refresh" x:Name="reload" />
                             <Separator />
-                            <MenuItem Header="Exit" />
-                        </MenuItem>
-                        <MenuItem Header="Tools">
-                            <MenuItem Header="Action Code Viewer" Click="ActionCodeViewer_Click" />
+                            <MenuItem Header="Exit" Click="Exit_Clicked" />
                         </MenuItem>
                     </Menu>
                     <TabControl x:Name="tabs" Grid.Row="1" Margin="2.5,0,2.5,5">
@@ -118,38 +115,67 @@
         </other:ContentControl>
         <Grid Grid.Column="2" Margin="2.5,5,5,5">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="0.4*" />
+                <RowDefinition Height="0.2*" />
+                <RowDefinition Height="0.4*" />
             </Grid.RowDefinitions>
             <GroupBox Grid.Row="0" Header="Attendance" x:Name="attendanceBox">
                 <Grid>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,5,0">Avg. Attendance</TextBlock>
-                        <TextBlock x:Name="attendanceAvg" Grid.Row="0" Grid.Column="1">200 students/week</TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0">Record High</TextBlock>
-                        <TextBlock x:Name="attendanceRecordHigh" Grid.Row="1" Grid.Column="1">300 students (date)</TextBlock>
-                        <TextBlock Grid.Row="2" Grid.Column="0">Record Low</TextBlock>
-                        <TextBlock x:Name="attendanceRecordLow" Grid.Row="2" Grid.Column="1">100 students (date)</TextBlock>
-                        <TextBlock Grid.Row="3" Grid.Column="0">Most Recent</TextBlock>
-                        <TextBlock x:Name="attendanceRecent" Grid.Row="3" Grid.Column="1">250 students (date)</TextBlock>
-                        <TextBlock Grid.Row="4" Grid.Column="0">Total Groups</TextBlock>
-                        <TextBlock x:Name="attendanceTotalGroups" Grid.Row="4" Grid.Column="1">13 groups</TextBlock>
-                        <TextBlock Grid.Row="5" Grid.Column="0">Total Students</TextBlock>
-                        <TextBlock x:Name="attendanceTotalStudents" Grid.Row="5" Grid.Column="1">310 students</TextBlock>
-                    </Grid>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,0,0,25">
+                        <Grid VerticalAlignment="Top">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0">Avg. Attendance</TextBlock>
+                            <TextBlock VerticalAlignment="Center" x:Name="attendanceAvg" Grid.Row="0" Grid.Column="1"
+                                       TextWrapping="Wrap">
+                                200 students/week
+                            </TextBlock>
+                            <TextBlock VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0">
+                                Avg. Leader
+                                <LineBreak />Attendance
+                            </TextBlock>
+                            <TextBlock VerticalAlignment="Center" x:Name="leaderAttendanceAvg" Grid.Row="1"
+                                       Grid.Column="1" TextWrapping="Wrap">
+                                100%
+                            </TextBlock>
+                            <TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="0">Record High</TextBlock>
+                            <TextBlock VerticalAlignment="Center" x:Name="attendanceRecordHigh" Grid.Row="2"
+                                       Grid.Column="1" TextWrapping="Wrap">
+                                300 students (date)
+                            </TextBlock>
+                            <TextBlock VerticalAlignment="Center" Grid.Row="3" Grid.Column="0">Record Low</TextBlock>
+                            <TextBlock VerticalAlignment="Center" x:Name="attendanceRecordLow" Grid.Row="3"
+                                       Grid.Column="1" TextWrapping="Wrap">
+                                100 students (date)
+                            </TextBlock>
+                            <TextBlock VerticalAlignment="Center" Grid.Row="4" Grid.Column="0">Most Recent</TextBlock>
+                            <TextBlock VerticalAlignment="Center" x:Name="attendanceRecent" Grid.Row="4"
+                                       Grid.Column="1" TextWrapping="Wrap">
+                                250 students (date)
+                            </TextBlock>
+                            <TextBlock VerticalAlignment="Center" Grid.Row="5" Grid.Column="0">Total Groups</TextBlock>
+                            <TextBlock VerticalAlignment="Center" x:Name="attendanceTotalGroups" Grid.Row="5"
+                                       Grid.Column="1" TextWrapping="Wrap">
+                                13 groups
+                            </TextBlock>
+                            <TextBlock VerticalAlignment="Center" Grid.Row="6" Grid.Column="0">Total Students</TextBlock>
+                            <TextBlock VerticalAlignment="Center" x:Name="attendanceTotalStudents" Grid.Row="6"
+                                       Grid.Column="1" TextWrapping="Wrap">
+                                310 students
+                            </TextBlock>
+                        </Grid>
+                    </ScrollViewer>
                     <Button x:Name="attendanceManager" VerticalAlignment="Bottom" Click="attendanceManager_Click">Open Attendance Manager</Button>
                 </Grid>
             </GroupBox>
@@ -193,8 +219,9 @@
                         <TextBlock Grid.Row="1" Grid.Column="0">MergeApi.dll</TextBlock>
                         <TextBlock x:Name="aboutLibVersion" Grid.Row="1" Grid.Column="1">1.0.0.0</TextBlock>
                     </Grid>
-                    <TextBlock VerticalAlignment="Bottom" TextWrapping="Wrap" Margin="0,0,0,25">Developed by Greg Whatley for Pantego Bible Church.</TextBlock>
-                    <Button Grid.Column="0" VerticalAlignment="Bottom" Click="CheckForUpdates">Check for Updates</Button>
+                    <TextBlock VerticalAlignment="Bottom" TextWrapping="Wrap" Margin="0,0,0,50">Developed by Greg Whatley for Pantego Bible Church.</TextBlock>
+                    <Button Grid.Column="0" VerticalAlignment="Bottom" Click="CheckForUpdates" Margin="0,0,0,25">Check for Updates</Button>
+                    <Button Grid.Column="0" VerticalAlignment="Bottom" Click="ViewRoadmap">View Roadmap</Button>
                 </Grid>
             </GroupBox>
         </Grid>

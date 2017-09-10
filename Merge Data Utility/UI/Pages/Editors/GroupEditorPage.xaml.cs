@@ -142,7 +142,7 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
                 nsrc.CoverImage = coverField.Value;
             } else {
                 nsrc.Coordinates = (await GoogleMapsGeocoding.GetCoordinates(addressBox.Text)).Item2;
-                nsrc.CoverImage = await coverField.PerformChangesAsync($"group_{idField.Id.ToLower()}");
+                nsrc.CoverImage = await coverField.PerformChangesAsync($"group_{idField.Id.ToLower()}", "");
             }
             return nsrc;
         }

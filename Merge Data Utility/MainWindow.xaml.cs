@@ -60,7 +60,11 @@ namespace Merge_Data_Utility {
                 await StaticAuth.AuthLink.GetFreshAuthAsync();
                 return StaticAuth.AuthLink.FirebaseToken;
             }, null, null, new Logger());
+#if DEBUG
+            Navigated += (s, e) => Title = ((Page) e.Content).Title + " - Merge Data Utility (DEBUG MODE)";
+#else
             Navigated += (s, e) => Title = ((Page) e.Content).Title + " - Merge Data Utility";
+#endif
             Navigate(new UpdateCheckPage());
         }
 

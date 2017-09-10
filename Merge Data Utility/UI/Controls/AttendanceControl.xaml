@@ -17,7 +17,7 @@
                        Margin="5,2.5,5,2.5" TextWrapping="Wrap" />
             <StackPanel Orientation="Horizontal" Margin="5,2.5,5,2.5" VerticalAlignment="Bottom"
                         HorizontalAlignment="Left">
-                <Button Click="Details_Requested" Content="View Details" />
+                <Button Click="Details_Requested" Content="View Attendance" />
                 <Button x:Name="editButton" Click="Edit_Requested" Content="Edit" Margin="5,0,0,0" />
                 <Button x:Name="deleteButton" Click="Delete_Requested" Content="Delete" Margin="5,0,0,0" />
                 <TextBlock x:Name="id" Text="ID" FontSize="12" Foreground="Gray" VerticalAlignment="Center"

@@ -9,12 +9,12 @@
       Title="Update Available">
 
     <Grid Background="White">
-        <StackPanel x:Name="main" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <StackPanel x:Name="main" VerticalAlignment="Center" HorizontalAlignment="Center" Width="355">
             <TextBlock x:Name="header" FontSize="34" FontWeight="Light" TextAlignment="Center">An update is available.</TextBlock>
-            <TextBlock TextAlignment="Center" Margin="0,5,0,0">
-                It is strongly recommended that you update the Merge Data Utility
-                <LineBreak />to ensure that you have all of the latest fixes and improvements.
-            </TextBlock>
+            <TextBlock TextAlignment="Center" Margin="0,5,0,0"
+                       Text="It is strongly recommended that you update the Merge Data Utility to ensure that you have all of the latest fixes and improvements."
+                       TextWrapping="Wrap" />
+            <TextBlock x:Name="note" TextAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" />
             <Grid Margin="0,5,0,0" x:Name="grid">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />

@@ -53,8 +53,11 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
             InitializeComponent();
         }
 
+        private List<(string Old, string New)> _renames;
+
         public AttendanceGroupEditorPage(AttendanceGroup src, bool draft) : this() {
             SetSource(src, false);
+            _renames = new List<(string Old, string New)>();
             DisableDrafting();
         }
 
@@ -84,6 +87,8 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
                     };
             }, i => true, i => {
                 var input = TextInputWindow.GetInput("Edit Student", "Enter student's name:", i.Content.ToString());
+                if (input != null)
+                    _renames.Add((i.Content.ToString(), input));
                 return input == null
                     ? i
                     : new ListViewItem {
@@ -107,11 +112,12 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
         }
 
         protected override InputValidationResult ValidateInput() {
-            var errors = new List<string>();
-            errors.Add(leadersList.Count == 0 ? "At least one leader must be specified." : "");
-            errors.Add(studentsList.Count == 0 ? "At least one student must be specified." : "");
-            errors.Add(gradeBox.SelectedIndex == -1 ? "No grade level specified." : "");
-            errors.Add(genderBox.SelectedIndex == -1 ? "No gender specified." : "");
+            var errors = new List<string> {
+                leadersList.Count == 0 ? "At least one leader must be specified." : "",
+                studentsList.Count == 0 ? "At least one student must be specified." : "",
+                gradeBox.SelectedIndex == -1 ? "No grade level specified." : "",
+                genderBox.SelectedIndex == -1 ? "No gender specified." : ""
+            };
             errors.RemoveAll(string.IsNullOrWhiteSpace);
             return new InputValidationResult(errors);
         }
@@ -121,7 +127,7 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
             return new AttendanceGroup {
                 Id = idField.Id,
                 LeaderNames = leadersList.GetItems(i => i.Content.ToString()).ToList(),
-                StudentNames = studentsList.GetItems(i => i.Content.ToString()).ToList(),
+                StudentNames = studentsList.GetItems(i => i.Content.ToString()).OrderBy(n => n.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last()).ToList(),
                 GradeLevel = GradeLevelConverter.FromString(((ComboBoxItem) gradeBox.SelectedItem).Content.ToString()),
                 Gender = genderBox.SelectedIndex == 0 ? Gender.Male : Gender.Female
             };
@@ -141,6 +147,19 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
                 reference.StartLoading("Processing...");
                 var o = (AttendanceGroup) await MakeObject();
                 try {
+                    if (_renames.Any()) {
+                        reference.SetMessage("Renaming students...");
+                        var records =
+                            (await MergeDatabase.ListAsync<AttendanceRecord>()).Where(r => r.GroupId == o.Id).ToList();
+                        foreach (var t in _renames) {
+                            foreach (var r in records) {
+                                if (!r.Students.Contains(t.Old)) continue;
+                                r.Students[r.Students.IndexOf(t.Old)] = t.New;
+                                await MergeDatabase.UpdateAsync(r);
+                            }
+                        }
+                    }
+                    reference.SetMessage("Processing...");
                     await MergeDatabase.UpdateAsync(o);
                     return true;
                 } catch (Exception ex) {

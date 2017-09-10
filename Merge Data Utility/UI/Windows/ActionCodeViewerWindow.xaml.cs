@@ -87,12 +87,12 @@ namespace Merge_Data_Utility.UI.Windows {
         }
 
         private void Indent_Changed(object sender, RoutedEventArgs e) {
-            _indent = ((CheckBox)sender).IsChecked.GetValueOrDefault(true);
+            _indent = ((CheckBox) sender).IsChecked.GetValueOrDefault(true);
             Update();
         }
 
         private void Wrap_Changed(object sender, RoutedEventArgs e) {
-            _wrap = ((CheckBox)sender).IsChecked.GetValueOrDefault(false);
+            _wrap = ((CheckBox) sender).IsChecked.GetValueOrDefault(false);
             Update();
         }
     }

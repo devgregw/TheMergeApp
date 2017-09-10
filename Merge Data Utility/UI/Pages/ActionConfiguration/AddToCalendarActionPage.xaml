@@ -26,9 +26,9 @@
         <other:SpecialRadioButton x:Name="r2">
             <StackPanel>
                 <TextBlock>Title</TextBlock>
-                <TextBox x:Name="titleBox" Width="250" />
+                <TextBox x:Name="titleBox" Width="250" HorizontalAlignment="Left" />
                 <TextBlock>Location</TextBlock>
-                <TextBox x:Name="locationBox" Width="250" />
+                <TextBox x:Name="locationBox" Width="250" HorizontalAlignment="Left" />
                 <TextBlock>Start Date</TextBlock>
                 <xctk:DateTimePicker x:Name="startBox" Format="Custom" FormatString="dddd, MMMM d, yyyy h:mm tt" />
                 <TextBlock>End Date</TextBlock>

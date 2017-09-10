@@ -55,6 +55,10 @@ namespace Merge_Data_Utility.UI.Pages.ActionConfiguration {
         public AddToCalendarActionPage(AddToCalendarAction source) {
             InitializeComponent();
             Initialize(source);
+            recurrenceField.DropDownClosed += (s, e) => {
+                r2.IsChecked = false;
+                r2.IsChecked = true;
+            };
         }
 
         public override void Update() {
@@ -72,6 +76,7 @@ namespace Merge_Data_Utility.UI.Pages.ActionConfiguration {
                     locationBox.Text = value.Location2;
                     startBox.Value = value.StartDate2;
                     endBox.Value = value.EndDate2;
+                    recurrenceField.SetSource(value.RecurrenceRule2);
                     break;
             }
         }

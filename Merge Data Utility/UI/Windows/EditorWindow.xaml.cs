@@ -62,10 +62,7 @@ namespace Merge_Data_Utility.UI.Windows {
             InitializeComponent();
         }
 
-        public EditorWindow(object source, bool draft, Action<ResultType> callback)
-            : this(EditorPage.GetPage(source.GetType(), source, draft), callback) { }
-
-        public EditorWindow(EditorPage page, Action<ResultType> callback) : this() {
+        private EditorWindow(EditorPage page, Action<ResultType> callback) : this() {
             _page = page;
             _callback = callback;
             Closing += async (sender, args) => {
@@ -85,7 +82,7 @@ namespace Merge_Data_Utility.UI.Windows {
                     if (diff.Any()) {
                         foreach (var img in diff)
                             await MergeDatabase.DeleteStorageReferenceAsync(
-                                img.Url.Replace("https://merge.devgregw.com/content/", ""));
+                                img.Url.Replace("https://merge.devgregw.com/content/", ""), "");
                         args.Cancel = false;
                         _safeClosing = true;
                         Close();
@@ -103,6 +100,9 @@ namespace Merge_Data_Utility.UI.Windows {
             get => menu.IsEnabled;
             set => menu.IsEnabled = value;
         }
+
+        public static EditorWindow Create<T>(T source, bool draft, Action<ResultType> callback) => new EditorWindow(
+            EditorPage.GetPage(source, draft), callback);
 
         private void CloseSafe(ResultType r) {
             _safeClosing = true;

@@ -39,7 +39,6 @@ using MergeApi.Client;
 using MergeApi.Models.Core.Attendance;
 using Merge_Data_Utility.Tools;
 using Merge_Data_Utility.UI.Controls;
-using Merge_Data_Utility.UI.Pages.Base;
 
 #endregion
 
@@ -62,7 +61,7 @@ namespace Merge_Data_Utility.UI.Windows {
             reference.StartLoading();
             if (preop != null)
                 await preop();
-            _records = (await MergeDatabase.ListAsync<AttendanceRecord>()).ToList();
+            _records = (await MergeDatabase.ListAsync<AttendanceRecord>()).OrderByDescending(r => r.Date).ToList();
             _groups = (await MergeDatabase.ListAsync<AttendanceGroup>()).ToList();
             Initialize();
             reference.StopLoading();
@@ -88,7 +87,7 @@ namespace Merge_Data_Utility.UI.Windows {
             groupsList.Children.Clear();
             foreach (var g in _groups)
                 groupsList.Children.Add(new AttendanceControl(_records, g,
-                    _g => { new EditorWindow(g, false, async r => await Refresh()).ShowDialog(); }, async _g => {
+                    _g => { EditorWindow.Create(g, false, async r => await Refresh()).ShowDialog(); }, async _g => {
                         if (
                             MessageBox.Show(this, "Are you sure you want to delete this group?", "Confirm",
                                 MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) ==
@@ -106,12 +105,12 @@ namespace Merge_Data_Utility.UI.Windows {
         }
 
         private void NewRecord_Click(object sender, RoutedEventArgs e) {
-            new EditorWindow(EditorPage.GetPage(typeof(AttendanceRecord), null, false), async r => await Refresh())
+            EditorWindow.Create<AttendanceRecord>(null, false, async r => await Refresh())
                 .ShowDialog();
         }
 
         private void NewGroup_Click(object sender, RoutedEventArgs e) {
-            new EditorWindow(EditorPage.GetPage(typeof(AttendanceGroup), null, false), async r => await Refresh())
+            EditorWindow.Create<AttendanceGroup>(null, false, async r => await Refresh())
                 .ShowDialog();
         }
     }

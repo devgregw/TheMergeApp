@@ -38,6 +38,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using MergeApi.Client;
 using MergeApi.Models.Core.Attendance;
+using Merge_Data_Utility.Tools;
 using Merge_Data_Utility.UI.Pages.Base;
 using Merge_Data_Utility.UI.Windows;
 using Xceed.Wpf.Toolkit.Primitives;
@@ -63,12 +64,17 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
         private void SelectGroup(AttendanceGroup g) {
             content.IsEnabled = true;
             _group = g;
+            id.Text = g.Id;
             students.Items.Clear();
             foreach (var s in _group.StudentNames)
                 students.Items.Add(new TextBlock {
                     TextWrapping = TextWrapping.Wrap,
                     Text = s
                 });
+            if (HasSource) {
+                var r = GetSource<AttendanceRecord>();
+                foreach (var s in r.Students) students.SelectedItems.Add(students.Items[r.Students.IndexOf(s)]);
+            }
             UpdateTitle();
         }
 
@@ -104,16 +110,16 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
         }
 
         protected override async void Update() {
+            browse.IsEnabled = !HasSource;
+            date.IsEnabled = !HasSource;
             if (!HasSource)
                 return;
-            var reference = GetLoaderReference();
+            var reference = new LoaderReference((ScrollViewer) Content);
             reference.StartLoading("Preparing...");
             var src = GetSource<AttendanceRecord>();
             date.SelectedDate = src.Date;
             SelectGroup(await src.GetGroupAsync());
             leaders.IsChecked = src.LeadersPresent;
-            date.IsEnabled = false;
-            browse.IsEnabled = false;
             reference.StopLoading();
         }
 
@@ -122,8 +128,7 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
                 return new InputValidationResult(new List<string> {
                     "No attendance group selected."
                 });
-            var errors = new List<string>();
-            errors.Add(date.SelectedDate.HasValue ? "" : "No data specified.");
+            var errors = new List<string> {date.SelectedDate.HasValue ? "" : "No date specified."};
             errors.RemoveAll(string.IsNullOrWhiteSpace);
             return new InputValidationResult(errors);
         }
@@ -140,7 +145,7 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
 
         public override string GetIdentifier() {
             return
-                $"attendance/records/{date.SelectedDate?.ToString("MMddyyy") ?? "<no date>"}/{(_group == null ? "<no group>" : _group.Id)}";
+                $"attendance/records/{date.SelectedDate?.ToString("MMddyyyy") ?? "<no date>"}/{(_group == null ? "<no group>" : _group.Id)}";
         }
 
         public override async Task<bool> Publish() {
@@ -152,12 +157,17 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
                 reference.StartLoading("Processing...");
                 var o = (AttendanceRecord) await MakeObject();
                 try {
-                    if (students.Items.Count > _group.StudentNames.Count) {
-                        MessageBox.Show(Window,
-                            "The selected attendance group will be updated to include the additional students provided.",
-                            "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
-                        _group.StudentNames = students.Items.Cast<TextBlock>().Select(t => t.Text).ToList();
-                        await MergeDatabase.UpdateAsync(_group);
+                    var newStudents = students.SelectedItems.OfType<TextBlock>().Select(b => b.Text)
+                        .Where(s => !_group.StudentNames.Contains(s)).ToList();
+                    if (newStudents.Count > 0) {
+                        var l = newStudents.Aggregate("", (current, n) => current + $"{n}\n");
+                        if (MessageBox.Show(Window,
+                                $"Do you want to add the following students to {_group.Summary} so they will be available for selection in future records?\n{l}",
+                                "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Information) ==
+                            MessageBoxResult.Yes) {
+                            _group.StudentNames.AddRange(newStudents);
+                            await MergeDatabase.UpdateAsync(_group);
+                        }
                     }
                     await MergeDatabase.UpdateAsync(o);
                     return true;

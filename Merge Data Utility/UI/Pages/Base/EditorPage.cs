@@ -52,6 +52,7 @@ namespace Merge_Data_Utility.UI.Pages.Base {
             {typeof(MergePage), typeof(PageEditorPage)},
             {typeof(AttendanceGroup), typeof(AttendanceGroupEditorPage)},
             {typeof(AttendanceRecord), typeof(AttendanceRecordEditorPage)},
+            {typeof(MergeGroupAttendanceRecord), typeof(MergeGroupRecordEditorPage)},
             {typeof(TabTip), typeof(TipEditorPage)}
         };
 
@@ -69,12 +70,13 @@ namespace Merge_Data_Utility.UI.Pages.Base {
             _drafting = false;
         }
 
-        public static EditorPage GetPage(Type objectType, object source, bool draft) {
+        public static EditorPage GetPage<T>(T source, bool draft) {
+            Console.WriteLine(typeof(T).Name);
             return
                 (EditorPage)
-                Mappings[objectType].GetConstructors()
-                    .First(c => c.GetParameters().Count() == 2)
-                    .Invoke(new[] {source, draft});
+                Mappings[typeof(T)].GetConstructors()
+                    .First(c => c.GetParameters().ToList().Count == 2)
+                    .Invoke(new object[] {source, draft});
         }
 
         public LoaderReference GetLoaderReference() {

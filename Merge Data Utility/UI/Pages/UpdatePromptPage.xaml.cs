@@ -45,7 +45,7 @@ namespace Merge_Data_Utility.UI.Pages {
             InitializeComponent();
         }
 
-        public UpdatePromptPage(UpdateCheckPage.ConsoleVersion info, int tab = 0, bool skip = false) : this() {
+        public UpdatePromptPage(UpdateCheckPage.UtilityVersion info, int tab = 0, bool skip = false) : this() {
             update.Click += (s, e) => {
                 header.Text = "Please wait.";
                 while (main.Children.Count > 1)
@@ -54,7 +54,8 @@ namespace Merge_Data_Utility.UI.Pages {
                 Process.Start("UpdaterTemp\\mdu-updater.exe");
                 Application.Current.MainWindow.Close();
             };
-            if (info.Require) {
+            note.Text = $"Version {info.Version}:  {info.Note}";
+            if (info.IsUpdateRequired) {
                 var block = new TextBlock {
                     Text = "This update is required.",
                     TextAlignment = TextAlignment.Center

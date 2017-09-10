@@ -32,7 +32,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -152,9 +151,9 @@ namespace Merge_Data_Utility.UI.Windows {
                 if (action.SelectedAction != null)
                     options.Add(new JProperty("action", JsonConvert.SerializeObject(action.SelectedAction)));
                 if (!string.IsNullOrWhiteSpace(cover.Value)) {
-                    var url = await cover.PerformChangesAsync(
+                    var url = /*await cover.PerformChangesAsync(
                         $"OneSignal-Notification-{DateTime.Now.ToString("Mdyyyy\"-\"hmmtt", CultureInfo.CurrentUICulture)}"
-                            .ToLower());
+                            .ToLower())*/"";
                     options.Add(new JProperty("ios_attachments", new JObject(new JProperty("pic", url))));
                     options.Add(new JProperty("big_picture", url));
                 }

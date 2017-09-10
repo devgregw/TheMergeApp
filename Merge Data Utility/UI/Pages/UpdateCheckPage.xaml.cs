@@ -30,14 +30,15 @@
 #region USINGS
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Cache;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Xml.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 
 #endregion
 
@@ -49,16 +50,16 @@ namespace Merge_Data_Utility.UI.Pages {
         public UpdateCheckPage(int tab = 0, bool skip = false) {
             InitializeComponent();
             Loaded += async (s, e) => {
-                ConsoleVersion info = null;
+                UtilityVersion info = null;
                 try {
-                    info = await CheckForUpdate();
+                    info = (await GetVersionsAsync()).LastOrDefault();
                 } catch (Exception ex) {
                     MessageBox.Show(
                         $"An error occurred while checking for updates.  You may continue to use the Merge Data Utility.\n{ex.Message} ({ex.GetType().FullName})",
                         "Check for Updates", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                     info = null;
                 } finally {
-                    if (info != null && info.IsAvailable)
+                    if (info != null && info.Version > VersionInfo.Version)
                         NavigationService.Navigate(new UpdatePromptPage(info, tab, skip));
                     else
                         NavigationService.Navigate(skip ? (Page) new MainPage(tab) : new AuthenticationPage());
@@ -66,47 +67,26 @@ namespace Merge_Data_Utility.UI.Pages {
             };
         }
 
-        private async Task<ConsoleVersion[]> GetVersions() {
+        private async Task<UtilityVersion[]> GetVersionsAsync() {
             using (var client = new WebClient()) {
                 client.CachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
-                var xml =
-                    XDocument.Parse(
-                        await client.DownloadStringTaskAsync("https://merge.devgregw.com/utility/versions.xml"));
-                var versions = new List<ConsoleVersion>();
-                foreach (var e in xml.Root.Elements())
-                    versions.Add(new ConsoleVersion(Version.Parse(e.Attribute("code").Value),
-                        bool.Parse(e.Attribute("require").Value), e.Attribute("file").Value));
-                return versions.ToArray();
+                var json = JObject.Parse(
+                    await client.DownloadStringTaskAsync("https://merge.devgregw.com/utility/versions.json"));
+                var array = json.Value<JArray>("versions");
+                return array.Select(token => token.ToObject<UtilityVersion>()).OrderBy(v => v.Version).ToArray();
             }
         }
 
-        private async Task<ConsoleVersion> CheckForUpdate() {
-            var versions = await GetVersions();
-            var latest = versions.Where(v => v.Code > VersionInfo.Version).ToArray();
-            if (latest.Length == 0)
-                return new ConsoleVersion();
-            return latest.Last();
-        }
+        public sealed class UtilityVersion {
+            [JsonProperty("version")]
+            [JsonConverter(typeof(VersionConverter))]
+            public Version Version { get; set; }
 
-        public class ConsoleVersion {
-            public ConsoleVersion() {
-                IsAvailable = false;
-            }
+            [JsonProperty("required")]
+            public bool IsUpdateRequired { get; set; }
 
-            public ConsoleVersion(Version code, bool require, string file) {
-                Code = code;
-                Require = require;
-                File = file;
-                IsAvailable = true;
-            }
-
-            public Version Code { get; }
-
-            public bool Require { get; }
-
-            public string File { get; }
-
-            public bool IsAvailable { get; }
+            [JsonProperty("note")]
+            public string Note { get; set; }
         }
     }
 }

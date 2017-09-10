@@ -66,7 +66,7 @@ namespace Merge_Data_Utility.UI.Windows {
             reference.StartLoading("Processing...");
             try {
                 await FileUploader.PutStorageReferenceAsync(pathBox.Text,
-                    pathBox.Text.Remove(0, pathBox.Text.LastIndexOf("\\", StringComparison.CurrentCulture)));
+                    pathBox.Text.Remove(0, pathBox.Text.LastIndexOf("\\", StringComparison.CurrentCulture)), "uploads");
             } catch (InvalidOperationException ex) {
                 Console.WriteLine(
                     $"The following exception occurred, but it's probably OK.\n{ex.Message} (System.InvalidOperationException):\n{ex.StackTrace}");

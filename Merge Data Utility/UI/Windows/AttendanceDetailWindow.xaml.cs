@@ -124,10 +124,13 @@ namespace Merge_Data_Utility.UI.Windows {
                 return;
             }
             treeView.Items.Clear();
-            var average = AttendanceTools.GetAverageAttendance(records, new[] {group}.ToList());
+            var average = AttendanceTools.GetMetrics(records, new List<AttendanceGroup> {
+                group
+            }, null, null);
+            //var average = AttendanceTools.GetAverageAttendance(records, new[] {group}.ToList());
             var groupItem = new TreeViewItem {
                 Header =
-                    $"{group.Summary} ({records.Count} records, {average.Item1} students ({average.Item2}%) on average)"
+                    $"{group.Summary} ({records.Count} records, {average.AverageStudentCount} students ({average.AverageAttendancePercentage}%) on average)"
             };
             records.Sort((x, y) => y.Date.WithoutTime().CompareTo(x.Date.WithoutTime()));
             foreach (var r in records) {

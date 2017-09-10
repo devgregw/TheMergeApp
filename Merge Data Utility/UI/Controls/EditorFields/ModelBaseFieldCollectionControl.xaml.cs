@@ -130,7 +130,7 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
             else
                 x.CoverImage =
                     await coverField.PerformChangesAsync(
-                        $"{x.GetType().Name.Replace("Merge", "")}_{idField.Id}".ToLower());
+                        $"{x.GetType().Name.Replace("Merge", "")}_{idField.Id}".ToLower(), "");
         }
     }
 }

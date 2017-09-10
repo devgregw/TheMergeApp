@@ -38,7 +38,6 @@ using MergeApi.Client;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Models.Core.Tab;
 using Merge_Data_Utility.Tools;
-using Merge_Data_Utility.UI.Pages.Base;
 using Merge_Data_Utility.UI.Windows;
 
 #endregion
@@ -82,7 +81,7 @@ namespace Merge_Data_Utility.UI.Controls.Other {
                 var tips = (await MergeDatabase.ListAsync<TabTip>()).Where(t => t.Tab == _tab);
                 tipsList.Children.Clear();
                 tips.ForEach(tip => tipsList.Children.Add(ModelControl.Create(tip, false, t => {
-                    new EditorWindow(t, false, r => {
+                    EditorWindow.Create((TabTip) t, false, r => {
                         if (r == EditorWindow.ResultType.Published)
                             InitTips();
                         else if (r == EditorWindow.ResultType.Saved)
@@ -129,7 +128,7 @@ namespace Merge_Data_Utility.UI.Controls.Other {
         }
 
         private async void HeaderSet_Click(object sender, RoutedEventArgs e) {
-            var img = ImageInputWindow.GetUrl("Set Header: " + _tab, "Choose a new header image:", $"{_tab}Header",
+            var img = ImageInputWindow.GetUrl("Set Header: " + _tab, "Choose a new header image:", "", $"{_tab}Header",
                 false);
             if (string.IsNullOrWhiteSpace(img)) return;
             await MergeDatabase.UpdateAsync(new TabHeader {
@@ -152,7 +151,7 @@ namespace Merge_Data_Utility.UI.Controls.Other {
         }
 
         private void TipNew_Click(object sender, RoutedEventArgs e) {
-            new EditorWindow(EditorPage.GetPage(typeof(TabTip), null, false), r => {
+            EditorWindow.Create<TabTip>(null, false, r => {
                 if (r == EditorWindow.ResultType.Published)
                     InitTips();
                 else if (r == EditorWindow.ResultType.Saved)

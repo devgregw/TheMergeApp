@@ -128,7 +128,7 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
                 LeadersOnly = leadersOnly.IsChecked.GetValueOrDefault(false),
                 Content = contentList.GetElements().ToList(),
                 Hidden = hiddenBox.IsChecked.GetValueOrDefault(false),
-                Importance = ((ComboBoxItem) importance.SelectedItem).Content.ToString().ToEnum<Importance>(true),
+                Importance = ((ComboBoxItem) importance.SelectedItem).Content.ToString().ToEnum<Importance>(),
                 ButtonLabel = string.IsNullOrWhiteSpace(buttonLabel.Text)
                     ? $"Launch {baseCtrls.Title}"
                     : buttonLabel.Text,

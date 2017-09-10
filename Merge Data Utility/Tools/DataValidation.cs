@@ -67,14 +67,14 @@ namespace Merge_Data_Utility.Tools {
                 case ValidationResultType.OutdatedEvent:
                     var e = v.GetSubject<MergeEvent>();
                     var choice = GetUserChoice($"Fix events/{e.Id} - Data Validation",
-                        GetResultDescription(v.ResultType),
+                        v.ResultDescription,
                         new[] {"Change the dates", "Delete the event"});
                     if (choice == -1)
                         return DefaultCancel;
                     if (choice == 0)
 #pragma warning disable 1998
                         return async v2 => {
-                            var window = new EditorWindow(e, false, r => { });
+                            var window = EditorWindow.Create(e, false, r => { });
                             window.ShowDialog();
                             return window.Result == EditorWindow.ResultType.Canceled
                                 ? FixResult.Cancel
@@ -94,7 +94,7 @@ namespace Merge_Data_Utility.Tools {
                                 subvalidation = validation.GetParameter<ValidationResult>(),
                                 subvalidation2 = subvalidation.GetParameter<ValidationResult>();
                             var choice1 = GetUserChoice($"Fix pages/{page.Id} - Data Validation",
-                                $"Element {buttons.IndexOf(b) + 1} of {buttons.Count}: {GetResultDescription(validation.ResultType)}: {GetResultDescription(subvalidation.ResultType)}: {GetResultDescription(subvalidation2.ResultType)}",
+                                $"Element {buttons.IndexOf(b) + 1} of {buttons.Count}: {validation.ResultDescription}",
                                 new[] {
                                     "Reconfigure the action",
                                     "See more choices"
@@ -135,41 +135,6 @@ namespace Merge_Data_Utility.Tools {
             return ChoiceWindow.GetChoice(title, message, choices);
         }
 
-        public static string GetResultDescription(ValidationResultType t) {
-            switch (t) {
-                case ValidationResultType.Success:
-                    return "No errors detected";
-                case ValidationResultType.EventNotFound:
-                    return "This action points to an event that does not exist";
-                case ValidationResultType.PageNotFound:
-                    return "This action points to a page that does not exist";
-                case ValidationResultType.GroupNotFound:
-                    return "This action points to a Merge group that does not exist";
-                case ValidationResultType.LeaderNotFound:
-                    return "This action points to a leader that does not exist";
-                case ValidationResultType.PageValidationFailure:
-                    return "This action points to a page that failed validation";
-                case ValidationResultType.EventValidationFailure:
-                    return "This action points to an event that failed validation";
-                case ValidationResultType.OutdatedAction:
-                    return "This action is configured to add an event that has already ended to the calendar";
-                case ValidationResultType.ButtonActionValidationFailure:
-                    return "The action featured by this element failed validation";
-                case ValidationResultType.NoAddress:
-                    return "This action is configured to get directions to an event with no address";
-                case ValidationResultType.Exception:
-                    return "Validation failed unexpectedly";
-                case ValidationResultType.PageActionValidationFailure:
-                    return "The action featured by this page's button failed validation";
-                case ValidationResultType.PageContentValidationFailure:
-                    return "One or more of the content elements featured by this page failed validation";
-                case ValidationResultType.OutdatedEvent:
-                    return "This event already occurred";
-                default:
-                    return "Uh oh";
-            }
-        }
-
         #region Specific Makers
 
         private static Func<ValidationResult, Task<FixResult>> GetPavfFixer(ValidationResult v) {
@@ -183,9 +148,8 @@ namespace Merge_Data_Utility.Tools {
                 case ValidationResultType.EventNotFound:
                 case ValidationResultType.PageNotFound:
                 case ValidationResultType.GroupNotFound:
-                case ValidationResultType.LeaderNotFound:
                     var c1 = GetUserChoice($"Fix pages/{page.Id} - Data Validation",
-                        $"{GetResultDescription(v.ResultType)}: {GetResultDescription(actionValidation.ResultType)}",
+                        v.ResultDescription,
                         new[] {"Reconfigure the action", "Delete the page"});
                     if (c1 == -1)
                         return DefaultCancel;
@@ -195,7 +159,7 @@ namespace Merge_Data_Utility.Tools {
                         page.Title, "page");
                 case ValidationResultType.OutdatedAction:
                     var c4 = GetUserChoice($"Fix pages/{page.Id} - Data Validation",
-                        $"{GetResultDescription(v.ResultType)}: {GetResultDescription(actionValidation.ResultType)}",
+                        v.ResultDescription,
                         new[] {"Reconfigure the action", "Delete the page"});
                     if (c4 == -1)
                         return DefaultCancel;
@@ -205,7 +169,7 @@ namespace Merge_Data_Utility.Tools {
                         page.Title, "page");
                 case ValidationResultType.NoAddress:
                     var c5 = GetUserChoice($"Fix pages/{page.Id} - Data Validation",
-                        $"{GetResultDescription(v.ResultType)}: {GetResultDescription(actionValidation.ResultType)}",
+                        v.ResultDescription,
                         new[] {
                             "Reconfigure the action",
                             $"Specify an address for events/{actionValidation.GetParameter<MergeEvent>().Id}"
@@ -230,7 +194,7 @@ namespace Merge_Data_Utility.Tools {
                     };
                 default:
                     var c2 = GetUserChoice($"Fix pages/{page.Id} - Data Validation",
-                        $"{GetResultDescription(v.ResultType)}: {GetResultDescription(actionValidation.ResultType)}",
+                        v.ResultDescription,
                         new[] {
                             "Reconfigure the action",
                             $"Fix {actionValidation.ResultType.ToString().Replace("Action", "").Replace("ValidationFailure", "").ToLower()}s/{actionValidation.GetParameter<ValidationResult>().GetSubject<ModelBase>().Id}"

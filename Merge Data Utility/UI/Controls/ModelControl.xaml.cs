@@ -103,10 +103,6 @@ namespace Merge_Data_Utility.UI.Controls {
                 return new ModelControl(o, MakeIdString(draft, "pages", casted.Id),
                     Condition(string.IsNullOrWhiteSpace(casted.Title), "(untitled)", casted.Title),
                     casted.ShortDescription, edit, delete);
-            if (o.TryCast<MergeLeader>(out casted))
-                return new ModelControl(o, MakeIdString(draft, "leaders", casted.Id),
-                    Condition(string.IsNullOrWhiteSpace(casted.Name), "(no name)", casted.Name), casted.Role, edit,
-                    delete);
             if (o.TryCast<TabTip>(out casted))
                 return new ModelControl(o, MakeIdString(draft, "tips/" + casted.Tab.ToString().ToLower(), casted.Id),
                     casted.Message, edit, delete, 12);

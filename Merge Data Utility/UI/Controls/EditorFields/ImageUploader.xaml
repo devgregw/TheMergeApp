@@ -20,6 +20,7 @@
             <Button x:Name="coverBrowse" Content="Browse this PC..." Click="coverBrowse_Click" Margin="0,0,0,2.5" />
             <!--<Button x:Name="uploadBrowse" Content="Browse uploads..." Click="uploadBrowse_Click" Margin="0,0,0,2.5" />-->
             <Button x:Name="clearButton" Click="clearButton_Click" Margin="0,0,0,2.5">Clear</Button>
+            <Button x:Name="downloadButton" Click="Download_Click" Margin="0,0,0,2.5" IsEnabled="False">Download</Button>
         </StackPanel>
     </StackPanel>
 </UserControl>

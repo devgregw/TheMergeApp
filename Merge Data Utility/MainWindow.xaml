@@ -5,7 +5,7 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   mc:Ignorable="d"
                   Icon="/Merge Data Utility;component/shadow-64.png" Title="Merge Data Utility"
-                  ShowsNavigationUI="False" Height="650" Width="1000" MinHeight="500"
+                  ShowsNavigationUI="False" Height="650" Width="1000" MinHeight="650"
                   MinWidth="1000" ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
 
 </NavigationWindow>

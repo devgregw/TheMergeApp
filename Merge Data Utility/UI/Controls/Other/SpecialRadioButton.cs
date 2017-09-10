@@ -44,6 +44,11 @@ namespace Merge_Data_Utility.UI.Controls.Other {
             };
         }
 
+        public bool IsContentEnabled {
+            get => ContentElement.IsEnabled;
+            set => ContentElement.IsEnabled = value;
+        }
+
         private UIElement ContentElement => (UIElement) Content;
     }
 }

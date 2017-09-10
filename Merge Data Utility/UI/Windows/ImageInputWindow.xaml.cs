@@ -43,24 +43,25 @@ namespace Merge_Data_Utility.UI.Windows {
     public partial class ImageInputWindow : Window {
         private bool _dt;
 
-        private string _n;
+        private string _n, _folder;
 
         public ImageInputWindow() {
             InitializeComponent();
         }
 
-        private ImageInputWindow(string title, string m, string fileNameBase, bool appendDateTime)
+        private ImageInputWindow(string title, string m, string folder, string fileNameBase, bool appendDateTime)
             : this() {
             Title = title;
             message.Text = m;
             _n = fileNameBase;
             _dt = appendDateTime;
+            _folder = folder;
         }
 
         public string ImageUrl { get; set; }
 
-        public static string GetUrl(string title, string m, string fileNameBase, bool appendDateTime) {
-            var w = new ImageInputWindow(title, m, fileNameBase, appendDateTime);
+        public static string GetUrl(string title, string m, string folder, string fileNameBase, bool appendDateTime) {
+            var w = new ImageInputWindow(title, m, folder, fileNameBase, appendDateTime);
             w.ShowDialog();
             return w.ImageUrl;
         }
@@ -79,7 +80,7 @@ namespace Merge_Data_Utility.UI.Windows {
             reference.StartLoading("Processing...");
             ImageUrl = await field.PerformChangesAsync(
                 (_dt ? $"{_n}-{DateTime.Now.ToString("MMddyyyy\"-\"hhmmss", CultureInfo.CurrentUICulture)}" : _n)
-                .ToLower());
+                .ToLower(), _folder);
             Close();
         }
     }

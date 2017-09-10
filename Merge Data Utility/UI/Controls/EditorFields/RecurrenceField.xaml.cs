@@ -46,7 +46,11 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
     public partial class RecurrenceField : UserControl {
         public RecurrenceField() {
             InitializeComponent();
+            frequencyBox.DropDownClosed += (s, e) => DropDownClosed?.Invoke(s, e);
+            endBehaviorBox.DropDownClosed += (s, e) => DropDownClosed?.Invoke(s, e);
         }
+
+        public event EventHandler DropDownClosed;
 
         public List<string> GetValidationErrors() {
             if (!enableBox.IsChecked.GetValueOrDefault(false))

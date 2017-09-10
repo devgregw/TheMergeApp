@@ -58,7 +58,7 @@ namespace Merge_Data_Utility.UI.Controls {
             _callback = callback;
             var m = _result.GetSubject<ModelBase>();
             header.Text = m.Title;
-            subheader.Text = DataValidation.GetResultDescription(r.ResultType);
+            subheader.Text = r.ResultDescription;
             id.Text = $"{m.GetType().Name.Replace("Merge", "").ToLower()}s/{m.Id}";
         }
 

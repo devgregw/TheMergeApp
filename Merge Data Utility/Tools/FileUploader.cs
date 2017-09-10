@@ -42,12 +42,12 @@ using MergeApi.Tools;
 
 namespace Merge_Data_Utility.Tools {
     public static class FileUploader {
-        public static async Task<StorageReference> PutStorageReferenceAsync(string path, string name) {
+        public static async Task<StorageReference> PutStorageReferenceAsync(string path, string name, string folder) {
             using (var client = new WebClient()) {
                 var r = await client.UploadFileTaskAsync(
-                    "https://merge.devgregw.com/content/manager.php?name=" + name, path);
+                    $"https://merge.devgregw.com/content/manager.php?name={name}&folder={folder}", path);
             }
-            return await MergeDatabase.GetStorageReferenceAsync(name);
+            return await MergeDatabase.GetStorageReferenceAsync(name, folder);
         }
     }
 }

@@ -271,7 +271,7 @@ namespace Merge_Data_Utility.UI.Pages {
                     var file =
                         await imageUploader.PerformChangesAsync(
                             $"ImageElement-{DateTime.Now.ToString("MMddyyyy\"-\"hhmmss", CultureInfo.CurrentUICulture)}"
-                                .ToLower());
+                                .ToLower(), "");
                     _window.Element = new ImageElement {
                         ScaleType = ScaleType.Uniform,
                         Url = file

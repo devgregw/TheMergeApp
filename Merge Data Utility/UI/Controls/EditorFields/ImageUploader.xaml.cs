@@ -30,11 +30,14 @@
 #region USINGS
 
 using System;
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Merge_Data_Utility.Tools;
+using Merge_Data_Utility.UI.Windows;
 using Microsoft.Win32;
 
 #endregion
@@ -57,17 +60,16 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
             private set {
                 coverFileBox.Text = value;
                 coverImage.Source = value == "" ? null : new BitmapImage(new Uri(value));
+                downloadButton.IsEnabled = coverFileBox.Text.Contains("https://");
             }
         }
 
-        public async Task<string> PerformChangesAsync(string name) {
+        public async Task<string> PerformChangesAsync(string name, string folder) {
             if (_state == State.NotModified)
                 return Value;
-            // assuming _state == State.FileSelected
             var localPath = Value;
-            //if (_shouldConvert) localPath = ImageConverter.ConvertToPng(localPath);
-            //File.Copy(localPath, "Cache\\upload.png", true);
-            return (await FileUploader.PutStorageReferenceAsync( /*"Cache\\upload.png"*/localPath, name + ".png")).Url;
+            return (await FileUploader.PutStorageReferenceAsync(localPath,
+                $"{name}.{ImageConverter.GetExtension(localPath)}", folder)).Url;
         }
 
         private void coverBrowse_Click(object sender, RoutedEventArgs e) {
@@ -75,7 +77,13 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
                 Filter = "Image Files|*.tiff;*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.jpe",
                 Title = "Choose an Image"
             };
-            if (dlg.ShowDialog().GetValueOrDefault(false)) {
+            if (!dlg.ShowDialog().GetValueOrDefault(false)) return;
+            var length = new FileInfo(dlg.FileName).Length / 1048576L;
+            if (length >= 5L) {
+                MessageBox.Show(
+                    $"The image you selected is too big.  The image you selected is {length} MB in size, but the maximum is 5 MB.",
+                    "Image Too Big", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+            } else {
                 Value = dlg.FileName;
                 _state = State.FileSelected;
             }
@@ -105,6 +113,26 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
                 Value = _original;
                 _state = State.NotModified;
             }
+        }
+
+        private void Download_Click(object sender, RoutedEventArgs e) {
+            var ext = ImageConverter.GetExtension(Value);
+            var dialog = new SaveFileDialog {
+                Filter = $"{ext.ToUpper()} Images|*.{ext}",
+                Title = "Save Image",
+                OverwritePrompt = true,
+                CreatePrompt = true
+            };
+            if (dialog.ShowDialog().GetValueOrDefault(false))
+                new AsyncLoadingWindow("Downloading Image", "Please wait...", new Func<object, Task<object>>(
+                    async o => {
+                        using (var client = new WebClient()) {
+                            File.WriteAllBytes(dialog.FileName, await client.DownloadDataTaskAsync(Value));
+                        }
+                        MessageBox.Show("The image was saved successfully.", "Success",
+                            MessageBoxButton.OK, MessageBoxImage.Information);
+                        return null;
+                    }), null).ShowDialog();
         }
 
         private enum State {
