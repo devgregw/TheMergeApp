@@ -212,12 +212,13 @@ namespace Merge.Classes.UI.Pages {
 				.Where(t => (int)t.Tab == _delegate.GetTab() && _metaDelegate.TipDoesPassThroughFilter(t)).ToList();
 			var content = tips.Select(t => new TipView(t))
 				.Concat(filteredMainContent.Select(_delegate.TransformIntoView)).ToList();
-			if (_metaDelegate.GetHeaders().Any(h => (int)h.Tab == _delegate.GetTab()))
+			TabHeader header;
+			if ((header = _metaDelegate.GetHeaders().FirstOrDefault(h => (int)h.Tab == _delegate.GetTab())) != null)
+			if (!string.IsNullOrWhiteSpace(header.Image))
 				content.Insert(0, new Image {
 					HeightRequest = 200d,
 					Margin = new Thickness(0, -8, 0, 0),
-					Source = ImageSource.FromUri(new Uri(_metaDelegate.GetHeaders()
-						.First(h => (int)h.Tab == _delegate.GetTab()).Image)),
+					Source = ImageSource.FromUri(new Uri(header.Image)),
 					Aspect = Aspect.AspectFill
 				});
 			var nothingCard =

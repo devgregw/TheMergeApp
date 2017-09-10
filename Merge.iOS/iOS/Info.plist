@@ -56,7 +56,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.devgregw.merge.ios</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.2.1</string>
+	<string>0.2.2</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
@@ -99,6 +99,6 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Merge uses your current location to display your location on the Merge Group map and to sort Merge Groups.</string>
 	<key>CFBundleVersion</key>
-	<string>9</string>
+	<string>10</string>
 </dict>
 </plist>
