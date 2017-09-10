@@ -43,6 +43,7 @@ using MergeApi.Framework.Enumerations;
 using MergeApi.Framework.Interfaces;
 using MergeApi.Framework.Interfaces.Receivers;
 using MergeApi.Models.Core;
+using MergeApi.Models.Core.Attendance;
 using MergeApi.Models.Elements;
 using MergeApi.Tools;
 using Newtonsoft.Json.Linq;
@@ -74,7 +75,12 @@ namespace MergeApi.Client {
                 {nameof(logReceiver), logReceiver}
             });
             Client = new FirebaseClient("https://the-merge-app.firebaseio.com", new FirebaseOptions {
-                AuthTokenAsyncFactory = authFactory
+                AuthTokenAsyncFactory = async () => {
+                    LogReceiver.Log(LogLevel.Debug, "MergeDatabase.Client.AuthTokenAsyncFactory", "Requesting authorization...");
+                    var token = await authFactory();
+                    LogReceiver.Log(LogLevel.Verbose, "MergeDatabase.Client.AuthTokenAsyncFactory", $"Token: {token}");
+                    return token;
+                }
             });
             AuthProvider = new FirebaseAuthProvider(new FirebaseConfig("AIzaSyC5tIbjfLfTuLRVbFrP6mXdcx9sHYjRmOE"));
             ActionInvocationReceiver = actionReceiver;
@@ -99,28 +105,29 @@ namespace MergeApi.Client {
             return identifier;
         }
 
-        public static async Task<StorageReference> GetStorageReferenceAsync(string fileName) {
+        public static async Task<StorageReference> GetStorageReferenceAsync(string fileName, string folder) {
             LogReceiver.Log(LogLevel.Debug, "MergeDatabase.GetStorageReferenceAsync",
-                $"Requesting storage reference: {fileName}");
-            return (await ListStorageReferencesAsync()).First(r => r.Name == fileName);
+                $"Requesting storage reference: {folder}/{fileName}");
+            return (await ListStorageReferencesAsync(folder)).FirstOrDefault(r => r.Name == fileName);
         }
 
-        public static async Task<List<StorageReference>> ListStorageReferencesAsync() {
+        public static async Task<List<StorageReference>> ListStorageReferencesAsync(string folder) {
             LogReceiver.Log(LogLevel.Debug, "MergeDatabase.ListSotrageReferencesAsync",
-                "Retrieving storage references");
+                $"Retrieving storage references from {folder}");
             using (var client = new HttpClient()) {
-                var r = await client.GetStringAsync("https://merge.devgregw.com/content/manager.php");
+                var r = await client.GetStringAsync("https://merge.devgregw.com/content/manager.php?folder=" + folder);
                 LogReceiver.Log(LogLevel.Debug, "MergeDatabase.ListStorageReferencesAsync", $"Response: {r}");
-                return JObject.Parse(r).Value<JArray>("files").Select(t => new StorageReference(t.ToString())).ToList();
+                return JObject.Parse(r).Value<JArray>("files").Select(t => new StorageReference(t.ToString(), folder))
+                    .ToList();
             }
         }
 
-        public static async Task DeleteStorageReferenceAsync(string fileName) {
+        public static async Task DeleteStorageReferenceAsync(string fileName, string folder) {
             LogReceiver.Log(LogLevel.Debug, "MergeDatabase.DeleteStorageReferenceAsync",
-                $"Deleting storage reference: {fileName}");
+                $"Deleting storage reference: {folder}/{fileName}");
             using (var client = new HttpClient()) {
                 var r = await client.GetStringAsync(
-                    $"https://merge.devgregw.com/content/manager.php?name={fileName}&action=delete");
+                    $"https://merge.devgregw.com/content/manager.php?name={fileName}&action=delete&folder={folder}");
                 LogReceiver.Log(LogLevel.Debug, "MergeDatabase.DeleteStorageReferenceAsync", $"Response: {r}");
             }
         }
@@ -129,8 +136,11 @@ namespace MergeApi.Client {
             LogReceiver.Log(LogLevel.Debug, "MergeDatabase.DeleteAssetsAsync",
                 $"Deleting the assets associated with {typeof(T).Name} {data.Id} ({fkey})");
             var names = new List<string>();
-            if (data is ModelBase)
-                names.Add((data as ModelBase).CoverImage.Replace("https://merge.devgregw.com/content/", ""));
+            if (data is MergeGroupAttendanceRecord)
+                names.Add((data as MergeGroupAttendanceRecord).Image.Replace("https://merge.devgregw.com/content/",
+                    ""));
+            if (data is ModelBase || data is MergeGroup)
+                names.Add(((dynamic) data).CoverImage.Replace("https://merge.devgregw.com/content/", ""));
             if (data is MergePage)
                 names.AddRange((data as MergePage).Content.OfType<ImageElement>()
                     .Select(e => e.Url.Replace("https://merge.devgregw.com/content/", "")));
@@ -138,7 +148,7 @@ namespace MergeApi.Client {
                 $"The following assets will be deleted from {typeof(T).Name} {data.Id} ({fkey}): {names.Format()}");
             foreach (var name in names)
                 try {
-                    await DeleteStorageReferenceAsync(name);
+                    await DeleteStorageReferenceAsync(name, "");
                 } catch (Exception ex) {
                     LogReceiver.Log(LogLevel.Error, "MergeDatabase.DeleteAssetsAsync", ex);
                 }
@@ -172,10 +182,12 @@ namespace MergeApi.Client {
         private static ChildQuery GetChildQuery(string typeName) {
             LogReceiver.Log(LogLevel.Verbose, "MergeDatabase.GetChildQuery(1)",
                 $"Choosing appropriate ChildQuery for type '{typeName}'");
-            if (typeName.ToLower().Contains("merge"))
-                return Client.Child($"{typeName.ToLower().Replace("merge", "")}s");
+            if (typeName.ToLower() == "mergegroupattendancerecord")
+                return Client.Child("attendance").Child("mergeGroupRecords");
             if (typeName.ToLower().Contains("attendance"))
                 return Client.Child("attendance").Child($"{typeName.ToLower().Replace("attendance", "")}s");
+            if (typeName.ToLower().Contains("merge"))
+                return Client.Child($"{typeName.ToLower().Replace("merge", "")}s");
             if (typeName.ToLower().Contains("tab"))
                 return Client.Child($"{typeName.ToLower().Replace("tab", "")}s");
             throw new InvalidOperationException("Cannot get ChildQuery for type " + typeName);
@@ -189,7 +201,7 @@ namespace MergeApi.Client {
 
         private static async Task<IDictionary<string, T>> InternalListAsync<T>() where T : IIdentifiable {
             ThrowIfNotInitialized();
-            LogReceiver.Log(LogLevel.Debug, "MergeDatabase.ListAsync", $"Listing {typeof(T).Name}s");
+            LogReceiver.Log(LogLevel.Debug, "MergeDatabase.InternalListAsync", $"Listing {typeof(T).Name}s");
             return (await GetChildQuery(typeof(T).Name).OrderByKey().OnceAsync<T>()).ToDictionary(fo => fo.Key,
                 fo => fo.Object);
         }
@@ -220,7 +232,7 @@ namespace MergeApi.Client {
         private static async Task InternalDeleteAsync<T>(T item, string firebaseKey, bool deleteAssets)
             where T : IIdentifiable {
             ThrowIfNotInitialized();
-            LogReceiver.Log(LogLevel.Verbose, "MergeDatabase.DeleteAsync",
+            LogReceiver.Log(LogLevel.Verbose, "MergeDatabase.InternalDeleteAsync",
                 $"Deleting {typeof(T).Name}: {item.Id} ({firebaseKey})");
             if (deleteAssets)
                 await DeleteAssetsAsync(item, firebaseKey);

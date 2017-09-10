@@ -30,23 +30,15 @@
 #region USINGS
 
 using System;
-using System.Collections.Generic;
 
 #endregion
 
 namespace MergeApi.Tools {
     public static class VersionInfo {
-        public const string VERSION_STRING = "1.0.0.0";
+        public const string VERSION_STRING = "1.0.1.2";
 
         public static readonly Version Version = Version.Parse(VERSION_STRING);
 
-        public static readonly int Update = 0;
-
-        public static readonly Dictionary<string, string> Licenses = new Dictionary<string, string> {
-            {"MergeApi", "http://api.mergeonpoint.com/license.txt"},
-            {"Lorem.PCL.NET", "https://raw.githubusercontent.com/trichards57/Lorem.DNX.NET/master/license.md"},
-            {"Newtonsoft.Json", "https://raw.githubusercontent.com/JamesNK/Newtonsoft.Json/master/LICENSE.md"},
-            {"XLabs.Cryptography", "https://raw.githubusercontent.com/XLabs/Xamarin-Forms-Labs/master/LICENSE"}
-        };
+        public static readonly int Update = 3;
     }
 }

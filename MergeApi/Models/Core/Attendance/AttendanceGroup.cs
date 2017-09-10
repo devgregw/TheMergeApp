@@ -29,6 +29,7 @@
 
 #region USINGS
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,7 +48,14 @@ namespace MergeApi.Models.Core.Attendance {
         public List<string> LeaderNames { get; set; }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "studentNames")]
-        public List<string> StudentNames { get; set; }
+        private List<string> _names;
+
+        [JsonIgnore]
+        public List<string> StudentNames {
+            get => _names.Where(n => !string.IsNullOrWhiteSpace(n)).OrderBy(n => n.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries).Last()).ToList();
+            set => _names = value.Where(n => !string.IsNullOrWhiteSpace(n)).OrderBy(n => n.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries).Last())
+                .ToList();
+        }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "gradeLevel")]
         public GradeLevel GradeLevel { get; set; }
@@ -55,6 +63,7 @@ namespace MergeApi.Models.Core.Attendance {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "gender")]
         public Gender Gender { get; set; }
 
+        [JsonIgnore]
         public string Summary {
             get {
                 var formatted = LeaderNames.Format();

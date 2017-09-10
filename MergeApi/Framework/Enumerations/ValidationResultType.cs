@@ -33,17 +33,10 @@ namespace MergeApi.Framework.Enumerations {
         Success, // nothing, anything
 
         EventNotFound, // id, AddToCalendarAction, GetDirectionsAction, OpenEventDetailsAction (ActionBase)
-
-        //TODO: DELETE
-        //AnnouncementNotFound, // id, ClickAnnouncementButtonAction, OpenAnnouncementDetailsAction (ActionBase)
+        
         PageNotFound, // id, OpenPageAction
         GroupNotFound, // id, GetDirectionsAction, ShowContactInfoAction (ActionBase)
-        LeaderNotFound, // id, ShowContactInfoAction
 
-        //TODO: DELETE
-        //ButtonHasNoAction, // MergeAnnouncement, ClickAnnouncementButtonAction
-        //TODO: DELETE
-        //AnnouncementValidationFailure, // ValidationResult, OpenAnnouncementDetailsAction
         PageValidationFailure, // ValidationResult, OpenPageAction
         EventValidationFailure, // ValidationResult, GetDirectionsAction, OpenEventDetailsAction (ActionBase)
         OutdatedAction, // AddToCalendarAction, AddToCalendarAction (same instance)
@@ -53,9 +46,7 @@ namespace MergeApi.Framework.Enumerations {
 
         Exception, // Exception, anything, MAIN
         PageActionValidationFailure, // ValidationResult, MergePage, MAIN
-
-        //TODO: DELETE
-        //AnnouncementActionValidationFailure, // ValidationResult, MergeAnnouncement, MAIN
+        
         PageContentValidationFailure, // List<ElementBase>, MergePage, MAIN
         OutdatedEvent // MergeEvent, MergeEvent (same instance), MAIN
     }

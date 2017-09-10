@@ -69,12 +69,21 @@ namespace MergeApi.Models.Core {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "price")]
         public double? Price { get; set; }
 
+        [JsonIgnore]
+        public TimeSpan Duration => EndDate.GetValueOrDefault(DateTime.MaxValue) -
+                                    StartDate.GetValueOrDefault(DateTime.MinValue);
+
+        [JsonIgnore]
+        public DateTime NextStartDate => RecurrenceRule == null
+            ? StartDate.GetValueOrDefault(DateTime.MinValue)
+            : RecurrenceRule.GetNextOccurrence(StartDate.GetValueOrDefault(DateTime.MinValue), RecurrenceRule)
+                .GetValueOrDefault(DateTime.MinValue);
+
+        [JsonIgnore]
+        public DateTime NextEndDate => NextStartDate + Duration;
+
         public override async Task<ValidationResult> ValidateAsync() {
-            // ReSharper disable once PossibleInvalidOperationException
-            var days = DateTime.Now.Subtract(RecurrenceRule == null
-                ? EndDate.Value
-                : RecurrenceRule.GetAllOccurrences(StartDate.Value, RecurrenceRule).Last()).TotalDays;
-            return days >= 1d
+            return DateTime.Now > NextEndDate
                 ? new ValidationResult(this, ValidationResultType.OutdatedEvent, this)
                 : new ValidationResult(this);
         }

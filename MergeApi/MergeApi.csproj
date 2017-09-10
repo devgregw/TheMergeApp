@@ -24,6 +24,7 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Framework\Enumerations\RecurrenceFrequency.cs" />
@@ -73,9 +75,9 @@
     <Compile Include="Models\Actions\TextAction.cs" />
     <Compile Include="Models\Core\Attendance\AttendanceGroup.cs" />
     <Compile Include="Models\Core\Attendance\AttendanceRecord.cs" />
+    <Compile Include="Models\Core\Attendance\MergeGroupAttendanceRecord.cs" />
     <Compile Include="Models\Core\Tab\TabTip.cs" />
     <Compile Include="Models\Core\Tab\TabHeader.cs" />
-    <Compile Include="Models\Core\MergeAnnouncement.cs" />
     <Compile Include="Framework\Enumerations\Gender.cs" />
     <Compile Include="Framework\Enumerations\GradeLevel.cs" />
     <Compile Include="Framework\Enumerations\Importance.cs" />
@@ -83,7 +85,6 @@
     <Compile Include="Framework\Enumerations\Theme.cs" />
     <Compile Include="Exceptions\ApiResponseException.cs" />
     <Compile Include="Models\Core\MergeGroup.cs" />
-    <Compile Include="Models\Core\MergeLeader.cs" />
     <Compile Include="Models\Core\MergePage.cs" />
     <Compile Include="Models\Elements\ButtonElement.cs" />
     <Compile Include="Models\Elements\ImageElement.cs" />

@@ -32,11 +32,45 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MergeApi.Framework.Enumerations;
 
 #endregion
 
 namespace MergeApi.Tools {
     public static class Extensions {
+        public static string GetDescription(this ValidationResultType r) {
+            switch (r) {
+                case ValidationResultType.Success:
+                    return "No errors detected";
+                case ValidationResultType.EventNotFound:
+                    return "This action points to an event that does not exist";
+                case ValidationResultType.PageNotFound:
+                    return "This action points to a page that does not exist";
+                case ValidationResultType.GroupNotFound:
+                    return "This action points to a Merge group that does not exist";
+                case ValidationResultType.PageValidationFailure:
+                    return "This action points to a page that failed validation";
+                case ValidationResultType.EventValidationFailure:
+                    return "This action points to an event that failed validation";
+                case ValidationResultType.OutdatedAction:
+                    return "This action is configured to add an event that has already ended to the calendar";
+                case ValidationResultType.ButtonActionValidationFailure:
+                    return "The action featured by this element failed validation";
+                case ValidationResultType.NoAddress:
+                    return "This action is configured to get directions to an event with no address";
+                case ValidationResultType.Exception:
+                    return "Validation failed unexpectedly";
+                case ValidationResultType.PageActionValidationFailure:
+                    return "The action featured by this page's button failed validation";
+                case ValidationResultType.PageContentValidationFailure:
+                    return "One or more of the content elements featured by this page failed validation";
+                case ValidationResultType.OutdatedEvent:
+                    return "This event already occurred";
+                default:
+                    return "Uh oh";
+            }
+        }
+
         public static TResult Manipulate<T, TResult>(this T obj, Func<T, TResult> manipulator) {
             Utilities.AssertCondition<object>(o => o != null, obj, manipulator);
             return manipulator(obj);

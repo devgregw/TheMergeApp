@@ -29,12 +29,16 @@
 
 namespace MergeApi.Tools {
     public sealed class StorageReference {
-        internal StorageReference(string name) {
+        internal StorageReference(string name, string folder) {
             Name = name;
+            Folder = folder;
         }
 
-        public string Url => $"https://merge.devgregw.com/content/{Name}";
+        public string Url =>
+            $"https://merge.devgregw.com/content/{(string.IsNullOrWhiteSpace(Folder) ? "" : Folder + "/")}{Name}";
 
-        public string Name { get; private set; }
+        public string Folder { get; }
+
+        public string Name { get; }
     }
 }

@@ -47,18 +47,28 @@ namespace MergeApi.Tools {
             ResultType = result;
         }
 
-        public ValidationResultType ResultType { get; set; }
+        public ValidationResultType ResultType { get; }
 
-        private object _resultParam { get; set; }
+        public string ResultDescription {
+            get {
+                var final = "";
+                final += ResultType.GetDescription();
+                if (_resultParam is ValidationResult)
+                    final += $": {GetParameter<ValidationResult>().ResultDescription}";
+                return final;
+            }
+        }
 
-        private IValidatable _subject { get; set; }
+        private readonly object _resultParam;
 
-        public T GetParameter<T>() {
-            return (T) _resultParam;
+        private readonly IValidatable _subject;
+
+        public T GetParameter<T>() where T : class {
+            return _resultParam as T;
         }
 
         public T GetSubject<T>() where T : IValidatable {
-            return (T) _subject;
+            return (T)_subject;
         }
     }
 }
