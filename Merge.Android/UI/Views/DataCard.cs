@@ -30,6 +30,7 @@
 #region USINGS
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Android.App;
 using Android.Content;
@@ -42,6 +43,7 @@ using Android.Support.V7.Widget;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using CheeseBind;
 using Merge.Android.Helpers;
 using Merge.Android.UI.Activities;
 using MergeApi.Framework.Enumerations;
@@ -54,7 +56,9 @@ using Utilities = Merge.Android.Helpers.Utilities;
 #endregion
 
 namespace Merge.Android.UI.Views {
-    public sealed class DataCard : CardView, View.IOnClickListener {
+    [SuppressMessage("ReSharper", "UnusedMember.Local")]
+    [SuppressMessage("ReSharper", "UnusedParameter.Local")]
+    public sealed class DataCard : CardView {
         private string _title, _json, _type, _url;
         public DataCard(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer) { }
 
@@ -96,9 +100,8 @@ namespace Merge.Android.UI.Views {
 
         public DataCard(Context context, IAttributeSet attrs, int defStyleAttr) : base(context, attrs, defStyleAttr) { }
 
-        public void OnClick(View v) {
-            if (v.Id == Resource.Id.card) ShowDetailsWithTransition();
-        }
+        [OnClick(Resource.Id.card)]
+        private void Card_OnClick(object sender, EventArgs e) => ShowDetailsWithTransition();
 
         private void ShowDetailsWithTransition() {
             if (string.IsNullOrWhiteSpace(_type)) {
@@ -107,7 +110,7 @@ namespace Merge.Android.UI.Views {
             }
             var options =
                 ActivityOptionsCompat.MakeSceneTransitionAnimation((Activity) Context,
-                    FindViewById<ImageView>(Resource.Id.image), "imageTransition");
+                    _image, "imageTransition");
             var intent = new Intent(Context, typeof(DataDetailActivity));
             intent.PutExtra("json", _json);
             intent.PutExtra("title", _title);
@@ -116,6 +119,11 @@ namespace Merge.Android.UI.Views {
             Context.StartActivity(intent, options.ToBundle());
         }
 
+        [BindView(Resource.Id.card)]
+        private CardView _card;
+        [BindView(Resource.Id.image)]
+        private ImageView _image;
+
         private void Initialize(string title, string desc, string json, string type, string url, Color color,
             Theme theme, params View[] extraViews) {
             _title = title;
@@ -123,20 +131,17 @@ namespace Merge.Android.UI.Views {
             _type = type;
             _url = url;
             var v = Inflate(Context, Resource.Layout.DataCard, this);
+            Cheeseknife.Bind(this, v);
             SetBackgroundColor(Color.Transparent);
             if (SdkChecker.Lollipop)
-                v.FindViewById<CardView>(Resource.Id.card).Foreground =
+                _card.Foreground =
                     new RippleDrawable(ColorStateList.ValueOf(Color.Argb(64, 0, 0, 0)), null,
                         new ColorDrawable(Color.Black));
-            Utilities.LoadImageForDisplay(_url, v.FindViewById<ImageView>(Resource.Id.image));
-            var titleView = v.FindViewById<TextView>(Resource.Id.dataCardTitle);
-            titleView.Text = _title;
+            Utilities.LoadImageForDisplay(_url, _image);
+            v.FindViewById<TextView>(Resource.Id.dataCardTitle).Text = _title;
             //titleView.SetTextColor(color.ContrastColor(theme));
-            var descView = v.FindViewById<TextView>(Resource.Id.dataCardDesc);
-            descView.Text = desc;
+            v.FindViewById<TextView>(Resource.Id.dataCardDesc).Text = desc;
             //descView.SetTextColor(color.ContrastColor(theme));
-            var cardView = v.FindViewById<CardView>(Resource.Id.card);
-            cardView.SetOnClickListener(this);
             //v.FindViewById<LinearLayout>(Resource.Id.dataCardRoot).SetBackgroundColor(color);
             var ll1 = v.FindViewById<LinearLayout>(Resource.Id.ll1);
             foreach (var view in extraViews.Where(_ => _ != null))

@@ -29,15 +29,20 @@
 
 #region USINGS
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
+using Android.Content.PM;
 using Android.Graphics;
 using Android.OS;
 using Android.Support.V7.App;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using CheeseBind;
 using Merge.Android.Helpers;
 using MergeApi.Client;
 using MergeApi.Models.Core.Attendance;
@@ -48,54 +53,136 @@ using Toolbar = Android.Support.V7.Widget.Toolbar;
 #endregion
 
 namespace Merge.Android.UI.Activities.LeadersOnly {
-    [Activity(Label = "Edit Students")]
+    [Activity(Label = "Edit Students", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
+    [SuppressMessage("ReSharper", "UnusedMember.Local")]
+    [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     public class AttendanceGroupEditorActivity : AppCompatActivity, View.IOnClickListener {
-        private AttendanceGroup _group;
-
-        private List<string> _students;
+        [BindView(Resource.Id.studentsList)]
         private LinearLayout _studentsList;
+
+        private AttendanceGroup _group;
+        private List<string> _students;
+        private List<(string Old, string New)> _renames;
+
+        private void GetName(string current, Action<string> callback) {
+            var view = new EditText(this);
+            var hasCurrentValue = !string.IsNullOrWhiteSpace(current);
+            if (hasCurrentValue)
+                view.Text = current;
+            var nameDialog = new AlertDialog.Builder(this).SetTitle($"{(hasCurrentValue ? "Edit" : "Add")} Student").SetCancelable(false)
+                .SetMessage(hasCurrentValue ? "Edit the student's name then tap Done." : "To add a new student, type in their name then tap Done.").SetPositiveButton("Done",
+                    (s, e) => { callback(view.Text); }).SetNegativeButton("Cancel", (s, e) => { })
+                .SetView(view).Create();
+            nameDialog.SetOnShowListener(AlertDialogColorOverride.Instance);
+            nameDialog.Show();
+        }
+
+        [OnClick(Resource.Id.addStudent)]
+        private void AddStudent_OnClick(object sender, EventArgs e) => GetName("", AddStudent);
 
         public void OnClick(View v) {
             switch (v.Id) {
-                case Resource.Id.addStudent:
-                    var view = new EditText(this);
-                    var nameDialog = new AlertDialog.Builder(this).SetTitle("Add Student").SetCancelable(false)
-                        .SetMessage("To add a new student, type in their name then tap Add.").SetPositiveButton("Add",
-                            (s, e) => { AddStudent(view.Text); }).SetNegativeButton("Cancel", (s, e) => { })
-                        .SetView(view).Create();
-                    nameDialog.SetOnShowListener(AlertDialogColorOverride.Instance);
-                    nameDialog.Show();
-                    break;
                 case 555:
-                    var name = ((ObjectWrapper<string>) v.Tag).Value.Replace("button:", "");
+                    if (_students.Count - 1 <= 0) {
+                        var dialog = new AlertDialog.Builder(this).SetTitle("Error").SetMessage("This group must contain at least one student.").SetPositiveButton("OK",
+                            (s, e) => { }).Create();
+                        dialog.SetOnShowListener(AlertDialogColorOverride.Instance);
+                        dialog.Show();
+                        return;
+                    }
+                    var name = ((ObjectWrapper<string>) v.Tag).Value;
                     _studentsList.RemoveViewAt(_students.IndexOf(name));
                     _students.Remove(name);
+                    break;
+                case 556:
+                    var name2 = ((ObjectWrapper<string>)v.Tag).Value;
+                    GetName(name2, n => {
+                        if (_renames.Select(t => t.New).Contains(name2)) {
+                            var index1 = _renames.Select(t => t.New).IndexOf(name2);
+                            var previous = _renames[index1];
+                            _renames[index1] = (previous.Old, n);
+                        } else
+                            _renames.Add((name2, n));
+                        var index2 = _students.IndexOf(name2);
+                        _students[index2] = n;
+                        ((TextView) ((ViewGroup) _studentsList.GetChildAt(index2)).GetChildAt(0)).Text = n;
+                    });
                     break;
             }
         }
 
         private void AddStudent(string name) {
+            if (string.IsNullOrWhiteSpace(name)) {
+                Toast.MakeText(this, "Could not add student: No name specified.", ToastLength.Long).Show();
+                return;
+            }
             _students.Add(name);
             var layout = new LinearLayout(this) {
-                Orientation = Orientation.Vertical,
-                Tag = new ObjectWrapper<string>(name)
+                Orientation = Orientation.Vertical
+            };
+            var buttons = new LinearLayout(this) {
+                Orientation = Orientation.Horizontal
             };
             var textView = new TextView(this) {
                 Text = name
             };
             textView.SetTextColor(Color.Black);
             textView.SetTextSize(ComplexUnitType.Sp, 18);
-            var button = new Button(this) {
+            var remove = new Button(this) {
                 Id = 555,
-                Tag = new ObjectWrapper<string>($"button:{name}"),
+                Tag = new ObjectWrapper<string>(name),
                 Text = "Remove",
                 LayoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
                     ViewGroup.LayoutParams.WrapContent)
             };
-            button.SetOnClickListener(this);
+            var rename = new Button(this) {
+                Id = 556,
+                Tag = new ObjectWrapper<string>(name),
+                Text = "Edit",
+                LayoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                    ViewGroup.LayoutParams.WrapContent)
+            };
+            remove.SetOnClickListener(this);
+            rename.SetOnClickListener(this);
             layout.AddView(textView);
-            layout.AddView(button);
-            _studentsList.AddView(layout);
+            buttons.AddView(remove);
+            buttons.AddView(rename);
+            layout.AddView(buttons);
+                _studentsList.AddView(layout);
+        }
+
+        public override void OnBackPressed() {
+            var dialog = new AlertDialog.Builder(this).SetTitle("Save Changes").SetMessage("Do you want to save or discard your changes?").SetPositiveButton("Save",
+                (s, e) => SaveAndExit()).SetNegativeButton("Discard", (s, e) => Finish()).SetNeutralButton("Cancel", (s, e) => {}).Create();
+            dialog.SetOnShowListener(AlertDialogColorOverride.Instance);
+            dialog.Show();
+        }
+
+        private void SaveAndExit() {
+            var dialog = new ProgressDialog(this) {
+                Indeterminate = true
+            };
+            dialog.SetTitle("Group Editor");
+            dialog.SetMessage("Saving changes...");
+            dialog.SetCancelable(false);
+            dialog.Show();
+            _group.StudentNames = _students;
+            Task.Run(async () => {
+                if (_renames.Any()) {
+                    var records =
+                        (await MergeDatabase.ListAsync<AttendanceRecord>()).Where(r => r.GroupId == _group.Id).ToList();
+                    foreach (var t in _renames) {
+                        foreach (var r in records) {
+                            if (!r.Students.Contains(t.Old)) continue;
+                            r.Students[r.Students.IndexOf(t.Old)] = t.New;
+                            await MergeDatabase.UpdateAsync(r);
+                        }
+                    }
+                }
+                await MergeDatabase.UpdateAsync(_group);
+                dialog.Dismiss();
+                Finish();
+            });
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item) {
@@ -104,19 +191,7 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
                     OnBackPressed();
                     return true;
                 case 12345:
-                    var dialog = new ProgressDialog(this) {
-                        Indeterminate = true
-                    };
-                    dialog.SetTitle("Group Editor");
-                    dialog.SetMessage("Saving changes...");
-                    dialog.SetCancelable(false);
-                    dialog.Show();
-                    _group.StudentNames = _students;
-                    Task.Run(async () => {
-                        await MergeDatabase.UpdateAsync(_group);
-                        dialog.Dismiss();
-                        Finish();
-                    });
+                    SaveAndExit();
                     return true;
             }
             return base.OnOptionsItemSelected(item);
@@ -130,14 +205,19 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AttendanceGroupEditorActivity);
+            Cheeseknife.Bind(this);
+            if (SdkChecker.KitKat)
+                Window.AddFlags(WindowManagerFlags.TranslucentStatus);
             SetSupportActionBar(FindViewById<Toolbar>(Resource.Id.toolbar));
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
-            _studentsList = FindViewById<LinearLayout>(Resource.Id.studentsList);
-            FindViewById<Button>(Resource.Id.addStudent).SetOnClickListener(this);
             _group = JsonConvert.DeserializeObject<AttendanceGroup>(Intent.GetStringExtra("groupJson"));
+            LogHelper.FirebaseLog(this, "manageAttendanceGroup", new Dictionary<string, string> {
+                {"groupId", _group.Id}
+            });
             FindViewById<TextView>(Resource.Id.groupIdView).Text = $"{_group.Id} ({_group.Summary})";
             _students = new List<string>();
+            _renames = new List<(string Old, string New)>();
             _group.StudentNames.ForEach(AddStudent);
         }
     }

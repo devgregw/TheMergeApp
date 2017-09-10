@@ -18,11 +18,16 @@
     <CheckBoxPreference android:key="caching" android:title="Allow data caching"
                         android:summary="When this is on, data consumption may be slightly lowered."
                         android:defaultValue="true" />
-    <CheckBoxPreference android:key="logging" android:title="Enable logging"
-                        android:summary="While this is on, Merge will record usage events, including crashes.  After modifying this setting, restart the Merge app to apply changes."
+    <CheckBoxPreference android:key="showInvalidObjects" android:title="Show invalid objects"
+                        android:summary="While this is on, Merge will not filter out invalid objects.  Merge may crash if you attempt to interact with invalid objects."
                         android:defaultValue="false" />
   </PreferenceCategory>
   <PreferenceCategory android:key="secret" android:title="Secret">
+    <!-- HIDDEN FOR NOW -->
+    <CheckBoxPreference android:key="logging" android:title="Enable logging"
+                        android:summary="While this is on, Merge will record usage events, including crashes.  After modifying this setting, restart the Merge app to apply changes."
+                        android:defaultValue="false" />
+    <!-- -->
     <CheckBoxPreference android:key="firstRun" android:title="First run"
                         android:defaultValue="true" />
     <EditTextPreference android:key="token" android:title="Token" android:defaultValue="" />

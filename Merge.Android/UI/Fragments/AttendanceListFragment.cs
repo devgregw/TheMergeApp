@@ -39,6 +39,7 @@ using Android.Views;
 using Android.Widget;
 using Merge.Android.UI.Activities.LeadersOnly;
 using MergeApi.Client;
+using MergeApi.Models.Core;
 using MergeApi.Models.Core.Attendance;
 using Newtonsoft.Json;
 using ListFragment = Android.Support.V4.App.ListFragment;
@@ -54,17 +55,22 @@ namespace Merge.Android.UI.Fragments {
         private List<AttendanceGroup> _groups;
         private Dictionary<string, string> _items;
         private List<AttendanceRecord> _records;
+        private List<MergeGroup> _mergeGroups;
+        private List<MergeGroupAttendanceRecord> _mergeGroupRecords;
         private int _state;
 
         public AttendanceListFragment(Context c) {
             _context = c;
             _groups = new List<AttendanceGroup>();
             _records = new List<AttendanceRecord>();
+            _mergeGroups = new List<MergeGroup>();
+            _mergeGroupRecords = new List<MergeGroupAttendanceRecord>();
             _items = new Dictionary<string, string>();
             _arguments = new Dictionary<int, object>();
         }
 
         public AttendanceGroup SelectedGroup { get; private set; }
+        public MergeGroup SelectedMergeGroup { get; private set; }
 
         private void SetItems(Dictionary<string, string> items) {
             (ListAdapter as ArrayAdapter<String>)?.Clear();
@@ -73,51 +79,67 @@ namespace Merge.Android.UI.Fragments {
                 _items.Keys.ToList());
         }
 
-        private void SetState(int state, bool load, object argument) {
-            new Action(async () => {
-                _state = state;
-                _arguments[_state] = argument;
-                (ListAdapter as ArrayAdapter<String>)?.Clear();
-                if (load) {
-                    var dialog = new ProgressDialog(_context) {
-                        Indeterminate = true
-                    };
-                    dialog.SetTitle("Attendance Manager");
-                    dialog.SetMessage("Loading...");
-                    dialog.SetCancelable(false);
-                    dialog.Show();
-                    _groups = (await MergeDatabase.ListAsync<AttendanceGroup>()).ToList();
-                    _records = (await MergeDatabase.ListAsync<AttendanceRecord>()).ToList();
-                    dialog.Dismiss();
-                }
-                switch (_state) {
-                    case StateMain:
-                        SelectedGroup = null;
-                        SetItems(new Dictionary<string, string> {
+        private void SetState(int state, bool load, object argument) => new Action(async () => {
+            _state = state;
+            _arguments[_state] = argument;
+            (ListAdapter as ArrayAdapter<String>)?.Clear();
+            if (load) {
+                var dialog = new ProgressDialog(_context) {
+                    Indeterminate = true
+                };
+                dialog.SetTitle("Attendance Manager");
+                dialog.SetMessage("Loading...");
+                dialog.SetCancelable(false);
+                dialog.Show();
+                _groups = (await MergeDatabase.ListAsync<AttendanceGroup>()).ToList();
+                _records = (await MergeDatabase.ListAsync<AttendanceRecord>()).ToList();
+                _mergeGroups = (await MergeDatabase.ListAsync<MergeGroup>()).ToList();
+                _mergeGroupRecords = (await MergeDatabase.ListAsync<MergeGroupAttendanceRecord>()).ToList();
+                dialog.Dismiss();
+            }
+            switch (_state) {
+                case StateMain:
+                    SelectedGroup = null;
+                    SetItems(new Dictionary<string, string> {
                             {"Junior High", "jh"},
-                            {"High School", "hs"}
+                            {"High School", "hs"},
+                            {"Merge Groups", "mg"}
                         });
-                        break;
-                    case StateGroups:
-                        SelectedGroup = null;
-                        SetItems(_groups
-                            .Where(g => argument.ToString() == "jh" ? (int) g.GradeLevel <= 8 : (int) g.GradeLevel >= 9)
-                            .ToDictionary(g => g.Summary, JsonConvert.SerializeObject));
-                        break;
-                    case StateRecords:
-                        SelectedGroup = _groups.First(g => g.Id == argument.ToString());
-                        var sorted = _records.Where(r => r.GroupId == argument.ToString()).ToList();
-                        sorted.Sort((x, y) => DateTime.Compare(y.Date, x.Date));
+                    break;
+                case StateGroups:
+                    var ministry = argument.ToString();
+                    if (ministry == "mg") {
+                        SelectedMergeGroup = null;
+                        SetItems(_mergeGroups.OrderBy(g => g.Id).ToDictionary(g => g.Name, g => $"mg:{JsonConvert.SerializeObject(g)}"));
+                        return;
+                    }
+                    SelectedGroup = null;
+                    SetItems(_groups
+                        .Where(g => argument.ToString() == "jh" ? (int)g.GradeLevel <= 8 : (int)g.GradeLevel >= 9)
+                        .OrderBy(g => (int)g.GradeLevel).ThenBy(g => g.Id).ToDictionary(g => g.Summary, g => $"ag:{JsonConvert.SerializeObject(g)}"));
+                    break;
+                case StateRecords:
+                    Console.WriteLine(argument.ToString());
+                    var isMergeGroup = argument.ToString().StartsWith("mg:");
+                    var id = argument.ToString().Length == 11 ? argument.ToString().Remove(0, 3) : argument.ToString();
+                    if (isMergeGroup) {
+                        SelectedMergeGroup = _mergeGroups.First(g => g.Id == id);
                         SetItems(new Dictionary<string, string> {
+                                {"Add Record", $"add:{id}"}
+                            }.Concat(_mergeGroupRecords.Where(r => r.MergeGroupId == id).OrderByDescending(r => r.Date).ToDictionary(r => r.Date.ToLongDateString(), JsonConvert.SerializeObject)).ToDictionary(r => r.Key, r => r.Value));
+                        return;
+                    }
+                    SelectedGroup = _groups.First(g => g.Id == id);
+                    var sorted = _records.Where(r => r.GroupId == id).OrderByDescending(r => r.Date).ToList();
+                    SetItems(new Dictionary<string, string> {
                                 {"Edit Group", "edit"},
-                                {"Add Record", $"add:{argument}"}
+                                {"Add Record", $"add:{id}"}
                             }
-                            .Concat(sorted.ToDictionary(g => g.Date.ToLongDateString(), JsonConvert.SerializeObject))
-                            .ToDictionary(p => p.Key, p => p.Value));
-                        break;
-                }
-            }).Invoke();
-        }
+                        .Concat(sorted.ToDictionary(g => g.Date.ToLongDateString(), JsonConvert.SerializeObject))
+                        .ToDictionary(p => p.Key, p => p.Value));
+                    break;
+            }
+        }).Invoke();
 
         public bool GoBack() {
             if (_state == StateMain) return false;
@@ -142,10 +164,21 @@ namespace Merge.Android.UI.Fragments {
                     SetState(StateGroups, false, data);
                     break;
                 case StateGroups:
-                    var group = JsonConvert.DeserializeObject<AttendanceGroup>(data);
-                    SetState(StateRecords, false, group.Id);
+                    string newData = data.Remove(0, 3),
+                        gid = data.StartsWith("ag:") ? $"ag:{JsonConvert.DeserializeObject<AttendanceGroup>(newData).Id}" : $"mg:{JsonConvert.DeserializeObject<MergeGroup>(newData).Id}";
+                    SetState(StateRecords, false, gid);
                     break;
                 case StateRecords:
+                    if (SelectedMergeGroup != null) {
+                        var mgIntent = new Intent(_context, typeof(MergeGroupRecordEditorActivity));
+                        if (!data.StartsWith("add:"))
+                            mgIntent.PutExtra("recordJson", data);
+                        mgIntent.PutExtra("groupJson",
+                            JsonConvert.SerializeObject(
+                                _mergeGroups.First(g => g.Id == _arguments[StateRecords].ToString().Replace("mg:", ""))));
+                        _context.StartActivity(mgIntent);
+                        return;
+                    }
                     if (data == "edit") {
                         var editorIntent = new Intent(_context, typeof(AttendanceGroupEditorActivity));
                         editorIntent.PutExtra("groupJson", JsonConvert.SerializeObject(SelectedGroup));
@@ -157,7 +190,7 @@ namespace Merge.Android.UI.Fragments {
                         intent.PutExtra("recordJson", data);
                     intent.PutExtra("groupJson",
                         JsonConvert.SerializeObject(
-                            _groups.First(g => g.Id == _arguments[StateRecords].ToString().Replace("add:", ""))));
+                            _groups.First(g => g.Id == _arguments[StateRecords].ToString().Replace("ag:", ""))));
                     _context.StartActivity(intent);
                     break;
             }

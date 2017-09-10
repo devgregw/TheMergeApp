@@ -29,12 +29,16 @@
 
 namespace Merge.Android.Helpers {
     public static class VersionConsts {
-        public const string Version = "0.1.0.0";
+        public const string Version = "0.1.1.0";
 
-        public const string MiniVersion = "0100";
+        public const string MiniVersion = "0110";
 
-        public const string Classification = "GENERAL AVAILABILITY";
+#if DEBUG
+        public const string Classification = "DEBUG";
+#else
+        public const string Classification = "GENERAL AVAILABILITY"
+#endif
 
-        public const int Update = 21;
+        public const int Update = 22;
     }
 }

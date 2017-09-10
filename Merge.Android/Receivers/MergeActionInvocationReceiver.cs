@@ -178,9 +178,7 @@ namespace Merge.Android.Receivers {
             StartActivity(intent);
         }
 
-        public void InvokeLaunchUriAction(LaunchUriAction action) {
-            StartActivity(Intent.CreateChooser(new Intent(Intent.ActionView, Uri.Parse(action.Uri1)), "Choose an app"));
-        }
+        public void InvokeLaunchUriAction(LaunchUriAction action) => StartActivity(Intent.CreateChooser(new Intent(Intent.ActionView, Uri.Parse(action.Uri1)), "Choose an app"));
 
         public void InvokeCallAction(CallAction action) {
             var intentBuilder =
@@ -245,11 +243,9 @@ namespace Merge.Android.Receivers {
             var maker = new Func<List<MediumBase>, Dictionary<string, MediumBase>>(mediums => {
                 var result = new Dictionary<string, MediumBase>();
                 foreach (var medium in mediums)
-                    if (medium is EmailAddressMedium) {
-                        var email = (EmailAddressMedium) medium;
+                    if (medium is EmailAddressMedium email) {
                         result.Add($"Email {email.Who} ({email.Kind.ToString()})", email);
-                    } else if (medium is PhoneNumberMedium) {
-                        var phone = (PhoneNumberMedium) medium;
+                    } else if (medium is PhoneNumberMedium phone) {
                         result.Add($"Call {phone.Who} ({phone.Kind.ToString()})", phone);
                         if (phone.CanReceiveSMS)
                             result.Add($"Text {phone.Who} ({phone.Kind.ToString()})", phone);
@@ -291,17 +287,17 @@ namespace Merge.Android.Receivers {
                     var msg = "";
                     var dupes = new List<PhoneNumberMedium>();
                     foreach (var medium in items.Values)
-                        if (medium is EmailAddressMedium) {
+                        if (medium is EmailAddressMedium email) {
                             msg +=
-                                $"{(medium as EmailAddressMedium).Who + " (" + ((EmailAddressMedium) medium).Kind.ToString().ToLower() + ")"}\n {(medium as EmailAddressMedium).Address}\n\n";
-                        } else if (medium is PhoneNumberMedium) {
-                            if (((PhoneNumberMedium) medium).CanReceiveSMS) {
-                                if (dupes.Contains((PhoneNumberMedium) medium))
+                                $"{email.Who + " (" + email.Kind.ToString().ToLower() + ")"}\n {email.Address}\n\n";
+                        } else if (medium is PhoneNumberMedium phone) {
+                            if (phone.CanReceiveSMS) {
+                                if (dupes.Contains(phone))
                                     continue;
                                 dupes.Add((PhoneNumberMedium) medium);
                             }
                             msg +=
-                                $"{(medium as PhoneNumberMedium).Who + " (" + ((PhoneNumberMedium) medium).Kind.ToString().ToLower() + ")"}\n {(medium as PhoneNumberMedium).PhoneNumber}\n\n";
+                                $"{phone.Who + " (" + phone.Kind.ToString().ToLower() + ")"}\n {phone.PhoneNumber}\n\n";
                         }
                     msg = msg.Remove(msg.Length - 2);
                     new AlertDialog.Builder(_context).SetTitle($"Contact {name}")
@@ -312,9 +308,7 @@ namespace Merge.Android.Receivers {
             dialog.Show();
         }
 
-        public void InvokeOpenGroupMapPageAction(OpenGroupMapPageAction action) {
-            StartActivity(new Intent(_context, typeof(GroupMapActivity)));
-        }
+        public void InvokeOpenGroupMapPageAction(OpenGroupMapPageAction action) => StartActivity(new Intent(_context, typeof(GroupMapActivity)));
 
         public async void InvokeOpenEventDetailsActionAsync(OpenEventDetailsAction action) {
             var e = await GetOrLoad(action.EventId1, () => DataCache.Events, v => DataCache.Events = v);
@@ -347,21 +341,15 @@ namespace Merge.Android.Receivers {
         }
 
         private async Task<T> GetOrLoad<T>(string id, Func<IEnumerable<T>> getter,
-            Func<IEnumerable<T>, IEnumerable<T>> setter) where T : IIdentifiable {
-            return (getter() == null || getter().All(i => i.Id != id)
+            Func<IEnumerable<T>, IEnumerable<T>> setter) where T : IIdentifiable => (getter() == null || getter().All(i => i.Id != id)
                 ? await LoadAsync(async () => setter(await MergeDatabase.ListAsync<T>()))
                 : getter()).First(i => i.Id == id);
-        }
 
-        public void SetContext(Context c) {
-            _context = c;
-            /*_dialog = new ProgressDialog(_context) {
+        public void SetContext(Context c) => _context = c;/*_dialog = new ProgressDialog(_context) {
                 Indeterminate = true
             };
             _dialog.SetMessage("Loading...");
-            _dialog.SetCancelable(false);*/
-            //_dialog = new AlertDialog.Builder(_context).SetCancelable(false).SetView(Resource.Layout.LoadingLayout).Create();
-        }
+            _dialog.SetCancelable(false);*///_dialog = new AlertDialog.Builder(_context).SetCancelable(false).SetView(Resource.Layout.LoadingLayout).Create();
 
         private Toast MakeToast(string message) {
             var t = Toast.MakeText(_context, message, ToastLength.Long);

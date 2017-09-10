@@ -39,9 +39,7 @@ namespace Merge.Android.Services {
     [Service(Label = "Merge Instance ID Service")]
     [IntentFilter(new[] {"com.google.firebase.INSTANCE_ID_EVENT"})]
     public sealed class MergeInstanceIdService : FirebaseInstanceIdService {
-        public override void OnTokenRefresh() {
-            Log.Info("MergeInstanceIdService",
+        public override void OnTokenRefresh() => Log.Info("MergeInstanceIdService",
                 "Instance ID refreshed: " + (FirebaseInstanceId.Instance?.Token ?? "NULL"));
-        }
     }
 }

@@ -30,6 +30,7 @@
 #region USINGS
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,6 +40,8 @@ using Android.Content;
 using Android.Content.PM;
 using Android.Support.V4.Content;
 using Android.Util;
+using Firebase.Analytics;
+using Firebase.Crash;
 using Java.Lang;
 using Enum = System.Enum;
 using Exception = System.Exception;
@@ -54,6 +57,14 @@ namespace Merge.Android.Helpers {
         private static File _folder;
         private static Context _context;
         private static bool _enable;
+
+        public static void FirebaseLog(Context c, string name, Dictionary<string, string> values) => FirebaseAnalytics.GetInstance(c).LogEvent(name, values.Concat(new Dictionary<string, string> {
+                { "instanceId", MergeApplication.InstanceId },
+                { "when", DateTime.Now.ToLongTimeString() }
+#if DEBUG
+                , { "debug", "true" }
+#endif
+            }).ToBundle());
 
         public static async Task<string[]> GetAllLogs() {
             WriteMessage("INFO", "Listing logs");
@@ -90,7 +101,11 @@ namespace Merge.Android.Helpers {
             if (!_file.Exists())
                 _file.CreateNewFile();
             WriteMessage("INFO",
-                $"*** WELCOME TO MERGE ***\n*** VERSION {VersionConsts.Version} ({VersionConsts.Classification}, update {VersionConsts.Update}) BY GREG WHATLEY ***\n*** LOGGING INITIALIZED ***");
+                $"*** WELCOME TO MERGE ***\n*** VERSION {VersionConsts.Version} ({VersionConsts.Classification}, UPDATE {VersionConsts.Update}) BY GREG WHATLEY ***\n*** LOGGING INITIALIZED ***");
+            WriteMessage("DEBUG", $"Instance Id: {MergeApplication.InstanceId}");
+#if DEBUG
+            WriteMessage("INFO", "*** DEBUGGING ***");
+#endif
         }
 
         private static void ShowErrorMessage(Type exType, string msg, string stacktrace, Action retryAction) {
@@ -119,6 +134,7 @@ namespace Merge.Android.Helpers {
         public static void WriteException(Throwable tr, bool showMessage, Action retryAction) {
             if (showMessage)
                 ShowErrorMessage(tr.GetType(), tr.Message, tr.StackTrace, retryAction);
+            FirebaseCrash.Report(tr);
             WriteMessage("ERROR",
                 $"*** EXCEPTION ***\n*** {tr.GetType().FullName}: {tr.Message} ***\n*** BEGIN STACKTRACE ***\n{tr.StackTrace}\n*** END STACKTRACE ***");
         }
@@ -126,6 +142,7 @@ namespace Merge.Android.Helpers {
         public static void WriteException(Exception ex, bool showMessage, Action retryAction) {
             if (showMessage)
                 ShowErrorMessage(ex.GetType(), ex.Message, ex.StackTrace, retryAction);
+            FirebaseCrash.Report(ex);
             WriteMessage("ERROR",
                 $"*** EXCEPTION ***\n*** {ex.GetType().FullName}: {ex.Message} ***\n*** BEGIN STACKTRACE ***\n{ex.StackTrace}\n*** END STACKTRACE ***");
         }
@@ -163,6 +180,7 @@ namespace Merge.Android.Helpers {
                 LogPriority p;
                 if (!Enum.TryParse(level, true, out p))
                     p = LogPriority.Info;
+                FirebaseCrash.Log(message);
                 Log.WriteLine(p, "MergeApp", message);
                 //Console.WriteLine($"[{DateTime.Now.ToString("HH:mm:ss")}] [{level}] {message}\n");
             }

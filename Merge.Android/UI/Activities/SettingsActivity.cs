@@ -38,6 +38,7 @@ using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Merge.Android.Helpers;
+using AlertDialog = Android.Support.V7.App.AlertDialog;
 
 #endregion
 
@@ -75,13 +76,26 @@ namespace Merge.Android.UI.Activities {
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item) {
-            if (item.ItemId == global::Android.Resource.Id.Home)
-                OnBackPressed();
-            return base.OnOptionsItemSelected(item);
+            switch (item.ItemId) {
+                case global::Android.Resource.Id.Home:
+                    OnBackPressed();
+                    return true;
+                case Resource.Id.MenuShowSetup:
+                    StartActivity(typeof(WelcomeActivity));
+                    return true;
+                case Resource.Id.MenuClearTips:
+                    PreferenceHelper.DismissedTips = new string[] { };
+                    new AlertDialog.Builder(this).SetMessage("Tips have been reset.").SetPositiveButton("OK",
+                        (s, e) => { }).Show();
+                    return true;
+                default:
+                    return base.OnOptionsItemSelected(item);
+            }
         }
 
         public override bool OnPrepareOptionsMenu(IMenu menu) {
-            MenuInflater.Inflate(Resource.Menu.empty, menu);
+            menu.Clear();
+            MenuInflater.Inflate(Resource.Menu.SettingsMenu, menu);
             return base.OnPrepareOptionsMenu(menu);
         }
 
@@ -92,9 +106,7 @@ namespace Merge.Android.UI.Activities {
             private void InitializePreferences() {
                 PreferenceScreen?.RemoveAll();
                 AddPreferencesFromResource(Resource.Xml.Preferences);
-                // ReSharper disable once UseNullPropagation
-                if (PreferenceScreen != null)
-                    PreferenceScreen.RemovePreference(PreferenceScreen.FindPreference("secret"));
+                    PreferenceScreen?.RemovePreference(PreferenceScreen.FindPreference("secret"));
             }
 
             public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

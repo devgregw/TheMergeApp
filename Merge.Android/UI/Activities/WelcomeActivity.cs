@@ -30,6 +30,7 @@
 #region USINGS
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Android;
 using Android.App;
@@ -41,13 +42,17 @@ using Android.Support.V4.Content;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
+using CheeseBind;
 using Firebase.Messaging;
+using Java.Lang;
 using Merge.Android.Helpers;
 using MergeApi.Client;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Models.Actions;
 using AlertDialog = Android.Support.V7.App.AlertDialog;
 using Orientation = Android.Widget.Orientation;
+using Process = Android.OS.Process;
+using String = Java.Lang.String;
 
 #endregion
 
@@ -55,9 +60,7 @@ namespace Merge.Android.UI.Activities {
     [Activity(Label = "Merge", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public class WelcomeActivity : AppCompatActivity {
         // ReSharper disable once RedundantOverriddenMember
-        public override void OnConfigurationChanged(Configuration newConfig) {
-            base.OnConfigurationChanged(newConfig);
-        }
+        public override void OnConfigurationChanged(Configuration newConfig) => base.OnConfigurationChanged(newConfig);
 
         private void ShowSimpleDialog(string title, string message, string positiveText,
             EventHandler<DialogClickEventArgs> positiveClick, string negativeText,
@@ -68,11 +71,9 @@ namespace Merge.Android.UI.Activities {
             dialog.Show();
         }
 
-        private void ShowWelcomeDialog() {
-            ShowSimpleDialog("Welcome to Merge",
+        private void ShowWelcomeDialog() => ShowSimpleDialog("Welcome to Merge",
                 "Welcome to the official Merge app!  The Merge app is designed to be your one-stop shop for all things Merge.  To use the Merge app, follow the steps on-screen to complete this brief setup.",
                 "Start", (s, e) => ShowLegalDialog(), "Exit", (s, e) => Process.KillProcess(Process.MyPid()));
-        }
 
         private void ShowLegalDialog() {
             var dialog = new AlertDialog.Builder(this).SetTitle("Here's the Legal Stuff").SetMessage(
@@ -90,9 +91,8 @@ namespace Merge.Android.UI.Activities {
                 "Back", (s, e) => ShowWelcomeDialog());*/
         }
 
-        private void ShowLoggingDialog() {
-            ShowSimpleDialog("Help Make Merge Better",
-                "Merge is capable of logging usage events (such as crashes) to help track down bugs, but this is disabled by default.  If you report a bug, you may be asked to turn this feature on and send the resulting log via the 'Send Logs' feature in the menu.  This behavior can be disabled or enabled from the 'Settings' page.",
+        private void ShowLoggingDialog() => ShowSimpleDialog("Help Make Merge Better",
+                "As you use the Merge app, it may record certain analytic events and crashes.  This information is securely transmitted and it never contains any personal information.  We may use this data to make the Merge app better by analyzing usage patterns and errors.",
                 "I Understand", (s, e) => {
                     if (SdkChecker.Marshmallow)
                         ShowPermissionsDialog();
@@ -100,10 +100,8 @@ namespace Merge.Android.UI.Activities {
                         ShowLeaderDialog();
                 },
                 "Back", (s, e) => ShowLegalDialog());
-        }
 
-        private void ShowPermissionsDialog() {
-            ShowSimpleDialog("We Need Your Permission",
+        private void ShowPermissionsDialog() => ShowSimpleDialog("We Need Your Permission",
                 "Some features require special permissions.  After reading about the permissions, tap 'Continue' to grant or deny them.  Your choices can be modifed from your phone's settings." +
                 _permissions,
                 "Continue", (s, e) => {
@@ -123,14 +121,11 @@ namespace Merge.Android.UI.Activities {
                         RequestPermissions(request, 0);
                 },
                 "Back", (s, e) => ShowLoggingDialog());
-        }
 
-        private void ShowPermissionsWarningDialog() {
-            ShowSimpleDialog("Notice",
+        private void ShowPermissionsWarningDialog() => ShowSimpleDialog("Notice",
                 "Because you denied one or more permissions, the corresponding functionality may be disabled.",
                 "I Understand", (s, e) => ShowLeaderDialog(),
                 "Back", (s, e) => ShowPermissionsDialog());
-        }
 
         private void ShowLeaderDialog() {
             var dialog = new AlertDialog.Builder(this).SetTitle("Are You a Leader?")
@@ -157,6 +152,18 @@ namespace Merge.Android.UI.Activities {
         }
 
         private void ShowTargetingDialog() {
+            
+            var dialog = new AlertDialog.Builder(this).SetTitle("Tell Us About Yourself").SetMessage(
+                    "Merge can filter out content that is irrelevant to you.  If you are a student, select your grade level and gender.  If you are a leader or parent, select the grade level(s) and gender(s) that apply to your student(s).  To disable this feature, do not select any grade levels or genders.  Your preferences can be modified anytime with the 'Settings' page.")
+                .SetCancelable(false)
+                .SetPositiveButton("Skip", (s, e) => 
+                    ShowCompleteDialog())
+                .SetNeutralButton("Back", (s, e) => ShowLeaderDialog()).SetNegativeButton("Setup", (s, e) => ShowTargetingSetupDialog()).Create();
+            dialog.SetOnShowListener(AlertDialogColorOverride.Instance);
+            dialog.Show();
+        }
+
+        private void ShowTargetingSetupDialog() {
             var scrollView = new ScrollView(this) {
                 LayoutParameters =
                     new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
@@ -172,10 +179,10 @@ namespace Merge.Android.UI.Activities {
                 Text = "Grade Levels",
                 TextSize = 18f
             });
-            layout.SetPadding((int) Resources.GetDimension(Resource.Dimension.firstRunDialogPadding), 0, 0, 0);
+            layout.SetPadding((int)Resources.GetDimension(Resource.Dimension.firstRunDialogPadding), 0, 0, 0);
             foreach (var grade in EnumConsts.AllGradeLevels)
                 layout.AddView(new CheckBox(this) {
-                    Text = $"{(int) grade}th grade",
+                    Text = $"{(int)grade}th grade",
                     Tag = new ObjectWrapper<GradeLevel>(grade)
                 });
             layout.AddView(new TextView(this) {
@@ -188,8 +195,7 @@ namespace Merge.Android.UI.Activities {
                     Tag = new ObjectWrapper<Gender>(gender)
                 });
             scrollView.AddView(layout);
-            var dialog = new AlertDialog.Builder(this).SetTitle("Tell Us About Yourself").SetMessage(
-                    "Merge can filter out content that is irrelevant to you.  If you are a student, select your grade level and gender.  If you are a leader or parent, select the grade level(s) and gender(s) that apply to your student(s).  To disable this feature, do not select any grade levels or genders.  Your preferences can be modified anytime with the 'Settings' page.")
+            var dialog = new AlertDialog.Builder(this).SetTitle("Setup Targeting")
                 .SetCancelable(false).SetView(scrollView)
                 .SetPositiveButton("Save", (s, e) => {
                     PreferenceHelper.GradeLevels = layout.GetChildren()
@@ -206,7 +212,7 @@ namespace Merge.Android.UI.Activities {
                         .ToList();
                     ShowCompleteDialog();
                 })
-                .SetNegativeButton("Back", (s, e) => ShowLeaderDialog()).Create();
+                .SetNegativeButton("Back", (s, e) => ShowTargetingDialog()).Create();
             dialog.SetOnShowListener(AlertDialogColorOverride.Instance);
             dialog.Show();
         }
@@ -248,13 +254,15 @@ namespace Merge.Android.UI.Activities {
             dialog.Show();
         }
 
+        [BindView(Resource.Id.authUsername)] private EditText _authUsername;
+        [BindView(Resource.Id.authPassword)] private EditText _authPassword;
+
         private void ShowLeaderAuthenticationDialog(bool leaderRoutine) {
             var root = LayoutInflater.Inflate(Resource.Layout.AuthenticationDialog, new LinearLayout(this) {
                 LayoutParameters = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
                     ViewGroup.LayoutParams.WrapContent)
             }, false);
-            EditText username = root.FindViewById<EditText>(Resource.Id.authUsername),
-                password = root.FindViewById<EditText>(Resource.Id.authPassword);
+            Cheeseknife.Bind(this, root);
             var dialog = new AlertDialog.Builder(this).SetTitle("Sign In")
                 .SetMessage("Enter your credentials then tap Sign In.").SetCancelable(false).SetView(root)
                 .SetPositiveButton("Sign In",
@@ -267,7 +275,7 @@ namespace Merge.Android.UI.Activities {
                         progressDialog.SetCancelable(false);
                         progressDialog.Show();
                         try {
-                            string u = username.Text, p = password.Text;
+                            string u = _authUsername.Text, p = _authPassword.Text;
                             MergeApplication.AuthLink = await MergeDatabase.AuthenticateAsync(u, p);
                             PreferenceHelper.Token = MergeApplication.AuthLink.FirebaseToken;
                             PreferenceHelper.TokenExpiration =
@@ -282,7 +290,7 @@ namespace Merge.Android.UI.Activities {
                             else
                                 ShowTargetingDialog();
                         } catch {
-                            Toast.MakeText(this, "Your credentials are incorrect.", ToastLength.Long).Show();
+                            Toast.MakeText(this, "Your credentials are incorrect or you do not have an Internet connection.", ToastLength.Long).Show();
                             FirebaseMessaging.Instance.UnsubscribeFromTopic("verified_leaders");
                             PreferenceHelper.AuthenticationState = PreferenceHelper.LeaderAuthenticationState.Failed;
                             ShowLeaderAuthenticationDialog(leaderRoutine);
@@ -304,9 +312,10 @@ namespace Merge.Android.UI.Activities {
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.Empty);
+            var leaderRoutine = Intent.GetBooleanExtra("leaderRoutine", false);
             if (SdkChecker.KitKat)
                 Window.AddFlags(WindowManagerFlags.TranslucentStatus);
-            if (!Intent.GetBooleanExtra("leaderRoutine", false))
+            if (!leaderRoutine)
                 ShowWelcomeDialog();
             else
                 ShowLeaderRoutineLeaderDialog();

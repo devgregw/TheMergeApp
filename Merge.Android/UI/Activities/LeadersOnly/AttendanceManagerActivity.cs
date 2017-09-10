@@ -35,6 +35,7 @@ using Android.OS;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
+using CheeseBind;
 using Merge.Android.Helpers;
 using Merge.Android.UI.Fragments;
 
@@ -71,6 +72,7 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AttendanceManagerActivity);
+            Cheeseknife.Bind(this);
             if (SdkChecker.KitKat)
                 Window.AddFlags(WindowManagerFlags.TranslucentStatus);
             SetSupportActionBar(FindViewById<Toolbar>(Resource.Id.toolbar));

@@ -30,10 +30,12 @@
 #region USINGS
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
 using Android.App;
+using Android.Content.PM;
 using Android.Content.Res;
 using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
@@ -47,6 +49,7 @@ using Android.Util;
 using Android.Views;
 using Android.Views.Animations;
 using Android.Widget;
+using CheeseBind;
 using Merge.Android.Helpers;
 using Merge.Android.Receivers;
 using Merge.Android.UI.Views;
@@ -64,19 +67,28 @@ using Utilities = Merge.Android.Helpers.Utilities;
 #endregion
 
 namespace Merge.Android.UI.Activities {
-    [Activity(Label = "DataDetailActivity")]
-    public class DataDetailActivity : AppCompatActivity, View.IOnClickListener, MenuBuilder.ICallback,
+    [Activity(Label = "Details", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
+    public class DataDetailActivity : AppCompatActivity, MenuBuilder.ICallback,
         AppBarLayout.IOnOffsetChangedListener, IOnMapReadyCallback {
-        private Color _color;
+        [BindView(Resource.Id.dataLayout)]
         private LinearLayout _dataLayout;
-        private MergeEvent _event;
+        [BindView(Resource.Id.fab)]
         private FloatingActionButton _fab;
-        private MergeGroup _group;
-        private MenuPopupHelper _menuHelper;
-
-        private MergePage _page;
+        [BindView(Resource.Id.toolbar_layout)]
+        private CollapsingToolbarLayout _toolbarLayout;
+        [BindView(Resource.Id.mapFragmentContainer)]
+        private FrameLayout _mapContainer;
+        [BindView(Resource.Id.app_bar)]
+        private AppBarLayout _appBarLayout;
+        [BindView(Resource.Id.image)]
+        private ImageView _image;
 
         private LinearLayout _pageContent;
+
+        private MenuPopupHelper _menuHelper;
+        private MergePage _page;
+        private MergeEvent _event;
+        private MergeGroup _group;
 
         public bool OnMenuItemSelected(MenuBuilder p0, IMenuItem p1) {
             switch (p1.ItemId) {
@@ -112,14 +124,11 @@ namespace Merge.Android.UI.Activities {
             // nothing
         }
 
-        public void OnClick(View v) {
-            if (v.Id == Resource.Id.fab)
-                _menuHelper.Show();
-        }
+        [OnClick(Resource.Id.fab)]
+        public void Fab_OnClick(object sender, EventArgs e) => _menuHelper.Show();
 
         public void OnMapReady(GoogleMap map) {
             LatLng coordinates;
-
             // ReSharper disable once InconsistentNaming
             void repos() {
                 map.MoveCamera(CameraUpdateFactory.NewLatLngZoom(coordinates, 15));
@@ -127,8 +136,8 @@ namespace Merge.Android.UI.Activities {
             }
 
             var options = new MarkerOptions();
-            options.SetPosition(new LatLng((double) _group.Coordinates.Latitude,
-                (double) _group.Coordinates.Longitude));
+            options.SetPosition(new LatLng((double)_group.Coordinates.Latitude,
+                (double)_group.Coordinates.Longitude));
             options.SetTitle(_group.Name);
             var newMarker = map.AddMarker(options);
             coordinates = newMarker.Position;
@@ -141,9 +150,9 @@ namespace Merge.Android.UI.Activities {
         }
 
         public void OnOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            var collapsed = Math.Abs(verticalOffset) >= appBarLayout.TotalScrollRange / 2;
             var arrow = ContextCompat.GetDrawable(this, Resource.Drawable.ic_arrow_back_black_24dp);
-            arrow.SetColorFilter(Math.Abs(verticalOffset) >= appBarLayout.TotalScrollRange / 2 ? Color.White : _color,
-                PorterDuff.Mode.SrcIn);
+            arrow.SetColorFilter(collapsed ? Color.White : Color.Transparent, PorterDuff.Mode.SrcIn);
             SupportActionBar.SetHomeAsUpIndicator(arrow);
         }
 
@@ -174,7 +183,7 @@ namespace Merge.Android.UI.Activities {
         }
 
         private async void SetupPageContent() {
-            ((MergeElementCreationReceiver) MergeDatabase.ElementCreationReceiver).SetColorInfo(
+            ((MergeElementCreationReceiver)MergeDatabase.ElementCreationReceiver).SetColorInfo(
                 _page.Color.ToAndroidColor(), _page.Theme);
             if (_pageContent == null) {
                 _pageContent = new LinearLayout(this) {
@@ -198,17 +207,21 @@ namespace Merge.Android.UI.Activities {
         }
 
         private void Colorize(Color c, Theme t) {
-            _color = c;
             if (SdkChecker.Lollipop) {
                 _fab.BackgroundTintList = ColorStateList.ValueOf(c);
                 var drawable = _fab.Drawable;
                 drawable.SetColorFilter(c.ContrastColor(t), PorterDuff.Mode.SrcIn);
                 _fab.SetImageDrawable(drawable);
             }
-            FindViewById<CollapsingToolbarLayout>(Resource.Id.toolbar_layout).SetExpandedTitleColor(c);
+            _toolbarLayout.SetExpandedTitleColor(Color.Transparent);
         }
 
         private void SetupLayout(MergePage p) {
+            LogHelper.FirebaseLog(this, "viewDetails", new Dictionary<string, string> {
+                { "id", p.Id },
+                { "type", "page" },
+                { "name", p.Title }
+            });
             if (p.LeadersOnly && !PreferenceHelper.IsValidLeader) {
                 var dialog = new AlertDialog.Builder(this).SetTitle("Unauthorized")
                     .SetMessage(
@@ -237,6 +250,11 @@ namespace Merge.Android.UI.Activities {
 
         [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private void SetupLayout(MergeEvent e) {
+            LogHelper.FirebaseLog(this, "viewDetails", new Dictionary<string, string> {
+                { "id", e.Id },
+                { "type", "event" },
+                { "title", e.Title }
+            });
             _event = e;
             SetupMenu(Resource.Menu.EventMenu, !e.HasRegistration);
             Colorize(e.Color.ToAndroidColor(), e.Theme);
@@ -271,22 +289,26 @@ namespace Merge.Android.UI.Activities {
         }
 
         private void SetupLayout(MergeGroup g) {
+            LogHelper.FirebaseLog(this, "viewDetails", new Dictionary<string, string> {
+                { "id", g.Id },
+                { "type", "group" },
+                { "name", g.Name }
+            });
             _group = g;
             SetupMenu(Resource.Menu.GroupMenu);
-            Colorize(new Color(ContextCompat.GetColor(this, Resource.Color.colorPrimary)),
-                MergeApi.Framework.Enumerations.Theme.Dark);
+            Colorize(new Color(ContextCompat.GetColor(this, Resource.Color.colorPrimary)), MergeApi.Framework.Enumerations.Theme.Dark);
             _dataLayout.AddView(new IconView(this, Resource.Drawable.MergeGroups, g.LeadersFormatted, true, true));
             _dataLayout.AddView(new IconView(this, Resource.Drawable.Location, g.Address));
             _dataLayout.AddView(new IconView(this, Resource.Drawable.Home, $"Hosted by {g.Host}"));
             var fragment = SupportMapFragment.NewInstance();
-            FindViewById<FrameLayout>(Resource.Id.mapFragmentContainer).Visibility = ViewStates.Visible;
+            _mapContainer.Visibility = ViewStates.Visible;
             SupportFragmentManager.BeginTransaction().Replace(Resource.Id.mapFragmentContainer, fragment).Commit();
             fragment.GetMapAsync(this);
         }
 
         protected override void OnResume() {
             base.OnResume();
-            ((MergeActionInvocationReceiver) MergeDatabase.ActionInvocationReceiver).SetContext(this);
+            ((MergeActionInvocationReceiver)MergeDatabase.ActionInvocationReceiver).SetContext(this);
         }
 
         protected override void OnCreate(Bundle savedInstanceState) {
@@ -298,16 +320,14 @@ namespace Merge.Android.UI.Activities {
             if (SdkChecker.Marshmallow)
                 Window.DecorView.SystemUiVisibility = StatusBarVisibility.Visible;
             SetContentView(Resource.Layout.DataDetailActivity);
-            _dataLayout = FindViewById<LinearLayout>(Resource.Id.dataLayout);
-            _fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
+            Cheeseknife.Bind(this);
             _fab.SetImageResource(Resource.Drawable.MoreVertical);
-            _fab.SetOnClickListener(this);
             SetSupportActionBar(FindViewById<Toolbar>(Resource.Id.toolbar));
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.SetHomeButtonEnabled(true);
-            FindViewById<AppBarLayout>(Resource.Id.app_bar).AddOnOffsetChangedListener(this);
+            _appBarLayout.AddOnOffsetChangedListener(this);
             Title = Intent.GetStringExtra("title");
-            Utilities.LoadImageForDisplay(Intent.GetStringExtra("url"), FindViewById<ImageView>(Resource.Id.image));
+            Utilities.LoadImageForDisplay(Intent.GetStringExtra("url"), _image);
             var json = Intent.GetStringExtra("json");
             switch (Intent.GetStringExtra("type")) {
                 case "page":

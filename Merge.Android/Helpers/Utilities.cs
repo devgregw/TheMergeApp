@@ -42,9 +42,7 @@ using MergeApi.Tools;
 
 namespace Merge.Android.Helpers {
     public static class Utilities {
-        public static void LoadImageForDisplay(string url, ImageView view) {
-            ImageLoader.Instance.DisplayImage(url, view);
-        }
+        public static void LoadImageForDisplay(string url, ImageView view) => ImageLoader.Instance.DisplayImage(url, view);
 
         public static string GetTargetingString<T>(T obj) where T : TargetableBase {
             var genders = (from g in obj.Genders select g.ToString().ToLower() == "male" ? "guys" : "girls").Format();

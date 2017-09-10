@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:id="@+id/MenuShowSetup" android:title="Open Setup" android:showAsAction="never" android:order="99"/>
+  <item android:id="@+id/MenuClearTips" android:title="Clear Dismissed Tips" android:showAsAction="never" android:order="100"/>
+</menu>

@@ -32,15 +32,32 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Android.Graphics;
+using Android.OS;
 using Android.Views;
 using Java.Text;
 using MergeApi.Framework.Enumerations;
+using MergeApi.Tools;
 
 #endregion
 
 namespace Merge.Android.Helpers {
     public static class Extensions {
+        public static Dictionary<T1, T2> Concat<T1, T2>(this Dictionary<T1, T2> dict, Dictionary<T1, T2> dict2) => dict.Concat(dict2.ToList()).ToDictionary(p => p.Key, p => p.Value);
+
+        public static string ToLongDateTimeString(this DateTime dt) =>
+            $"{dt.ToLongDateString()} {dt.ToLongTimeString()}";
+
+        public static Bundle ToBundle(this Dictionary<string, string> dict) =>
+            new Bundle().Manipulate(b => {
+                foreach (var pair in dict)
+                    b.PutString(pair.Key, pair.Value);
+                return b;
+            });
+
+        public static int IndexOf<T>(this IEnumerable<T> e, T s) => Array.IndexOf(e.ToArray(), s);
+
         #region System.DateTime
 
         public static long GetMillisecondsSinceEpoch(this DateTime dt) =>
@@ -77,7 +94,7 @@ namespace Merge.Android.Helpers {
 
         #region System.String
 
-        public static T ToEnum<T>(this string s) => (T) Enum.Parse(typeof(T), s, true);
+        public static T ToEnum<T>(this string s) => (T)Enum.Parse(typeof(T), s, true);
 
         public static Color ToAndroidColor(this string s) => Color.ParseColor(s);
 

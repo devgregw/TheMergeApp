@@ -33,12 +33,16 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Android.App;
 using Android.Content;
 using Android.Preferences;
+using Android.Provider;
 using Android.Widget;
 using Firebase.Messaging;
+using Java.Lang;
 using Merge.Android.UI.Activities;
 using MergeApi.Framework.Enumerations;
+using AlertDialog = Android.Support.V7.App.AlertDialog;
 using Object = Java.Lang.Object;
 
 #endregion
@@ -112,12 +116,7 @@ namespace Merge.Android.Helpers {
         public static string[] DismissedTips {
             get => _preferences.GetString("dismissedTips", "")
                 .Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
-            private set => _preferences.Edit().PutString("dismissedTips", string.Join(";", value)).Commit();
-        }
-
-        public static string[] Tags {
-            get => _preferences.GetString("tags", "").Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
-            set => _preferences.Edit().PutString("tags", string.Join(";", value)).Commit();
+            set => _preferences.Edit().PutString("dismissedTips", string.Join(";", value)).Commit();
         }
 
         /// <summary>
@@ -159,6 +158,11 @@ namespace Merge.Android.Helpers {
             set => _preferences.Edit().PutBoolean("isLeader", value).Commit();
         }
 
+        public static bool ShowInvalidObjects {
+            get => _preferences.GetBoolean("showInvalidObjects", false);
+            set => _preferences.Edit().PutBoolean("showInvalidObjects", value).Commit();
+        }
+
         /// <summary>
         ///     Gets a value indicating whether the app will cache data.
         /// </summary>
@@ -166,17 +170,16 @@ namespace Merge.Android.Helpers {
         public static bool Caching => _preferences
             .GetBoolean("caching", true);
 
-        public static bool Telemetry => _preferences
-            .GetBoolean("telemetry", true);
+        //public static bool Telemetry => _preferences
+            //.GetBoolean("telemetry", true);
 
         public static bool Logging {
-            get => _preferences.GetBoolean("logging", false);
-            set => _preferences.Edit().PutBoolean("logging", value).Commit();
+            /*get => _preferences.GetBoolean("logging", false);
+            set => _preferences.Edit().PutBoolean("logging", value).Commit();*/
+            get => false;
         }
 
-        public static void AddDismissedTip(string id) {
-            DismissedTips = DismissedTips.Concat(new[] {id}).ToArray();
-        }
+        public static void AddDismissedTip(string id) => DismissedTips = DismissedTips.Concat(new[] { id }).ToArray();
 
         public static void Initialize(Context context) {
             _context = context;
@@ -192,7 +195,7 @@ namespace Merge.Android.Helpers {
             }
 
             public void OnSharedPreferenceChanged(ISharedPreferences sharedPreferences, string key) {
-                if (key == "isLeader")
+                if (key == "isLeader") {
                     if (IsLeader) {
                         Toast.MakeText(_c, "Credentials are required.", ToastLength.Long).Show();
                         var intent = new Intent(_context, typeof(WelcomeActivity));
@@ -206,6 +209,21 @@ namespace Merge.Android.Helpers {
                         AuthenticationState = LeaderAuthenticationState.NoAttempt;
                         FirebaseMessaging.Instance.UnsubscribeFromTopic("verified_leader");
                     }
+                }
+                else if (key == "caching") {
+                    var dialog = new AlertDialog.Builder(_c).SetTitle("Restart Required")
+                        .SetMessage("To apply your changes, the Merge app must be restarted.").SetPositiveButton(
+                            "Restart",
+                            (s, e) => {
+                                var intent =
+                                    PendingIntent.GetActivity(_c, 0,
+                                        _c.PackageManager.GetLaunchIntentForPackage(_c.PackageName), PendingIntentFlags.CancelCurrent);
+                                ((AlarmManager)_c.GetSystemService(Context.AlarmService)).Set(AlarmType.Rtc, JavaSystem.CurrentTimeMillis() + 1, intent);
+                                JavaSystem.Exit(2);
+                            }).SetNegativeButton("Later", (s, e) => { }).SetCancelable(false).Create();
+                    dialog.SetOnShowListener(AlertDialogColorOverride.Instance);
+                    dialog.Show();
+                }
             }
         }
     }

@@ -31,6 +31,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
@@ -40,6 +41,7 @@ using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
+using CheeseBind;
 using Merge.Android.Helpers;
 using Merge.Android.Receivers;
 using Merge.Android.UI.Views;
@@ -52,22 +54,21 @@ using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace Merge.Android.UI.Activities.LeadersOnly {
     [Activity(Label = "Leader Resources", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
-    public class LeaderResourcesActivity : AppCompatActivity, View.IOnClickListener {
-        private ViewApplier _applier;
-        private Button _attendanceButton;
-        private bool _first = true;
+    [SuppressMessage("ReSharper", "UnusedMember.Local")]
+    [SuppressMessage("ReSharper", "UnusedParameter.Local")]
+    public class LeaderResourcesActivity : AppCompatActivity {
+        [BindView(Resource.Id.content_list)]
         private LinearLayout _mainList;
+
+        private ViewApplier _applier;
+        private bool _first = true;
         private IEnumerable<MergePage> _pages;
-        private Toolbar _toolbar;
 
-        public void OnClick(View v) {
-            if (v.Id == _attendanceButton.Id)
-                StartActivity(typeof(AttendanceManagerActivity));
-        }
+        [OnClick(Resource.Id.resourcesAttendance)]
+        private void AttendanceButton_OnClick(object sender, EventArgs e) => StartActivity(
+            typeof(AttendanceManagerActivity));
 
-        private void Nullify() {
-            _pages = null;
-        }
+        private void Nullify() => _pages = null;
 
         private async void LoadData() {
             if (_pages == null) {
@@ -139,15 +140,12 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.LeaderResourcesActivity);
+            Cheeseknife.Bind(this);
             if (SdkChecker.KitKat)
                 Window.AddFlags(WindowManagerFlags.TranslucentStatus);
-            _toolbar = FindViewById<Toolbar>(Resource.Id.toolbar);
-            SetSupportActionBar(_toolbar);
+            SetSupportActionBar(FindViewById<Toolbar>(Resource.Id.toolbar));
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.SetDisplayShowHomeEnabled(true);
-            _attendanceButton = FindViewById<Button>(Resource.Id.resourcesAttendance);
-            _attendanceButton.SetOnClickListener(this);
-            _mainList = FindViewById<LinearLayout>(Resource.Id.content_list);
             _applier = new ViewApplier(this, _mainList);
             if (!PreferenceHelper.IsValidLeader)
                 ShowUnauthorizedDialog();
