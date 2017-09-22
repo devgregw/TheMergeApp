@@ -13,7 +13,7 @@
                 <StackLayout Orientation="Horizontal" Spacing="5">
                     <Label TextColor="Black" Text="Leaders were present" VerticalOptions="Center"
                            HorizontalOptions="FillAndExpand" />
-                    <Switch x:Name="leadersPresent" />
+                    <Switch x:Name="leadersPresent" IsToggled="True" />
                 </StackLayout>
                 <Label Text="Students" TextColor="Black" FontSize="18" />
                 <StackLayout x:Name="studentsList" Spacing="5" />

@@ -47,20 +47,14 @@ namespace Merge.Classes.UI.Pages {
                 $"Version {VersionConsts.Version} (update {VersionConsts.Update}) {VersionConsts.Classification}\nUtilizing MergeApi version {VersionInfo.Version} (update {VersionInfo.Update})";
         }
 
-        private void Devgregw(object sender, EventArgs e) {
-            LaunchUriAction.FromUri("http://www.devgregw.com").Invoke();
-        }
+        private void Devgregw(object sender, EventArgs e) => LaunchUriAction.FromUri("http://www.devgregw.com").Invoke();
 
-        private void Pantego(object sender, EventArgs e) {
-            LaunchUriAction.FromUri("http://www.pantego.org").Invoke();
-        }
+        private void Pantego(object sender, EventArgs e) => LaunchUriAction.FromUri("http://www.pantego.org").Invoke();
 
-        private void Licenses(object sender, EventArgs e) {
-            LaunchUriAction.FromUri("https://merge.devgregw.com/licenses").Invoke();
-        }
+        private void Licenses(object sender, EventArgs e) => LaunchUriAction.FromUri("https://merge.devgregw.com/licenses").Invoke();
 
-        private void ContactUs(object sender, EventArgs e) {
-            EmailAction.FromAddress("students@pantego.org").Invoke();
-        }
+        private void Roadmap(object sender, EventArgs e) => LaunchUriAction.FromUri("https://trello.com/b/nAzvRa7R/roadmap").Invoke();
+
+        private void ContactUs(object sender, EventArgs e) => EmailAction.FromAddress("students@pantego.org").Invoke();
     }
 }

@@ -22,6 +22,7 @@
                     </StackLayout>
                     <Label TextColor="Black"
                            Text="This app is licensed under the MIT license.  By using this app, you agree to the MIT license and all third-party licenses.  Tap 'Licenses' to learn more." />
+                    <Button Clicked="Roadmap" BackgroundColor="#ffd326" TextColor="Black" HorizontalOptions="Fill" Text="View Roadmap"/>
                     <Button Clicked="Licenses" BackgroundColor="#ffd326" TextColor="Black" HorizontalOptions="Fill"
                             Text="Licenses" />
                     <Button Clicked="ContactUs" BackgroundColor="#ffd326" TextColor="Black" HorizontalOptions="Fill"

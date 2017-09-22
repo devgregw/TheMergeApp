@@ -45,6 +45,7 @@ using MergeApi.Tools;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Merge.Classes.Receivers;
 
 #endregion
 
@@ -115,6 +116,11 @@ namespace Merge.Classes.UI.Pages {
                         Register();
                 });
             InitializeMenu();
+            MergeLogReceiver.Log("viewDetails", new Dictionary<string, string> {
+                {"id", e.Id},
+                {"type", "event"},
+                {"title", e.Title}
+            });
         }
 
         public DataDetailPage(MergePage p) : this() {
@@ -160,6 +166,11 @@ namespace Merge.Classes.UI.Pages {
                 Navigation.RemovePage(this);
             });
             InitializeMenu();
+            MergeLogReceiver.Log("viewDetails", new Dictionary<string, string> {
+                {"id", p.Id},
+                {"type", "page"},
+                {"title", p.Title}
+            });
         }
 
         public DataDetailPage(MergeGroup g) : this() {
@@ -181,6 +192,11 @@ namespace Merge.Classes.UI.Pages {
             _menuItems.Add("See All Groups", () => new OpenGroupMapPageAction().Invoke());
             _menuItems.Add("Contact Group Leaders", () => ShowContactInfoAction.FromGroupId(g.Id).Invoke());
             InitializeMenu();
+            MergeLogReceiver.Log("viewDetails", new Dictionary<string, string> {
+                {"id", g.Id},
+                {"type", "group"},
+                {"name", g.Name}
+            });
         }
 
         public Color Color { get; set; }

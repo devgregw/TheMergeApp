@@ -46,6 +46,9 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 using Application = Xamarin.Forms.Application;
 using ui = UIKit;
+using System.Threading.Tasks;
+using System.Threading;
+using Merge.Classes.Receivers;
 
 #endregion
 
@@ -73,11 +76,12 @@ namespace Merge {
                 ReInitTabs(2);
             });
             InitMainPage();
+            MergeLogReceiver.Log("appStarted", new Dictionary<string, string>());
         }
 
         public void ShowLoader(string message) {
-            _overlay = new LoadingOverlay(message, ui.UIScreen.MainScreen.Bounds);
-            _overlay.Show(ui.UIApplication.SharedApplication.KeyWindow.RootViewController);
+            _overlay = new LoadingOverlay(message, ui.UIScreen.MainScreen.Bounds, ui.UIApplication.SharedApplication.KeyWindow.RootViewController);
+            _overlay.Show();
         }
 
         public void HideLoader() {
@@ -167,8 +171,11 @@ namespace Merge {
         public sealed class LoadingOverlay : ui.UIView {
             private ui.UILabel _label;
             private ui.UIActivityIndicatorView _spinner;
+            private ui.UIButton _button;
+            private ui.UIViewController _controller;
+            private bool _showing = false;
 
-            public LoadingOverlay(string msg, CGRect frame) : base(frame) {
+            public LoadingOverlay(string msg, CGRect frame, ui.UIViewController controller) : base(frame) {
                 BackgroundColor = ui.UIColor.Black;
                 Alpha = 0.75f;
                 AutoresizingMask = ui.UIViewAutoresizing.All;
@@ -176,6 +183,7 @@ namespace Merge {
                     labelWidth = Frame.Width - 20,
                     centerX = Frame.Width / 2,
                     centerY = Frame.Height / 2;
+                _controller = controller;
                 _spinner = new ui.UIActivityIndicatorView(ui.UIActivityIndicatorViewStyle.WhiteLarge);
                 _spinner.Frame = new CGRect(centerX - _spinner.Frame.Width / 2, centerY - _spinner.Frame.Height - 20,
                     _spinner.Frame.Width, _spinner.Frame.Height);
@@ -189,16 +197,26 @@ namespace Merge {
                     TextAlignment = ui.UITextAlignment.Center,
                     AutoresizingMask = ui.UIViewAutoresizing.All
                 };
+                _button =
+                    new ui.UIButton(new CGRect(centerX - labelWidth / 2, centerY + 40, labelWidth, labelHeight)) {
+                        BackgroundColor = ui.UIColor.Clear
+                    };
+                _button.SetTitleColor(ui.UIColor.Clear, ui.UIControlState.Normal);
                 AddSubview(_label);
             }
 
-            public void Show(ui.UIViewController controller) {
+            public async void Show() {
+                _showing = true;
                 Alpha = 0f;
-                controller.View.Add(this);
+                _controller.View.Add(this);
                 Animate(0.25d, () => Alpha = 0.75f);
+                await Task.Run(() => Thread.Sleep(1));
+                if (_showing)
+                    AddSubview(_button);
             }
 
             public void Hide() {
+                _showing = false;
                 Animate(0.25, () => Alpha = 0f, RemoveFromSuperview);
             }
         }

@@ -119,14 +119,23 @@ namespace Merge.Classes.Receivers {
 
         public async void InvokeGetDirectionsActionAsync(GetDirectionsAction action) {
             void InternalInvokeWithCoordinates(CLLocationCoordinate2D coords, NSDictionary addressDictionary = null) {
+                if (UIApplication.SharedApplication.CanOpenUrl(NSUrl.FromString("comgooglemaps://"))) {
+                    UIApplication.SharedApplication.OpenUrl(NSUrl.FromString($"comgooglemaps://?directionsmode=driving&daddr={coords.Latitude},{coords.Longitude}"));
+                } else
                 new MKMapItem(new MKPlacemark(coords, addressDictionary)).OpenInMaps(new MKLaunchOptions {
                     DirectionsMode = MKDirectionsMode.Driving
                 });
             }
 
             async Task InternalInvokeWithAddress(string address) {
-                var geocodeResult = await LoadAsync(async () => await new CLGeocoder().GeocodeAddressAsync(address));
-                InternalInvokeWithCoordinates(geocodeResult[0].Location.Coordinate, geocodeResult[0].AddressDictionary);
+                if (UIApplication.SharedApplication.CanOpenUrl(NSUrl.FromString("comgooglemaps://"))) {
+                    UIApplication.SharedApplication.OpenUrl(NSUrl.FromString($"comgooglemaps://?directionsmode=driving&daddr={System.Net.WebUtility.UrlEncode(address)}"));
+                } else {
+                    var geocodeResult =
+                        await LoadAsync(async () => await new CLGeocoder().GeocodeAddressAsync(address));
+                    InternalInvokeWithCoordinates(geocodeResult[0].Location.Coordinate,
+                        geocodeResult[0].AddressDictionary);
+                }
             }
 
             switch (action.ParamGroup) {
@@ -230,18 +239,18 @@ namespace Merge.Classes.Receivers {
             Dictionary<string, MediumBase> MakeItems(List<MediumBase> mediums) {
                 var list = new Dictionary<string, MediumBase>();
                 foreach (var cm in mediums)
-                    if (cm is EmailAddressMedium) {
+                    if (cm is EmailAddressMedium ea) {
                         list.Add(
-                            "Email " + ((EmailAddressMedium) cm).Who + " (" +
-                            ((EmailAddressMedium) cm).Kind.ToString().ToLower() + ")", cm);
-                    } else if (cm is PhoneNumberMedium) {
+                            "Email " + ea.Who + " (" +
+                            ea.Kind.ToString().ToLower() + ")", ea);
+                    } else if (cm is PhoneNumberMedium ph) {
                         list.Add(
-                            "Call " + ((PhoneNumberMedium) cm).Who + " (" +
-                            ((PhoneNumberMedium) cm).Kind.ToString().ToLower() + ")", cm);
-                        if (((PhoneNumberMedium) cm).CanReceiveSMS)
+                            "Call " + ph.Who + " (" +
+                            ph.Kind.ToString().ToLower() + ")", ph);
+                        if (ph.CanReceiveSMS)
                             list.Add(
-                                "Text " + ((PhoneNumberMedium) cm).Who + " (" +
-                                ((PhoneNumberMedium) cm).Kind.ToString().ToLower() + ")", cm);
+                                "Text " + ph.Who + " (" +
+                                ph.Kind.ToString().ToLower() + ")", ph);
                     }
                 return list;
             }
@@ -276,12 +285,12 @@ namespace Merge.Classes.Receivers {
                 if (b == "View Info") {
                     var msg = "";
                     foreach (var medium in mediums)
-                        if (medium is EmailAddressMedium) {
+                        if (medium is EmailAddressMedium ea) {
                             msg +=
-                                $"{(medium as EmailAddressMedium).Who + " (" + ((EmailAddressMedium) medium).Kind.ToString().ToLower() + ")"}\n {(medium as EmailAddressMedium).Address}\n\n";
-                        } else if (medium is PhoneNumberMedium) {
+                                $"{ea.Who + " (" + ea.Kind.ToString().ToLower() + ")"}\n {ea.Address}\n\n";
+                        } else if (medium is PhoneNumberMedium ph) {
                             var nmsg =
-                                $"{(medium as PhoneNumberMedium).Who + " (" + ((PhoneNumberMedium) medium).Kind.ToString().ToLower() + ")"}\n {(medium as PhoneNumberMedium).PhoneNumber}\n\n";
+                                $"{ph.Who + " (" + ph.Kind.ToString().ToLower() + ")"}\n {ph.PhoneNumber}\n\n";
                             if (!msg.Contains(nmsg))
                                 msg += nmsg;
                         }
@@ -359,7 +368,7 @@ namespace Merge.Classes.Receivers {
         }
 
         public async Task<T> GetOrLoad<T>(string id, Func<IEnumerable<T>> getter,
-            Func<IEnumerable<T>, IEnumerable<T>> setter) where T : IIdentifiable {
+            Func<IEnumerable<T>, IEnumerable<T>> setter) where T : class, IIdentifiable {
             return (getter() == null || getter().All(i => i.Id != id)
                     ? await LoadAsync(async () => setter(await MergeDatabase.ListAsync<T>()))
                     : getter())

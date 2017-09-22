@@ -100,5 +100,12 @@
 	<string>Merge uses your current location to display your location on the Merge Group map and to sort Merge Groups.</string>
 	<key>CFBundleVersion</key>
 	<string>10</string>
+	<key>NSCameraUsageDescription</key>
+	<string>When adding Merge Group attendance reocrds, the camera may be used to attatch a photo.</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>googlechromes</string>
+		<string>comgooglemaps</string>
+	</array>
 </dict>
 </plist>

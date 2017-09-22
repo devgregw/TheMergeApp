@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\DataCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\FileUploader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\VersionConsts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\MapAnnotation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\MergeGroupAnnotation.cs" />
@@ -51,6 +52,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\LeadersOnly\LeaderResourcesPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\LeadersOnly\MergeGroupRecordEditorPage.xaml.cs">
+      <DependentUpon>MergeGroupRecordEditorPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\LeadersOnly\RecordEditorPage.xaml.cs">
       <DependentUpon>RecordEditorPage.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -129,6 +134,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\LeadersOnly\RecordEditorPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\LeadersOnly\MergeGroupRecordEditorPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

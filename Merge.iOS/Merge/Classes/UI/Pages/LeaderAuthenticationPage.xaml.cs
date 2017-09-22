@@ -44,7 +44,7 @@ using Xamarin.Forms.Xaml;
 namespace Merge.Classes.UI.Pages {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LeaderAuthenticationPage : ContentPage {
-        private Action<bool> _callback;
+        private readonly Action<bool> _callback;
 
         public LeaderAuthenticationPage(Action<bool> callback) {
             InitializeComponent();

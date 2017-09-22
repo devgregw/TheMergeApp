@@ -43,6 +43,8 @@ using Xamarin.Forms;
 
 namespace Merge.Classes.Helpers {
     public static class Extensions {
+        public static int IndexOf<T>(this IEnumerable<T> e, T item) => Array.IndexOf(e.ToArray(), item);
+
 		public static UIViewController GetTopmostViewController(this UIWindow w) {
 			var controller = UIApplication.SharedApplication.KeyWindow.RootViewController;
 			while (controller.PresentedViewController != null)

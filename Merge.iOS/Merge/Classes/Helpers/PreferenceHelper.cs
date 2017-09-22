@@ -178,6 +178,14 @@ namespace Merge.Classes.Helpers {
             }
         }
 
+        public static bool ShowInvalidObjects {
+            get => Preferences.BoolForKey("showInvalidObjects");
+            set {
+                Preferences.SetBool(value, "showInvalidObjects");
+                Preferences.Synchronize();
+            }
+        }
+
         public static void AddDismissedTip(string id) {
             DismissedTips = DismissedTips.Concat(new[] {id}).ToArray();
         }

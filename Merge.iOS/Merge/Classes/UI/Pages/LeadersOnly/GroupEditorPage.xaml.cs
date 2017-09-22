@@ -40,6 +40,8 @@ using MergeApi.Models.Core.Attendance;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 using Xamarin.Forms.Xaml;
+using System.Linq;
+using Merge.Classes.Receivers;
 
 #endregion
 
@@ -49,22 +51,19 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
         private AttendanceGroup _group;
 
         private List<string> _students;
+        private List<(string Old, string New)> _renames;
 
         public GroupEditorPage(AttendanceGroup group) {
             InitializeComponent();
             _students = new List<string>();
+            _renames = new List<(string Old, string New)>();
             _group = group;
             groupId.Text = $"{_group.Summary} ({_group.Id})";
             _group.StudentNames.ForEach(AddStudentToList);
-			this.AddToolbarItem("Close", Images.Dismiss, (s, e) => {
-				AlertHelper.ShowSheet(null, async b => {
-					if (b == "Save")
-						await SaveAndExit();
-					else if (b == "Don't Save")
-						await Navigation.PopModalAsync();
-				}, "Cancel", "Don't Save", ((ToolbarItem)s).ToUIBarButtonItem(), "Save");
-			});
-            ToolbarItems.Add(new ToolbarItem("Save", Images.Save, async () => await SaveAndExit()));
+            ToolbarItems.Add(new ToolbarItem("Save", null, async () => await SaveAndExit()));
+            MergeLogReceiver.Log("managerAttendanceGroup", new Dictionary<string, string> {
+                {"groupId", group.Id}
+            });
         }
 
         private void AddStudentToList(string name) {
@@ -81,32 +80,83 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
                         HorizontalOptions = LayoutOptions.FillAndExpand,
                         VerticalOptions = LayoutOptions.Center
                     },
-                    new Button {
-                        Text = "Remove",
-                        TextColor = Color.Red,
-                        FontSize = 14d,
-                        Command = new Command(() => {
-                            studentsList.Children.RemoveAt(_students.IndexOf(name));
-                            _students.Remove(name);
-                        })
+                    new StackLayout {
+                        Spacing = 5,
+                        Orientation = StackOrientation.Vertical,
+                        Children = {
+                            new Button {
+                                Text = "Remove",
+                                TextColor = Color.Red,
+                                FontSize = 14d,
+                                Command = new Command(() => {
+                                    studentsList.Children.RemoveAt(_students.IndexOf(name));
+                                    _students.Remove(name);
+                                })
+                            },
+                            new Button {
+                            Text = "Edit",
+                            TextColor = Color.Red,
+                            FontSize = 14d,
+                            Command = new Command(() => {
+                                AlertHelper.ShowTextInputAlert("Edit Student", "Type the student's name then tap 'Done'.", false, f => f.Text = name,
+                                    (b, i) => {
+                                        if (b == "Done") {
+                                            if (!string.IsNullOrWhiteSpace(i)) {
+                                                if (_renames.Select(t => t.New).Contains(name)) {
+                                                    var index1 = _renames.Select(t => t.New).IndexOf(name);
+                                                    var previous = _renames[index1];
+                                                    _renames[index1] = (previous.Old, i);
+                                                } else
+                                                    _renames.Add((name, i));
+                                                var index2 = _students.IndexOf(name);
+                                                _students[index2] = i;
+                                                ((Label) ((StackLayout)studentsList.Children.ElementAt(index2)).Children.ElementAt(0))
+                                                    .Text = i;
+                                            } else
+                                                AlertHelper.ShowAlert("Error",
+                                                    "Could not edit student: No name specified.", null, "OK");
+                                        }
+                                    }, "Done", "Cancel");
+                            })
+                        }
+                    }
                     }
                 }
             });
         }
 
         private async Task SaveAndExit() {
+            if (_students.Count == 0) {
+                AlertHelper.ShowAlert("No Students", "This group must contain at least one student.", null, "OK");
+                return;
+            }
             new NSObject().InvokeOnMainThread(() => ((App) Application.Current).ShowLoader("Saving changes..."));
             _group.StudentNames = _students;
+            if (_renames.Any()) {
+                var records = (await MergeDatabase.ListAsync<AttendanceRecord>()).Where(r => r.GroupId == _group.Id)
+                    .ToList();
+                foreach (var t in _renames) {
+                    foreach (var r in records) {
+                        if (!r.Students.Contains(t.Old)) continue;
+                        r.Students[r.Students.IndexOf(t.Old)] = t.New;
+                        await MergeDatabase.UpdateAsync(r);
+                    }
+                }
+            }
             await MergeDatabase.UpdateAsync(_group);
             new NSObject().InvokeOnMainThread(((App) Application.Current).HideLoader);
             await Navigation.PopModalAsync();
         }
 
         private void AddStudent(object sender, EventArgs e) {
-            AlertHelper.ShowTextInputAlert("Add Student", "Type the student's name then tap 'Add'.", false, f => { },
+            AlertHelper.ShowTextInputAlert("Add Student", "Type the student's name then tap 'Done'.", false, f => { },
                 (b, i) => {
-                    if (b == "Add")
-                        AddStudentToList(i);
+                    if (b == "Done") {
+                        if (!string.IsNullOrWhiteSpace(i))
+                            AddStudentToList(i);
+                        else
+                            AlertHelper.ShowAlert("Error", "Could not add student: No name specified.", null, "OK");
+                    }
                 }, "Add", "Cancel");
         }
     }

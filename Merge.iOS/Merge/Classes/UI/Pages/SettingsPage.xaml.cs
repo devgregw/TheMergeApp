@@ -51,10 +51,11 @@ namespace Merge.Classes.UI {
             BackgroundColor = Color.FromHex(ColorConsts.PrimaryLightColor);
             cachingCell.On = PreferenceHelper.Caching;
             leaderFeaturesCell.On = PreferenceHelper.LeaderFeaturesEnabled;
+            invalidObjectsCell.On = PreferenceHelper.ShowInvalidObjects;
             if (UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
                 extrasSection.Add(new ViewCell {
                     View = new Button {
-                        Text = "Open In Settings App"
+                        Text = "More Settings"
                     }.Manipulate(b => {
                         b.Clicked +=
                             (s, e) => UIApplication.SharedApplication.OpenUrl(NSUrl.FromString(UIApplication
@@ -109,6 +110,10 @@ namespace Merge.Classes.UI {
 
         private void Caching_Changed(object sender, ToggledEventArgs e) {
             PreferenceHelper.Caching = cachingCell.On;
+        }
+
+        private void ShowInvalidObjects_Changed(object sender, ToggledEventArgs e) {
+            PreferenceHelper.ShowInvalidObjects = invalidObjectsCell.On;
         }
 
         private void ClearTips_Clicked(object sender, EventArgs e) {

@@ -32,22 +32,49 @@
 using System;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Framework.Interfaces.Receivers;
+using Firebase.CrashReporting;
+using System.Collections.Generic;
+using System.Linq;
+using Foundation;
+using Firebase.Analytics;
+using LogLevel = MergeApi.Framework.Enumerations.LogLevel;
 
 #endregion
 
 namespace Merge.Classes.Receivers {
     public sealed class MergeLogReceiver : ILogReceiver {
+        public static string SessionId { get; private set; }
+
         public bool Initialize() {
+            SessionId = Guid.NewGuid().ToString();
+            Log(LogLevel.Info, "Merge.Classes.Receivers.MergeLogReceiver", "Session ID: " + SessionId);
             return true;
         }
 
         public void Log(LogLevel level, string sender, string message) {
             Console.WriteLine($"[{level}]: {message} (from \"{sender}\")");
+            CrashReporting.Log($"[{level}]: {message} (from \"{sender}\")");
         }
 
         public void Log(LogLevel level, string sender, Exception e) {
             Console.WriteLine(
                 $"[{level}]: {e.Message} ({e.GetType().FullName}) (from \"{sender}\")\n{e.StackTrace}\n-----");
+            CrashReporting.Log(
+                $"[{level}]: {e.Message} ({e.GetType().FullName}) (from \"{sender}\")\n{e.StackTrace}\n-----");
+        }
+
+        public static void Log(string name, Dictionary<string, string> items) {
+            var allItems = items.Concat(new Dictionary<string, string> {
+                {"instanceId", SessionId},
+                {"when", DateTime.Now.ToLongTimeString()}
+#if DEBUG
+                ,
+                {"debug", "true"}
+#endif
+            });
+            var newDict = allItems.Select(p => new KeyValuePair<NSString, NSObject>(new NSString(p.Key), NSObject.FromObject(p.Value))).ToDictionary(p => p.Key, p => p.Value);
+            Analytics.LogEvent(name,
+                new NSDictionary<NSString, NSObject>(newDict.Keys.ToArray(), newDict.Values.ToArray()));
         }
     }
 }
