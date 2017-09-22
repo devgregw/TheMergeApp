@@ -53,9 +53,7 @@ namespace MergeApi.Tools {
                         $"The object '{(argument == null ? "<null>" : argument.ToString())}' ({typeof(T).FullName}) did not meet the specified condition(s)");
         }
 
-        public static void AssertCondition<T>(bool condition, T argument) {
-            AssertCondition(o => condition, argument);
-        }
+        public static void AssertCondition<T>(bool condition, T argument) => AssertCondition(o => condition, argument);
 
         public static string HashMD5(string plain) {
             using (var md5 = MD5.Create()) {

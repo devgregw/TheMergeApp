@@ -33,7 +33,7 @@ namespace MergeApi.Framework.Enumerations {
         Success, // nothing, anything
 
         EventNotFound, // id, AddToCalendarAction, GetDirectionsAction, OpenEventDetailsAction (ActionBase)
-        
+
         PageNotFound, // id, OpenPageAction
         GroupNotFound, // id, GetDirectionsAction, ShowContactInfoAction (ActionBase)
 
@@ -46,7 +46,7 @@ namespace MergeApi.Framework.Enumerations {
 
         Exception, // Exception, anything, MAIN
         PageActionValidationFailure, // ValidationResult, MergePage, MAIN
-        
+
         PageContentValidationFailure, // List<ElementBase>, MergePage, MAIN
         OutdatedEvent // MergeEvent, MergeEvent (same instance), MAIN
     }

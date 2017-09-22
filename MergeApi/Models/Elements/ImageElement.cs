@@ -46,16 +46,10 @@ namespace MergeApi.Models.Elements {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "scaletype")]
         public ScaleType ScaleType { get; set; }
 
-        public override T CreateView<T>() {
-            return MergeDatabase.ElementCreationReceiver.CreateImageElement<T>(this);
-        }
+        public override T CreateView<T>() => MergeDatabase.ElementCreationReceiver.CreateImageElement<T>(this);
 
-        public override async Task<ValidationResult> ValidateAsync() {
-            return new ValidationResult(this);
-        }
+        public override async Task<ValidationResult> ValidateAsync() => new ValidationResult(this);
 
-        public override string ToFriendlyString() {
-            return $"Image: {Url} ({ScaleType})";
-        }
+        public override string ToFriendlyString() => $"Image: {Url} ({ScaleType})";
     }
 }

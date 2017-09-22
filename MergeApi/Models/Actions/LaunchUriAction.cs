@@ -50,16 +50,10 @@ namespace MergeApi.Models.Actions {
             };
         }
 
-        public override void Invoke() {
-            MergeDatabase.ActionInvocationReceiver.InvokeLaunchUriAction(this);
-        }
+        public override void Invoke() => MergeDatabase.ActionInvocationReceiver.InvokeLaunchUriAction(this);
 
-        public override async Task<ValidationResult> ValidateAsync() {
-            return new ValidationResult(this);
-        }
+        public override async Task<ValidationResult> ValidateAsync() => new ValidationResult(this);
 
-        public override string ToFriendlyString() {
-            return $"Launch URI: {Uri1}";
-        }
+        public override string ToFriendlyString() => $"Launch URI: {Uri1}";
     }
 }

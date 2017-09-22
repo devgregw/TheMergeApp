@@ -86,9 +86,7 @@ namespace MergeApi.Models.Actions {
             };
         }
 
-        public override void Invoke() {
-            MergeDatabase.ActionInvocationReceiver.InvokeAddToCalendarActionAsync(this);
-        }
+        public override void Invoke() => MergeDatabase.ActionInvocationReceiver.InvokeAddToCalendarActionAsync(this);
 
         public override async Task<ValidationResult> ValidateAsync() {
             switch (ParamGroup) {
@@ -115,12 +113,10 @@ namespace MergeApi.Models.Actions {
                 new InvalidParamGroupException(GetType(), ParamGroup));
         }
 
-        public override string ToFriendlyString() {
-            return "Add to calendar: " +
+        public override string ToFriendlyString() => "Add to calendar: " +
                    (ParamGroup == "1"
                        ? "events/" + EventId1
                        : $"\"{Title2}\" at {Location2} from {StartDate2.Value.ToString("M/dd/yyyy h:mm tt", CultureInfo.CurrentUICulture)} to {EndDate2.Value.ToString("M/dd/yyyy h:mm tt", CultureInfo.CurrentUICulture)}"
                    );
-        }
     }
 }

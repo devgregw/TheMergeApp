@@ -64,6 +64,9 @@ namespace MergeApi.Models.Core {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "id")]
         public string Id { get; set; }
 
+        [JsonIgnore]
+        public string FirebaseKey { get; set; }
+
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "name")]
         public string Name { get; set; }
     }

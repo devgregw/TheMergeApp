@@ -65,16 +65,10 @@ namespace MergeApi.Models.Actions {
             };
         }
 
-        public override void Invoke() {
-            MergeDatabase.ActionInvocationReceiver.InvokeTextAction(this);
-        }
+        public override void Invoke() => MergeDatabase.ActionInvocationReceiver.InvokeTextAction(this);
 
-        public override async Task<ValidationResult> ValidateAsync() {
-            return new ValidationResult(this);
-        }
+        public override async Task<ValidationResult> ValidateAsync() => new ValidationResult(this);
 
-        public override string ToFriendlyString() {
-            return $"Text: {(ParamGroup == "1" ? ContactMedium1.ToFriendlyString() : PhoneNumber2)}";
-        }
+        public override string ToFriendlyString() => $"Text: {(ParamGroup == "1" ? ContactMedium1.ToFriendlyString() : PhoneNumber2)}";
     }
 }

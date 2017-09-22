@@ -55,16 +55,10 @@ namespace MergeApi.Models.Elements {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "style")]
         public LabelStyle Style { get; set; }
 
-        public override T CreateView<T>() {
-            return MergeDatabase.ElementCreationReceiver.CreateLabelElement<T>(this);
-        }
+        public override T CreateView<T>() => MergeDatabase.ElementCreationReceiver.CreateLabelElement<T>(this);
 
-        public override async Task<ValidationResult> ValidateAsync() {
-            return new ValidationResult(this);
-        }
+        public override async Task<ValidationResult> ValidateAsync() => new ValidationResult(this);
 
-        public override string ToFriendlyString() {
-            return $"Label: \"{Label}\" ({Size}, {Style})";
-        }
+        public override string ToFriendlyString() => $"Label: \"{Label}\" ({Size}, {Style})";
     }
 }

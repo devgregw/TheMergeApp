@@ -38,16 +38,10 @@ using MergeApi.Tools;
 
 namespace MergeApi.Models.Actions {
     public sealed class OpenGroupMapPageAction : ActionBase {
-        public override void Invoke() {
-            MergeDatabase.ActionInvocationReceiver.InvokeOpenGroupMapPageAction(this);
-        }
+        public override void Invoke() => MergeDatabase.ActionInvocationReceiver.InvokeOpenGroupMapPageAction(this);
 
-        public override async Task<ValidationResult> ValidateAsync() {
-            return new ValidationResult(this);
-        }
+        public override async Task<ValidationResult> ValidateAsync() => new ValidationResult(this);
 
-        public override string ToFriendlyString() {
-            return "Open group map page";
-        }
+        public override string ToFriendlyString() => "Open group map page";
     }
 }

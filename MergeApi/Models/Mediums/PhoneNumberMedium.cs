@@ -48,10 +48,8 @@ namespace MergeApi.Models.Mediums {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "kind")]
         public PhoneNumberKind Kind { get; set; }
 
-        public static bool IsValidPhoneNumber(string number) {
-            return !string.IsNullOrWhiteSpace(number) &&
+        public static bool IsValidPhoneNumber(string number) => !string.IsNullOrWhiteSpace(number) &&
                    Regex.IsMatch(number, @"\(?\d{3}\)?[. -]? *\d{3}[. -]? *[. -]?\d{4}");
-        }
 
         public static PhoneNumberMedium Create(string who, string number, bool sms, PhoneNumberKind kind) {
             Utilities.AssertCondition(IsValidPhoneNumber(number), number);
@@ -63,8 +61,6 @@ namespace MergeApi.Models.Mediums {
             };
         }
 
-        public override string ToFriendlyString() {
-            return $"{Who}: {PhoneNumber} ({Kind})";
-        }
+        public override string ToFriendlyString() => $"{Who}: {PhoneNumber} ({Kind})";
     }
 }

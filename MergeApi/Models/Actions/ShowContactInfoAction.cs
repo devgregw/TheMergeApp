@@ -75,9 +75,7 @@ namespace MergeApi.Models.Actions {
             };
         }
 
-        public override void Invoke() {
-            MergeDatabase.ActionInvocationReceiver.InvokeShowContactInfoActionAsync(this);
-        }
+        public override void Invoke() => MergeDatabase.ActionInvocationReceiver.InvokeShowContactInfoActionAsync(this);
 
         public override async Task<ValidationResult> ValidateAsync() {
             switch (ParamGroup) {

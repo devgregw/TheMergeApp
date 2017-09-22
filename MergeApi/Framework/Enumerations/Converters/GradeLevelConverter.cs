@@ -35,9 +35,7 @@ using MergeApi.Tools;
 
 namespace MergeApi.Framework.Enumerations.Converters {
     public static class GradeLevelConverter {
-        public static int ToInt32(GradeLevel grade) {
-            return (int) grade;
-        }
+        public static int ToInt32(GradeLevel grade) => (int)grade;
 
         public static GradeLevel FromString(string grade) {
             Utilities.AssertCondition(s => !string.IsNullOrWhiteSpace(s), grade);

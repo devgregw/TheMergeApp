@@ -36,6 +36,10 @@ using MergeApi.Framework.Interfaces;
 
 namespace MergeApi.Tools {
     public sealed class ValidationResult {
+        private readonly object _resultParam;
+
+        private readonly IValidatable _subject;
+
         public ValidationResult(IValidatable subject) {
             _subject = subject;
             ResultType = ValidationResultType.Success;
@@ -59,16 +63,8 @@ namespace MergeApi.Tools {
             }
         }
 
-        private readonly object _resultParam;
+        public T GetParameter<T>() where T : class => _resultParam as T;
 
-        private readonly IValidatable _subject;
-
-        public T GetParameter<T>() where T : class {
-            return _resultParam as T;
-        }
-
-        public T GetSubject<T>() where T : IValidatable {
-            return (T)_subject;
-        }
+        public T GetSubject<T>() where T : IValidatable => (T)_subject;
     }
 }

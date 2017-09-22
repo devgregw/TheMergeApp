@@ -61,8 +61,12 @@ namespace MergeApi.Models.Core {
         }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "content")]
-        [JsonConverter(typeof(ClassableListJsonConverter<ElementBase>))]
-        public List<ElementBase> Content { get; set; }
+        [JsonConverter(typeof(ClassableListJsonConverter<ElementBase>))] private List<ElementBase> _content;
+
+        public List<ElementBase> Content {
+            get => _content ?? new List<ElementBase>();
+            set => _content = value;
+        }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "buttonLabel")]
         public string ButtonLabel { get; set; }

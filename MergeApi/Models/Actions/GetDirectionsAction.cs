@@ -88,9 +88,7 @@ namespace MergeApi.Models.Actions {
             };
         }
 
-        public override void Invoke() {
-            MergeDatabase.ActionInvocationReceiver.InvokeGetDirectionsActionAsync(this);
-        }
+        public override void Invoke() => MergeDatabase.ActionInvocationReceiver.InvokeGetDirectionsActionAsync(this);
 
         public override async Task<ValidationResult> ValidateAsync() {
             switch (ParamGroup) {

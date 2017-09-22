@@ -37,9 +37,7 @@ using MergeApi.Framework.Interfaces.Receivers;
 
 namespace MergeApi.Tools {
     internal class DefaultLogReceiver : ILogReceiver {
-        public bool Initialize() {
-            return true;
-        }
+        public bool Initialize() => true;
 
         public void Log(LogLevel level, string sender, string message) { }
 

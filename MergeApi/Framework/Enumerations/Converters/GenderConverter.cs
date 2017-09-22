@@ -53,8 +53,6 @@ namespace MergeApi.Framework.Enumerations.Converters {
             throw new ArgumentException("The given string cannot be converted to a Gender.", nameof(gender));
         }
 
-        public static string ToHumanString(Gender gender, bool plural) {
-            return $"{(gender == Gender.Male ? "guy" : "girl")}{(plural ? "s" : "")}";
-        }
+        public static string ToHumanString(Gender gender, bool plural) => $"{(gender == Gender.Male ? "guy" : "girl")}{(plural ? "s" : "")}";
     }
 }

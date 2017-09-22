@@ -30,7 +30,6 @@
 #region USINGS
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using MergeApi.Framework.Abstractions;
 using MergeApi.Framework.Enumerations;
@@ -82,10 +81,8 @@ namespace MergeApi.Models.Core {
         [JsonIgnore]
         public DateTime NextEndDate => NextStartDate + Duration;
 
-        public override async Task<ValidationResult> ValidateAsync() {
-            return DateTime.Now > NextEndDate
+        public override async Task<ValidationResult> ValidateAsync() => DateTime.Now > NextEndDate
                 ? new ValidationResult(this, ValidationResultType.OutdatedEvent, this)
                 : new ValidationResult(this);
-        }
     }
 }

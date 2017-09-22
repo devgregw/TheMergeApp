@@ -77,13 +77,9 @@ namespace MergeApi.Tools {
         }
 
         // ReSharper disable once InconsistentNaming
-        public static string MD5(this string s) {
-            return Utilities.HashMD5(s);
-        }
+        public static string MD5(this string s) => Utilities.HashMD5(s);
 
-        public static TEnum ToEnum<TEnum>(this string str, bool ignoreCase = true) {
-            return (TEnum) Enum.Parse(typeof(TEnum), str, ignoreCase);
-        }
+        public static TEnum ToEnum<TEnum>(this string str, bool ignoreCase = true) => (TEnum)Enum.Parse(typeof(TEnum), str, ignoreCase);
 
         public static string Format<T>(this IEnumerable<T> ie) {
             if (ie == null)

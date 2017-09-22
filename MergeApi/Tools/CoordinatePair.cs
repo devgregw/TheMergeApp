@@ -51,13 +51,9 @@ namespace MergeApi.Tools {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "longitude")]
         public decimal Longitude { get; set; }
 
-        public static double GetDistanceBetween(CoordinatePair one, CoordinatePair two) {
-            return Math.Sqrt(Math.Pow(Convert.ToDouble(one.Latitude - two.Latitude), 2) +
+        public static double GetDistanceBetween(CoordinatePair one, CoordinatePair two) => Math.Sqrt(Math.Pow(Convert.ToDouble(one.Latitude - two.Latitude), 2) +
                              Math.Pow(Convert.ToDouble(one.Longitude - two.Longitude), 2));
-        }
 
-        public override string ToString() {
-            return $"({Latitude}, {Longitude})";
-        }
+        public override string ToString() => $"({Latitude}, {Longitude})";
     }
 }

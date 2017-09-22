@@ -48,9 +48,7 @@ namespace MergeApi.Models.Elements {
         [JsonConverter(typeof(ClassableJsonConverter))]
         public ActionBase Action { get; set; }
 
-        public override T CreateView<T>() {
-            return MergeDatabase.ElementCreationReceiver.CreateButtonElement<T>(this);
-        }
+        public override T CreateView<T>() => MergeDatabase.ElementCreationReceiver.CreateButtonElement<T>(this);
 
         public override async Task<ValidationResult> ValidateAsync() {
             var v = await Action.ValidateAsync();
@@ -59,8 +57,6 @@ namespace MergeApi.Models.Elements {
                 : new ValidationResult(this);
         }
 
-        public override string ToFriendlyString() {
-            return $"Button: {Label} ({Action.ToFriendlyString()})";
-        }
+        public override string ToFriendlyString() => $"Button: {Label} ({Action.ToFriendlyString()})";
     }
 }

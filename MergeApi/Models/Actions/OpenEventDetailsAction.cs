@@ -54,9 +54,7 @@ namespace MergeApi.Models.Actions {
             };
         }
 
-        public override void Invoke() {
-            MergeDatabase.ActionInvocationReceiver.InvokeOpenEventDetailsActionAsync(this);
-        }
+        public override void Invoke() => MergeDatabase.ActionInvocationReceiver.InvokeOpenEventDetailsActionAsync(this);
 
         public override async Task<ValidationResult> ValidateAsync() {
             try {
@@ -72,8 +70,6 @@ namespace MergeApi.Models.Actions {
             }
         }
 
-        public override string ToFriendlyString() {
-            return $"Open event details: events/{EventId1}";
-        }
+        public override string ToFriendlyString() => $"Open event details: events/{EventId1}";
     }
 }

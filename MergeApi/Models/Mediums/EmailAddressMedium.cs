@@ -64,8 +64,6 @@ namespace MergeApi.Models.Mediums {
             };
         }
 
-        public override string ToFriendlyString() {
-            return $"{Who}: {Address} ({Kind})";
-        }
+        public override string ToFriendlyString() => $"{Who}: {Address} ({Kind})";
     }
 }

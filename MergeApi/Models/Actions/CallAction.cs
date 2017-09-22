@@ -64,18 +64,13 @@ namespace MergeApi.Models.Actions {
             };
         }
 
-        public override void Invoke() {
-            MergeDatabase.ActionInvocationReceiver.InvokeCallAction(this);
-        }
+        public override void Invoke() => MergeDatabase.ActionInvocationReceiver.InvokeCallAction(this);
 
 #pragma warning disable 1998
-        public override async Task<ValidationResult> ValidateAsync() {
+        public override async Task<ValidationResult> ValidateAsync() =>
 #pragma warning restore 1998
-            return new ValidationResult(this);
-        }
+            new ValidationResult(this);
 
-        public override string ToFriendlyString() {
-            return $"Call: {(ParamGroup == "1" ? ContactMedium1.ToFriendlyString() : PhoneNumber2)}";
-        }
+        public override string ToFriendlyString() => $"Call: {(ParamGroup == "1" ? ContactMedium1.ToFriendlyString() : PhoneNumber2)}";
     }
 }

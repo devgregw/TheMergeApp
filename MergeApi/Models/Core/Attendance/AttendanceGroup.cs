@@ -44,16 +44,18 @@ using Newtonsoft.Json;
 
 namespace MergeApi.Models.Core.Attendance {
     public sealed class AttendanceGroup : IIdentifiable {
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "leaderNames")]
-        public List<string> LeaderNames { get; set; }
-
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "studentNames")]
         private List<string> _names;
 
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "leaderNames")]
+        public List<string> LeaderNames { get; set; }
+
         [JsonIgnore]
         public List<string> StudentNames {
-            get => _names.Where(n => !string.IsNullOrWhiteSpace(n)).OrderBy(n => n.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries).Last()).ToList();
-            set => _names = value.Where(n => !string.IsNullOrWhiteSpace(n)).OrderBy(n => n.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries).Last())
+            get => _names.Where(n => !string.IsNullOrWhiteSpace(n))
+                .OrderBy(n => n.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries).Last()).ToList();
+            set => _names = value.Where(n => !string.IsNullOrWhiteSpace(n))
+                .OrderBy(n => n.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries).Last())
                 .ToList();
         }
 
@@ -74,6 +76,9 @@ namespace MergeApi.Models.Core.Attendance {
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "id")]
         public string Id { get; set; }
+
+        [JsonIgnore]
+        public string FirebaseKey { get; set; }
 
         public async Task<List<AttendanceRecord>> GetRecordsAsync() {
             var records = await MergeDatabase.ListAsync<AttendanceRecord>();

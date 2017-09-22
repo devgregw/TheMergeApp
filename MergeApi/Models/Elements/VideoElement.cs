@@ -46,16 +46,10 @@ namespace MergeApi.Models.Elements {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "id")]
         public string VideoId { get; set; }
 
-        public override T CreateView<T>() {
-            return MergeDatabase.ElementCreationReceiver.CreateVideoElement<T>(this);
-        }
+        public override T CreateView<T>() => MergeDatabase.ElementCreationReceiver.CreateVideoElement<T>(this);
 
-        public override async Task<ValidationResult> ValidateAsync() {
-            return new ValidationResult(this);
-        }
+        public override async Task<ValidationResult> ValidateAsync() => new ValidationResult(this);
 
-        public override string ToFriendlyString() {
-            return $"Video: {VideoId} ({Vendor})";
-        }
+        public override string ToFriendlyString() => $"Video: {VideoId} ({Vendor})";
     }
 }

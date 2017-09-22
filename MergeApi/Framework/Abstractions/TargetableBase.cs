@@ -44,9 +44,7 @@ namespace MergeApi.Framework.Abstractions {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "genders")]
         public List<Gender> Genders { get; set; }
 
-        public bool CheckTargeting(IEnumerable<GradeLevel> setGradeLevels, IEnumerable<Gender> setGenders) {
-            return CheckTargeting(setGradeLevels.ToList(), setGenders.ToList());
-        }
+        public bool CheckTargeting(IEnumerable<GradeLevel> setGradeLevels, IEnumerable<Gender> setGenders) => CheckTargeting(setGradeLevels.ToList(), setGenders.ToList());
 
         public bool CheckTargeting(List<GradeLevel> setGradeLevels, List<Gender> setGenders) {
             var grades = !setGradeLevels.Any() ? EnumConsts.AllGradeLevels : setGradeLevels;

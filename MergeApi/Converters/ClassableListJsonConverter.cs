@@ -40,9 +40,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MergeApi.Converters {
     public sealed class ClassableListJsonConverter<T> : JsonConverter {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
-            serializer.Serialize(writer, value);
-        }
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) => serializer.Serialize(writer, value);
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
             JsonSerializer serializer) {
@@ -58,8 +56,6 @@ namespace MergeApi.Converters {
             }
         }
 
-        public override bool CanConvert(Type objectType) {
-            return typeof(IEnumerable<T>).GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo());
-        }
+        public override bool CanConvert(Type objectType) => typeof(IEnumerable<T>).GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo());
     }
 }

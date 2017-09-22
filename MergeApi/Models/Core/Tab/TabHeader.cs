@@ -51,5 +51,8 @@ namespace MergeApi.Models.Core.Tab {
                 // do nothing
             }
         }
+
+        [JsonIgnore]
+        public string FirebaseKey { get; set; }
     }
 }

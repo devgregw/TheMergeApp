@@ -54,9 +54,7 @@ namespace MergeApi.Models.Actions {
             };
         }
 
-        public override void Invoke() {
-            MergeDatabase.ActionInvocationReceiver.InvokeOpenPageActionAsync(this);
-        }
+        public override void Invoke() => MergeDatabase.ActionInvocationReceiver.InvokeOpenPageActionAsync(this);
 
         public override async Task<ValidationResult> ValidateAsync() {
             try {
@@ -72,8 +70,6 @@ namespace MergeApi.Models.Actions {
             }
         }
 
-        public override string ToFriendlyString() {
-            return $"Open page: pages/{PageId1}";
-        }
+        public override string ToFriendlyString() => $"Open page: pages/{PageId1}";
     }
 }

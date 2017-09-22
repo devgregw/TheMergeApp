@@ -46,12 +46,10 @@ namespace MergeApi.Models.Actions {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "groupId")]
         public string GroupId1 { get; set; }
 
-        public static OpenGroupDetailsAction FromGroupId(string id) {
-            return new OpenGroupDetailsAction {
-                ParamGroup = "1",
-                GroupId1 = id
-            };
-        }
+        public static OpenGroupDetailsAction FromGroupId(string id) => new OpenGroupDetailsAction {
+            ParamGroup = "1",
+            GroupId1 = id
+        };
 
         public override async Task<ValidationResult> ValidateAsync() {
             try {
@@ -66,12 +64,8 @@ namespace MergeApi.Models.Actions {
             }
         }
 
-        public override string ToFriendlyString() {
-            return $"Open group details: groups/{GroupId1}";
-        }
+        public override string ToFriendlyString() => $"Open group details: groups/{GroupId1}";
 
-        public override void Invoke() {
-            MergeDatabase.ActionInvocationReceiver.InvokeOpenGroupDetailsActionAsync(this);
-        }
+        public override void Invoke() => MergeDatabase.ActionInvocationReceiver.InvokeOpenGroupDetailsActionAsync(this);
     }
 }
