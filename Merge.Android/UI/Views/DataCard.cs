@@ -59,6 +59,10 @@ namespace Merge.Android.UI.Views {
     [SuppressMessage("ReSharper", "UnusedMember.Local")]
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     public sealed class DataCard : CardView {
+        [BindView(Resource.Id.card)] private CardView _card;
+
+        [BindView(Resource.Id.image)] private ImageView _image;
+
         private string _title, _json, _type, _url;
         public DataCard(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer) { }
 
@@ -118,11 +122,6 @@ namespace Merge.Android.UI.Views {
             intent.PutExtra("type", _type);
             Context.StartActivity(intent, options.ToBundle());
         }
-
-        [BindView(Resource.Id.card)]
-        private CardView _card;
-        [BindView(Resource.Id.image)]
-        private ImageView _image;
 
         private void Initialize(string title, string desc, string json, string type, string url, Color color,
             Theme theme, params View[] extraViews) {

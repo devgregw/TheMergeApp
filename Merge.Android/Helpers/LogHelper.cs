@@ -58,11 +58,13 @@ namespace Merge.Android.Helpers {
         private static Context _context;
         private static bool _enable;
 
-        public static void FirebaseLog(Context c, string name, Dictionary<string, string> values) => FirebaseAnalytics.GetInstance(c).LogEvent(name, values.Concat(new Dictionary<string, string> {
-                { "instanceId", MergeApplication.InstanceId },
-                { "when", DateTime.Now.ToLongTimeString() }
+        public static void FirebaseLog(Context c, string name, Dictionary<string, string> values) => FirebaseAnalytics
+            .GetInstance(c).LogEvent(name, values.Concat(new Dictionary<string, string> {
+                {"instanceId", MergeApplication.InstanceId},
+                {"when", DateTime.Now.ToLongTimeString()}
 #if DEBUG
-                , { "debug", "true" }
+                ,
+                {"debug", "true"}
 #endif
             }).ToBundle());
 

@@ -55,20 +55,21 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
     [SuppressMessage("ReSharper", "UnusedMember.Global")]
     [SuppressMessage("ReSharper", "UnusedParameter.Global")]
     public class AttendanceRecordEditorActivity : AppCompatActivity {
-        [BindView(Resource.Id.addStudent)]
-        private Button _addStudentButton;
-        [BindView(Resource.Id.recordDate)]
-        private TextView _date;
-        [BindView(Resource.Id.groupIdView)]
-        private TextView _groupId;
-        [BindView(Resource.Id.recordLeadersPresent)]
-        private CheckBox _leadersPresent;
-        [BindView(Resource.Id.studentsList)]
-        private LinearLayout _studentsList;
+        [BindView(Resource.Id.addStudent)] private Button _addStudentButton;
+
+        [BindView(Resource.Id.recordDate)] private TextView _date;
+
+        private bool _enable = true;
 
         private AttendanceGroup _group;
-        private bool _enable = true;
+
+        [BindView(Resource.Id.groupIdView)] private TextView _groupId;
+
+        [BindView(Resource.Id.recordLeadersPresent)] private CheckBox _leadersPresent;
+
         private AttendanceRecord _record;
+
+        [BindView(Resource.Id.studentsList)] private LinearLayout _studentsList;
 
         [OnClick(Resource.Id.addStudent)]
         public void AddStudent_OnClick(object sender, EventArgs args) {
@@ -97,6 +98,15 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
         }
 
         private void SaveAndExit() {
+            var students = GetStudents().Where(IsStudentChecked).ToList();
+            if (students.Count == 0) {
+                var errDialog = new AlertDialog.Builder(this).SetTitle("No Students")
+                    .SetMessage("Please select at least one student.  If no students attended, simply do not create a record.").SetPositiveButton("Ok",
+                        (s, e) => { }).Create();
+                errDialog.SetOnShowListener(AlertDialogColorOverride.Instance);
+                errDialog.Show();
+                return;
+            }
             var dialog = new ProgressDialog(this) {
                 Indeterminate = true
             };
@@ -108,7 +118,7 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
                 GroupId = _groupId.Text.Substring(0, 8),
                 Date = DateTime.Parse(_date.Text),
                 LeadersPresent = _leadersPresent.Checked,
-                Students = GetStudents().Where(IsStudentChecked).ToList()
+                Students = students
             };
             foreach (var name in GetStudents().Where(n => !_group.StudentNames.Contains(n)))
                 if (IsStudentChecked(name))
@@ -126,12 +136,14 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
                 Finish();
                 return;
             }
-            var dialog = new AlertDialog.Builder(this).SetTitle("Save Changes").SetMessage("Do you want to save or discard your changes?").SetPositiveButton("Save",
-                (s, e) => SaveAndExit()).SetNegativeButton("Discard", (s, e) => Finish()).SetNeutralButton("Cancel", (s, e) => { }).Create();
+            var dialog = new AlertDialog.Builder(this).SetTitle("Save Changes")
+                .SetMessage("Do you want to save or discard your changes?").SetPositiveButton("Save",
+                    (s, e) => SaveAndExit()).SetNegativeButton("Discard", (s, e) => Finish())
+                .SetNeutralButton("Cancel", (s, e) => { }).Create();
             dialog.SetOnShowListener(AlertDialogColorOverride.Instance);
             dialog.Show();
         }
-        
+
         public override bool OnOptionsItemSelected(IMenuItem item) {
             switch (item.ItemId) {
                 case global::Android.Resource.Id.Home:
@@ -146,11 +158,11 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
         }
 
         private List<string> GetStudents() => (from checkBox in _studentsList.GetChildren().OfType<CheckBox>()
-                                               select checkBox.Text).ToList();
+            select checkBox.Text).ToList();
 
         private bool IsStudentChecked(string name) => (from checkBox in _studentsList.GetChildren().OfType<CheckBox>()
-                                                       where checkBox.Text == name
-                                                       select checkBox.Checked).FirstOrDefault();
+            where checkBox.Text == name
+            select checkBox.Checked).FirstOrDefault();
 
         private void AddStudent(string name, bool check, bool enable) => _studentsList.AddView(new CheckBox(this) {
             Text = name,
@@ -181,9 +193,9 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
                 _groupId.Text = $"{_record.GroupId} ({_group.Summary})";
                 _date.Text = _record.Date.ToLongDateString();
                 LogHelper.FirebaseLog(this, "manageAttendanceRecord", new Dictionary<string, string> {
-                        {"groupId", _group.Id},
+                    {"groupId", _group.Id},
                     {"recordDate", _record.DateString},
-                    { "editable", _enable.ToString()}
+                    {"editable", _enable.ToString()}
                 });
             } else {
                 _leadersPresent.Checked = true;
@@ -193,7 +205,7 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
                 LogHelper.FirebaseLog(this, "manageAttendanceRecord", new Dictionary<string, string> {
                     {"groupId", _group.Id},
                     {"recordDate", "null"},
-                    { "editable", _enable.ToString()}
+                    {"editable", _enable.ToString()}
                 });
             }
             foreach (var name in _group.StudentNames)

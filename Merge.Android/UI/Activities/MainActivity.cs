@@ -50,7 +50,6 @@ using Android.Support.Design.Widget;
 using Android.Support.V4.Content;
 using Android.Support.V4.Widget;
 using Android.Views;
-using Android.Views.Animations;
 using Android.Widget;
 using CheeseBind;
 using Com.Nostra13.Universalimageloader.Core;
@@ -82,11 +81,14 @@ namespace Merge.Android.UI.Activities {
     [IntentFilter(new[] {"android.intent.action.MAIN"}, Categories = new[] {"android.intent.category.LAUNCHER"})]
     public class MainActivity : appcompat7.AppCompatActivity, ViewSwitcher.IViewFactory {
         private const int WelcomeActivityRequestCode = 63743;
+
         private const int TabHome = 0, TabEvents = 1, TabGroups = 2;
         //private const int HeaderInterval = 8000;
         //private const int HeaderAnimationDuration = 1000;
 
         private static GoogleApiClient _playServices;
+
+        [BindView(Resource.Id.appBarLayout)] private AppBarLayout _appBar;
 
         /*private readonly Dictionary<int, string> _images = new Dictionary<int, string> {
             {Resource.Drawable.LargeHeader, "The Merge App"},
@@ -96,22 +98,23 @@ namespace Merge.Android.UI.Activities {
         };*/
 
         private ViewApplier _applier;
-        //private int _currentHeader = -1;
-        [BindView(Resource.Id.drawerLayout)]
-        private DrawerLayout _drawerLayout;
-        [BindView(Resource.Id.content_list)]
-        private LinearLayout _mainList;
-        [BindView(Resource.Id.navView)]
-        private NavigationView _navView;
-        [BindView(Resource.Id.toolbar)]
-        private Toolbar _toolbar;
-        [BindView(Resource.Id.appBarLayout)]
-        private AppBarLayout _appBar;
 
-        private bool /*_headerRunning = true,*/ _first = true;
+        //private int _currentHeader = -1;
+        [BindView(Resource.Id.drawerLayout)] private DrawerLayout _drawerLayout;
+
+        private bool /*_headerRunning = true,*/
+            _first = true;
+
         private Dictionary<int, TabHeader> _headers;
+
+        [BindView(Resource.Id.content_list)] private LinearLayout _mainList;
+
+        [BindView(Resource.Id.navView)] private NavigationView _navView;
+
         private int _selectedTab = -1; // See consts above
         private List<TabTip> _tips;
+
+        [BindView(Resource.Id.toolbar)] private Toolbar _toolbar;
 
         public View MakeView() {
             var view = new ImageView(this);
@@ -158,7 +161,7 @@ namespace Merge.Android.UI.Activities {
 
         private async Task HandleTab<T, TSortBy>(Func<IEnumerable<T>> variableGetter,
             Action<IEnumerable<T>> variableSetter,
-            int tab, Func<T, TSortBy> sorter, Func<T, bool> filter, Func<T, View> viewCreator) where T : IIdentifiable {
+            int tab, Func<T, TSortBy> sorter, Func<T, bool> filter, Func<T, View> viewCreator) where T : class, IIdentifiable {
             _navView.SetCheckedItem(GetDrawerItemForTab(tab));
             if (variableGetter() == null) {
                 // Load data from the database if we haven't already (variableGetter() will also return null if the user tapped refresh: see Nullify())
@@ -198,13 +201,17 @@ namespace Merge.Android.UI.Activities {
             }
             if (_selectedTab == tab) {
                 // If the user switched tabs, don't replace the content they're already viewing
-                Task<(T Object, ValidationResult Result)>[] validations = variableGetter().Where(filter).OrderBy(sorter).Select(async o => (o,
-                    typeof(T) == typeof(IValidatable) ? await ((IValidatable) o).ValidateAsync() : null)).ToArray();
+                Task<(T Object, ValidationResult Result)>[] validations = variableGetter().Where(filter).OrderBy(sorter)
+                    .Select(async o => (o,
+                        o is IValidatable ? await ((IValidatable) o).ValidateAsync() : null)).ToArray();
                 var all = (await Task.WhenAll(validations)).ToList();
                 var tips = _tips.Where(t => t.Tab == GetTabForInt(tab) &&
                                             t.CheckTargeting(PreferenceHelper.GradeLevels, PreferenceHelper.Genders) &&
                                             !PreferenceHelper.DismissedTips.Contains(t.Id));
-                var content = tips.Select(t => new TipCard(this, t)).Concat(all.Where(t => PreferenceHelper.ShowInvalidObjects || t.Result == null || t.Result.ResultType == ValidationResultType.Success).Select(t => viewCreator(t.Object)))
+                var content = tips.Select(t => new TipCard(this, t)).Concat(all
+                        .Where(t => PreferenceHelper.ShowInvalidObjects || t.Result == null ||
+                                    t.Result.ResultType == ValidationResultType.Success)
+                        .Select(t => viewCreator(t.Object)))
                     .ToList();
                 var image = _headers.ContainsKey(tab) && _headers[tab] != null
                     ? CreateHeaderImageView(_headers[tab].Image)
@@ -276,8 +283,8 @@ namespace Merge.Android.UI.Activities {
         }*/
 
         private void InitializeHeaderImageSwitcher() {
-            var switcher = (ImageSwitcher)((RelativeLayout)_navView.GetHeaderView(0)).GetChildAt(0);
-            var caption = (TextView)((RelativeLayout)_navView.GetHeaderView(0)).GetChildAt(1);
+            var switcher = (ImageSwitcher) ((RelativeLayout) _navView.GetHeaderView(0)).GetChildAt(0);
+            var caption = (TextView) ((RelativeLayout) _navView.GetHeaderView(0)).GetChildAt(1);
             switcher.SetFactory(this);
             switcher.SetImageResource(Resource.Drawable.LargeHeader);
             caption.Text = "The Merge App";

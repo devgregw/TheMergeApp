@@ -40,6 +40,7 @@ namespace Merge.Android.Helpers {
         GrantUriPermissions = true)]
     [MetaData("android.support.FILE_PROVIDER_PATHS", Resource = "@xml/provider_paths")]
     public sealed class GenericFileProvider : FileProvider {
-        public static string GetAuthority(Context c) => c.ApplicationContext.PackageName + ".com.devgregw.merge.provider";
+        public static string GetAuthority(Context c) => c.ApplicationContext.PackageName +
+                                                        ".com.devgregw.merge.provider";
     }
 }

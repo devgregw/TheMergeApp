@@ -44,7 +44,8 @@ using MergeApi.Tools;
 
 namespace Merge.Android.Helpers {
     public static class Extensions {
-        public static Dictionary<T1, T2> Concat<T1, T2>(this Dictionary<T1, T2> dict, Dictionary<T1, T2> dict2) => dict.Concat(dict2.ToList()).ToDictionary(p => p.Key, p => p.Value);
+        public static Dictionary<T1, T2> Concat<T1, T2>(this Dictionary<T1, T2> dict, Dictionary<T1, T2> dict2) => dict
+            .Concat(dict2.ToList()).ToDictionary(p => p.Key, p => p.Value);
 
         public static string ToLongDateTimeString(this DateTime dt) =>
             $"{dt.ToLongDateString()} {dt.ToLongTimeString()}";
@@ -94,7 +95,7 @@ namespace Merge.Android.Helpers {
 
         #region System.String
 
-        public static T ToEnum<T>(this string s) => (T)Enum.Parse(typeof(T), s, true);
+        public static T ToEnum<T>(this string s) => (T) Enum.Parse(typeof(T), s, true);
 
         public static Color ToAndroidColor(this string s) => Color.ParseColor(s);
 

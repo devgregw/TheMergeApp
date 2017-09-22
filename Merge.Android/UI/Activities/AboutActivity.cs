@@ -50,8 +50,7 @@ namespace Merge.Android.UI.Activities {
     [SuppressMessage("ReSharper", "UnusedMember.Global")]
     [SuppressMessage("ReSharper", "UnusedParameter.Global")]
     public class AboutActivity : AppCompatActivity {
-        [BindView(Resource.Id.aboutVersion)]
-        private TextView _aboutVersion;
+        [BindView(Resource.Id.aboutVersion)] private TextView _aboutVersion;
 
         [OnClick(Resource.Id.aboutDevgregw)]
         public void AboutDevgregw_OnClick(object sender, EventArgs e) => LaunchUriAction
@@ -66,10 +65,12 @@ namespace Merge.Android.UI.Activities {
             .FromUri("https://merge.devgregw.com/licenses").Invoke();
 
         [OnClick(Resource.Id.aboutSendFeedback)]
-        public void AboutSendFeedback_OnClick(object sender, EventArgs e) => EmailAction.FromAddress("devgregw@outlook.com").Invoke();
+        public void AboutSendFeedback_OnClick(object sender, EventArgs e) => EmailAction
+            .FromAddress("devgregw@outlook.com").Invoke();
 
         [OnClick(Resource.Id.viewRoadmap)]
-        public void ViewRoadmap_OnClick(object sender, EventArgs e) => LaunchUriAction.FromUri("https://trello.com/b/nAzvRa7R/roadmap").Invoke();
+        public void ViewRoadmap_OnClick(object sender, EventArgs e) => LaunchUriAction
+            .FromUri("https://trello.com/b/nAzvRa7R/roadmap").Invoke();
 
         public override bool OnOptionsItemSelected(IMenuItem item) {
             if (item.ItemId != global::Android.Resource.Id.Home) return base.OnOptionsItemSelected(item);

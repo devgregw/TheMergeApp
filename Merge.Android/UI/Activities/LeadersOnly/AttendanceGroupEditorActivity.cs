@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Project Merge.Android:  AttendanceGroupEditorActivity.cs (in Solution Merge.Android)
-// Created by Greg Whatley on 06/30/2017 at 9:43 AM.
+// Created by Greg Whatley on 09/01/2017 at 8:35 AM.
 // 
 // The MIT License (MIT)
 // 
@@ -57,35 +57,19 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
     [SuppressMessage("ReSharper", "UnusedMember.Local")]
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     public class AttendanceGroupEditorActivity : AppCompatActivity, View.IOnClickListener {
-        [BindView(Resource.Id.studentsList)]
-        private LinearLayout _studentsList;
-
         private AttendanceGroup _group;
-        private List<string> _students;
         private List<(string Old, string New)> _renames;
+        private List<string> _students;
 
-        private void GetName(string current, Action<string> callback) {
-            var view = new EditText(this);
-            var hasCurrentValue = !string.IsNullOrWhiteSpace(current);
-            if (hasCurrentValue)
-                view.Text = current;
-            var nameDialog = new AlertDialog.Builder(this).SetTitle($"{(hasCurrentValue ? "Edit" : "Add")} Student").SetCancelable(false)
-                .SetMessage(hasCurrentValue ? "Edit the student's name then tap Done." : "To add a new student, type in their name then tap Done.").SetPositiveButton("Done",
-                    (s, e) => { callback(view.Text); }).SetNegativeButton("Cancel", (s, e) => { })
-                .SetView(view).Create();
-            nameDialog.SetOnShowListener(AlertDialogColorOverride.Instance);
-            nameDialog.Show();
-        }
-
-        [OnClick(Resource.Id.addStudent)]
-        private void AddStudent_OnClick(object sender, EventArgs e) => GetName("", AddStudent);
+        [BindView(Resource.Id.studentsList)] private LinearLayout _studentsList;
 
         public void OnClick(View v) {
             switch (v.Id) {
                 case 555:
                     if (_students.Count - 1 <= 0) {
-                        var dialog = new AlertDialog.Builder(this).SetTitle("Error").SetMessage("This group must contain at least one student.").SetPositiveButton("OK",
-                            (s, e) => { }).Create();
+                        var dialog = new AlertDialog.Builder(this).SetTitle("Error")
+                            .SetMessage("This group must contain at least one student.").SetPositiveButton("OK",
+                                (s, e) => { }).Create();
                         dialog.SetOnShowListener(AlertDialogColorOverride.Instance);
                         dialog.Show();
                         return;
@@ -95,14 +79,15 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
                     _students.Remove(name);
                     break;
                 case 556:
-                    var name2 = ((ObjectWrapper<string>)v.Tag).Value;
+                    var name2 = ((ObjectWrapper<string>) v.Tag).Value;
                     GetName(name2, n => {
                         if (_renames.Select(t => t.New).Contains(name2)) {
                             var index1 = _renames.Select(t => t.New).IndexOf(name2);
                             var previous = _renames[index1];
                             _renames[index1] = (previous.Old, n);
-                        } else
+                        } else {
                             _renames.Add((name2, n));
+                        }
                         var index2 = _students.IndexOf(name2);
                         _students[index2] = n;
                         ((TextView) ((ViewGroup) _studentsList.GetChildAt(index2)).GetChildAt(0)).Text = n;
@@ -110,6 +95,25 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
                     break;
             }
         }
+
+        private void GetName(string current, Action<string> callback) {
+            var view = new EditText(this);
+            var hasCurrentValue = !string.IsNullOrWhiteSpace(current);
+            if (hasCurrentValue)
+                view.Text = current;
+            var nameDialog = new AlertDialog.Builder(this).SetTitle($"{(hasCurrentValue ? "Edit" : "Add")} Student")
+                .SetCancelable(false)
+                .SetMessage(hasCurrentValue
+                    ? "Edit the student's name then tap Done."
+                    : "To add a new student, type in their name then tap Done.").SetPositiveButton("Done",
+                    (s, e) => { callback(view.Text); }).SetNegativeButton("Cancel", (s, e) => { })
+                .SetView(view).Create();
+            nameDialog.SetOnShowListener(AlertDialogColorOverride.Instance);
+            nameDialog.Show();
+        }
+
+        [OnClick(Resource.Id.addStudent)]
+        private void AddStudent_OnClick(object sender, EventArgs e) => GetName("", AddStudent);
 
         private void AddStudent(string name) {
             if (string.IsNullOrWhiteSpace(name)) {
@@ -148,17 +152,27 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
             buttons.AddView(remove);
             buttons.AddView(rename);
             layout.AddView(buttons);
-                _studentsList.AddView(layout);
+            _studentsList.AddView(layout);
         }
 
         public override void OnBackPressed() {
-            var dialog = new AlertDialog.Builder(this).SetTitle("Save Changes").SetMessage("Do you want to save or discard your changes?").SetPositiveButton("Save",
-                (s, e) => SaveAndExit()).SetNegativeButton("Discard", (s, e) => Finish()).SetNeutralButton("Cancel", (s, e) => {}).Create();
+            var dialog = new AlertDialog.Builder(this).SetTitle("Save Changes")
+                .SetMessage("Do you want to save or discard your changes?").SetPositiveButton("Save",
+                    (s, e) => SaveAndExit()).SetNegativeButton("Discard", (s, e) => Finish())
+                .SetNeutralButton("Cancel", (s, e) => { }).Create();
             dialog.SetOnShowListener(AlertDialogColorOverride.Instance);
             dialog.Show();
         }
 
         private void SaveAndExit() {
+            if (_students.Count == 0) {
+                var errDialog = new AlertDialog.Builder(this).SetTitle("No Students")
+                    .SetMessage("This group must contain at least one student.").SetPositiveButton("Ok",
+                        (s, e) => { }).Create();
+                errDialog.SetOnShowListener(AlertDialogColorOverride.Instance);
+                errDialog.Show();
+                return;
+            }
             var dialog = new ProgressDialog(this) {
                 Indeterminate = true
             };
@@ -171,12 +185,11 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
                 if (_renames.Any()) {
                     var records =
                         (await MergeDatabase.ListAsync<AttendanceRecord>()).Where(r => r.GroupId == _group.Id).ToList();
-                    foreach (var t in _renames) {
-                        foreach (var r in records) {
-                            if (!r.Students.Contains(t.Old)) continue;
-                            r.Students[r.Students.IndexOf(t.Old)] = t.New;
-                            await MergeDatabase.UpdateAsync(r);
-                        }
+                    foreach (var t in _renames)
+                    foreach (var r in records) {
+                        if (!r.Students.Contains(t.Old)) continue;
+                        r.Students[r.Students.IndexOf(t.Old)] = t.New;
+                        await MergeDatabase.UpdateAsync(r);
                     }
                 }
                 await MergeDatabase.UpdateAsync(_group);

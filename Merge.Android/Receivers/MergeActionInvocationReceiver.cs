@@ -178,7 +178,8 @@ namespace Merge.Android.Receivers {
             StartActivity(intent);
         }
 
-        public void InvokeLaunchUriAction(LaunchUriAction action) => StartActivity(Intent.CreateChooser(new Intent(Intent.ActionView, Uri.Parse(action.Uri1)), "Choose an app"));
+        public void InvokeLaunchUriAction(LaunchUriAction action) => StartActivity(
+            Intent.CreateChooser(new Intent(Intent.ActionView, Uri.Parse(action.Uri1)), "Choose an app"));
 
         public void InvokeCallAction(CallAction action) {
             var intentBuilder =
@@ -308,7 +309,8 @@ namespace Merge.Android.Receivers {
             dialog.Show();
         }
 
-        public void InvokeOpenGroupMapPageAction(OpenGroupMapPageAction action) => StartActivity(new Intent(_context, typeof(GroupMapActivity)));
+        public void InvokeOpenGroupMapPageAction(OpenGroupMapPageAction action) => StartActivity(new Intent(_context,
+            typeof(GroupMapActivity)));
 
         public async void InvokeOpenEventDetailsActionAsync(OpenEventDetailsAction action) {
             var e = await GetOrLoad(action.EventId1, () => DataCache.Events, v => DataCache.Events = v);
@@ -341,15 +343,16 @@ namespace Merge.Android.Receivers {
         }
 
         private async Task<T> GetOrLoad<T>(string id, Func<IEnumerable<T>> getter,
-            Func<IEnumerable<T>, IEnumerable<T>> setter) where T : IIdentifiable => (getter() == null || getter().All(i => i.Id != id)
-                ? await LoadAsync(async () => setter(await MergeDatabase.ListAsync<T>()))
-                : getter()).First(i => i.Id == id);
+            Func<IEnumerable<T>, IEnumerable<T>> setter)
+            where T : class, IIdentifiable => (getter() == null || getter().All(i => i.Id != id)
+            ? await LoadAsync(async () => setter(await MergeDatabase.ListAsync<T>()))
+            : getter()).First(i => i.Id == id);
 
-        public void SetContext(Context c) => _context = c;/*_dialog = new ProgressDialog(_context) {
+        public void SetContext(Context c) => _context = c; /*_dialog = new ProgressDialog(_context) {
                 Indeterminate = true
             };
             _dialog.SetMessage("Loading...");
-            _dialog.SetCancelable(false);*///_dialog = new AlertDialog.Builder(_context).SetCancelable(false).SetView(Resource.Layout.LoadingLayout).Create();
+            _dialog.SetCancelable(false);*/ //_dialog = new AlertDialog.Builder(_context).SetCancelable(false).SetView(Resource.Layout.LoadingLayout).Create();
 
         private Toast MakeToast(string message) {
             var t = Toast.MakeText(_context, message, ToastLength.Long);

@@ -1,10 +1,39 @@
-﻿using System;
+﻿#region LICENSE
+
+// Project Merge.Android:  MergeGroupRecordEditorActivity.cs (in Solution Merge.Android)
+// Created by Greg Whatley on 09/02/2017 at 2:15 PM.
+// 
+// The MIT License (MIT)
+// 
+// Copyright (c) 2017 Greg Whatley
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#endregion
+
+#region USINGS
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Android;
 using Android.App;
@@ -14,54 +43,54 @@ using Android.Graphics;
 using Android.Media;
 using Android.OS;
 using Android.Provider;
-using Android.Runtime;
 using Android.Support.V4.Content;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
 using CheeseBind;
 using Merge.Android.Helpers;
+using MergeApi.Client;
 using MergeApi.Models.Core;
 using MergeApi.Models.Core.Attendance;
-using AlertDialog = Android.Support.V7.App.AlertDialog;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
 using Newtonsoft.Json;
-using Com.Nostra13.Universalimageloader.Core;
-using Com.Nostra13.Universalimageloader.Core.Display;
-using Java.IO;
+using AlertDialog = Android.Support.V7.App.AlertDialog;
 using Environment = Android.OS.Environment;
-using Uri = Android.Net.Uri;
-using MergeApi.Client;
+using File = Java.IO.File;
+using Toolbar = Android.Support.V7.Widget.Toolbar;
+
+#endregion
 
 namespace Merge.Android.UI.Activities.LeadersOnly {
-    [Activity(Label = "Merge Group Record Editor", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize, WindowSoftInputMode = SoftInput.AdjustPan)]
+    [Activity(Label = "Merge Group Record Editor",
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
+        WindowSoftInputMode = SoftInput.AdjustPan)]
     [SuppressMessage("ReSharper", "UnusedMember.Local")]
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     public class MergeGroupRecordEditorActivity : AppCompatActivity {
         private const int StateNone = 0, StateOriginal = 1, StateModified = 2;
+        private Bitmap _bitmap;
 
-        [BindView(Resource.Id.groupIdView)]
-        private TextView _groupId;
-        [BindView(Resource.Id.recordDate)]
-        private TextView _date;
-        [BindView(Resource.Id.countEditText)]
-        private EditText _studentCount;
-        [BindView(Resource.Id.clearButton)]
-        private Button _clearButton;
-        [BindView(Resource.Id.cameraButton)]
-        private Button _cameraButton;
-        [BindView(Resource.Id.browseButton)]
-        private Button _browseButton;
-        [BindView(Resource.Id.image)]
-        private ImageView _image;
+        [BindView(Resource.Id.browseButton)] private Button _browseButton;
+
+        [BindView(Resource.Id.cameraButton)] private Button _cameraButton;
+
+        [BindView(Resource.Id.clearButton)] private Button _clearButton;
+
+        [BindView(Resource.Id.recordDate)] private TextView _date;
 
         private bool _enable = true;
+        private File _file;
         private MergeGroup _group;
-        private MergeGroupAttendanceRecord _record;
-        private Bitmap _bitmap;
-        private string _next, _fileName, _filePath;
+
+        [BindView(Resource.Id.groupIdView)] private TextView _groupId;
+
+        [BindView(Resource.Id.image)] private ImageView _image;
+
         private int _imageState = StateNone;
-        private Java.IO.File _file;
+        private string _next, _fileName, _filePath;
+        private MergeGroupAttendanceRecord _record;
+
+        [BindView(Resource.Id.countEditText)] private EditText _studentCount;
 
         [OnClick(Resource.Id.clearButton)]
         private void ClearButton_OnClick(object sender, EventArgs e) {
@@ -84,11 +113,13 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
             if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.ReadExternalStorage) ==
                 Permission.Granted) {
                 var intent = new Intent(MediaStore.ActionImageCapture);
-                intent.PutExtra(MediaStore.ExtraOutput, FileProvider.GetUriForFile(this, GenericFileProvider.GetAuthority(this), _file));
+                intent.PutExtra(MediaStore.ExtraOutput,
+                    FileProvider.GetUriForFile(this, GenericFileProvider.GetAuthority(this), _file));
                 StartActivityForResult(intent, 100);
                 _clearButton.Enabled = true;
-            } else
+            } else {
                 RequestPermissions("camera");
+            }
         }
 
         [OnClick(Resource.Id.browseButton)]
@@ -103,18 +134,21 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
 
         private void RequestPermissions(string next) {
             _next = next;
-            RequestPermissions(new[] { Manifest.Permission.ReadExternalStorage, Manifest.Permission.WriteExternalStorage }, 100);
+            RequestPermissions(
+                new[] {Manifest.Permission.ReadExternalStorage, Manifest.Permission.WriteExternalStorage}, 100);
         }
 
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults) {
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions,
+            Permission[] grantResults) {
             if (requestCode == 100 && grantResults[0] == Permission.Granted) {
                 if (_next == "camera")
                     CameraButton_OnClick(null, null);
                 else if (_next == "browse")
                     BrowseButton_OnClick(null, null);
                 _next = null;
-            } else
+            } else {
                 Toast.MakeText(this, "Permission to read storage denied.", ToastLength.Short).Show();
+            }
         }
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data) {
@@ -150,7 +184,6 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
                     var final = Bitmap.CreateBitmap(bitmap, 0, 0, bounds.OutWidth, bounds.OutHeight, matrix, true);
                     _image.SetImageBitmap(final);
                     _bitmap = final;
-                    
                 } catch (Exception ex) {
                     Toast.MakeText(this, $"Could not rotate image: {ex.Message}", ToastLength.Long).Show();
                     _bitmap = BitmapFactory.DecodeFile(_filePath);
@@ -185,10 +218,12 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
 
         private void SaveAndExit() {
             if (!int.TryParse(_studentCount.Text, out var count)) {
-                new AlertDialog.Builder(this).SetTitle("Error")
-                    .SetMessage("Please specify a number greater than or equal to 0 for the student count.")
+                var errDialog = new AlertDialog.Builder(this).SetTitle("Invalid Student Count")
+                    .SetMessage("The student count must be an integer greater then or equal to 0.")
                     .SetPositiveButton("Dismiss",
-                        (s, e) => { }).Show();
+                        (s, e) => { }).Create();
+                errDialog.SetOnShowListener(AlertDialogColorOverride.Instance);
+                errDialog.Show();
                 return;
             }
             var dialog = new ProgressDialog(this) {
@@ -207,7 +242,11 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
                     MergeGroupId = _group.Id,
                     StudentCount = count,
                     Date = _record?.Date ?? DateTime.Today,
-                    Image = _imageState == StateNone ? "" : _imageState == StateModified ? (await FileUploader.PutImageAsync(_filePath, _fileName, "")).Url : _record.Image
+                    Image = _imageState == StateNone
+                        ? ""
+                        : _imageState == StateModified
+                            ? (await FileUploader.PutImageAsync(_filePath, _fileName, "")).Url
+                            : _record.Image
                 });
                 dialog.Dismiss();
                 Finish();
@@ -219,8 +258,10 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
                 Finish();
                 return;
             }
-            var dialog = new AlertDialog.Builder(this).SetTitle("Save Changes").SetMessage("Do you want to save or discard your changes?").SetPositiveButton("Save",
-                (s, e) => SaveAndExit()).SetNegativeButton("Discard", (s, e) => Finish()).SetNeutralButton("Cancel", (s, e) => { }).Create();
+            var dialog = new AlertDialog.Builder(this).SetTitle("Save Changes")
+                .SetMessage("Do you want to save or discard your changes?").SetPositiveButton("Save",
+                    (s, e) => SaveAndExit()).SetNegativeButton("Discard", (s, e) => Finish())
+                .SetNeutralButton("Cancel", (s, e) => { }).Create();
             dialog.SetOnShowListener(AlertDialogColorOverride.Instance);
             dialog.Show();
         }
@@ -249,7 +290,7 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             _group = JsonConvert.DeserializeObject<MergeGroup>(Intent.GetStringExtra("groupJson"));
             _fileName = $"MergeGroup_{_group.Id}_{DateTime.Now.ToString("MMddyyyy", CultureInfo.CurrentUICulture)}.jpg";
-            _file = new Java.IO.File(Environment.ExternalStorageDirectory,
+            _file = new File(Environment.ExternalStorageDirectory,
                 _fileName);
             _filePath = _file.Path;
             _groupId.Text = $"{_group.Id} ({_group.Name})";
@@ -266,12 +307,13 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
                     _clearButton.Enabled = _enable;
                     Utilities.LoadImageForDisplay(_record.Image, _image);
                     _imageState = StateOriginal;
-                } else
+                } else {
                     _clearButton.Enabled = false;
+                }
                 LogHelper.FirebaseLog(this, "manageMergeGroupAttendanceRecord", new Dictionary<string, string> {
                     {"groupId", _group.Id},
                     {"recordDate", _record.Date.ToString("MMddyyyy")},
-                    { "editable", _enable.ToString()}
+                    {"editable", _enable.ToString()}
                 });
             } else {
                 _clearButton.Enabled = false;
@@ -279,7 +321,7 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
                 LogHelper.FirebaseLog(this, "manageMergeGroupAttendanceRecord", new Dictionary<string, string> {
                     {"groupId", _group.Id},
                     {"recordDate", "null"},
-                    { "editable", _enable.ToString()}
+                    {"editable", _enable.ToString()}
                 });
             }
         }

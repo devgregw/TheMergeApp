@@ -52,10 +52,9 @@ namespace Merge.Android.UI.Views {
     public sealed class TipCard : CardView {
         private readonly TabTip _tip;
 
-        public TipCard(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer) { }
+        [BindView(Resource.Id.card)] private CardView _card;
 
-        [BindView(Resource.Id.card)]
-        private CardView _card;
+        public TipCard(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer) { }
 
         public TipCard(Context context, TabTip tip) : base(context) {
             _tip = tip;

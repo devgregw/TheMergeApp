@@ -54,9 +54,9 @@ namespace Merge.Android.UI.Fragments {
         private readonly Context _context;
         private List<AttendanceGroup> _groups;
         private Dictionary<string, string> _items;
-        private List<AttendanceRecord> _records;
-        private List<MergeGroup> _mergeGroups;
         private List<MergeGroupAttendanceRecord> _mergeGroupRecords;
+        private List<MergeGroup> _mergeGroups;
+        private List<AttendanceRecord> _records;
         private int _state;
 
         public AttendanceListFragment(Context c) {
@@ -101,22 +101,24 @@ namespace Merge.Android.UI.Fragments {
                 case StateMain:
                     SelectedGroup = null;
                     SetItems(new Dictionary<string, string> {
-                            {"Junior High", "jh"},
-                            {"High School", "hs"},
-                            {"Merge Groups", "mg"}
-                        });
+                        {"Junior High", "jh"},
+                        {"High School", "hs"},
+                        {"Merge Groups", "mg"}
+                    });
                     break;
                 case StateGroups:
                     var ministry = argument.ToString();
                     if (ministry == "mg") {
                         SelectedMergeGroup = null;
-                        SetItems(_mergeGroups.OrderBy(g => g.Id).ToDictionary(g => g.Name, g => $"mg:{JsonConvert.SerializeObject(g)}"));
+                        SetItems(_mergeGroups.OrderBy(g => g.Id)
+                            .ToDictionary(g => g.Name, g => $"mg:{JsonConvert.SerializeObject(g)}"));
                         return;
                     }
                     SelectedGroup = null;
                     SetItems(_groups
-                        .Where(g => argument.ToString() == "jh" ? (int)g.GradeLevel <= 8 : (int)g.GradeLevel >= 9)
-                        .OrderBy(g => (int)g.GradeLevel).ThenBy(g => g.Id).ToDictionary(g => g.Summary, g => $"ag:{JsonConvert.SerializeObject(g)}"));
+                        .Where(g => argument.ToString() == "jh" ? (int) g.GradeLevel <= 8 : (int) g.GradeLevel >= 9)
+                        .OrderBy(g => (int) g.GradeLevel).ThenBy(g => IntFromWord(g.LeaderNames.ElementAt(0).Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last()))
+                        .ToDictionary(g => g.Summary, g => $"ag:{JsonConvert.SerializeObject(g)}"));
                     break;
                 case StateRecords:
                     Console.WriteLine(argument.ToString());
@@ -126,15 +128,17 @@ namespace Merge.Android.UI.Fragments {
                         SelectedMergeGroup = _mergeGroups.First(g => g.Id == id);
                         SetItems(new Dictionary<string, string> {
                                 {"Add Record", $"add:{id}"}
-                            }.Concat(_mergeGroupRecords.Where(r => r.MergeGroupId == id).OrderByDescending(r => r.Date).ToDictionary(r => r.Date.ToLongDateString(), JsonConvert.SerializeObject)).ToDictionary(r => r.Key, r => r.Value));
+                            }.Concat(_mergeGroupRecords.Where(r => r.MergeGroupId == id).OrderByDescending(r => r.Date)
+                                .ToDictionary(r => r.Date.ToLongDateString(), JsonConvert.SerializeObject))
+                            .ToDictionary(r => r.Key, r => r.Value));
                         return;
                     }
                     SelectedGroup = _groups.First(g => g.Id == id);
                     var sorted = _records.Where(r => r.GroupId == id).OrderByDescending(r => r.Date).ToList();
                     SetItems(new Dictionary<string, string> {
-                                {"Edit Group", "edit"},
-                                {"Add Record", $"add:{id}"}
-                            }
+                            {"Edit Group", "edit"},
+                            {"Add Record", $"add:{id}"}
+                        }
                         .Concat(sorted.ToDictionary(g => g.Date.ToLongDateString(), JsonConvert.SerializeObject))
                         .ToDictionary(p => p.Key, p => p.Value));
                     break;
@@ -157,6 +161,22 @@ namespace Merge.Android.UI.Fragments {
             return base.OnCreateView(inflater, container, savedInstanceState);
         }
 
+        private int IntFromWord(string w) {
+            switch (w.ToLower()) {
+                case "one":
+                    return 1;
+                case "two":
+                    return 2;
+                case "three":
+                    return 3;
+                case "four":
+                    return 4;
+                case "five":
+                    return 5;
+            }
+            return -1;
+        }
+
         public override void OnListItemClick(ListView l, View v, int position, long id) {
             var data = _items.ElementAt(position).Value;
             switch (_state) {
@@ -165,7 +185,9 @@ namespace Merge.Android.UI.Fragments {
                     break;
                 case StateGroups:
                     string newData = data.Remove(0, 3),
-                        gid = data.StartsWith("ag:") ? $"ag:{JsonConvert.DeserializeObject<AttendanceGroup>(newData).Id}" : $"mg:{JsonConvert.DeserializeObject<MergeGroup>(newData).Id}";
+                        gid = data.StartsWith("ag:")
+                            ? $"ag:{JsonConvert.DeserializeObject<AttendanceGroup>(newData).Id}"
+                            : $"mg:{JsonConvert.DeserializeObject<MergeGroup>(newData).Id}";
                     SetState(StateRecords, false, gid);
                     break;
                 case StateRecords:
@@ -175,7 +197,8 @@ namespace Merge.Android.UI.Fragments {
                             mgIntent.PutExtra("recordJson", data);
                         mgIntent.PutExtra("groupJson",
                             JsonConvert.SerializeObject(
-                                _mergeGroups.First(g => g.Id == _arguments[StateRecords].ToString().Replace("mg:", ""))));
+                                _mergeGroups.First(
+                                    g => g.Id == _arguments[StateRecords].ToString().Replace("mg:", ""))));
                         _context.StartActivity(mgIntent);
                         return;
                     }

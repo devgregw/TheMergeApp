@@ -106,7 +106,7 @@ namespace Merge.Android.UI.Activities {
             private void InitializePreferences() {
                 PreferenceScreen?.RemoveAll();
                 AddPreferencesFromResource(Resource.Xml.Preferences);
-                    PreferenceScreen?.RemovePreference(PreferenceScreen.FindPreference("secret"));
+                PreferenceScreen?.RemovePreference(PreferenceScreen.FindPreference("secret"));
             }
 
             public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

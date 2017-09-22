@@ -36,7 +36,7 @@ namespace Merge.Android.Helpers {
 #if DEBUG
         public const string Classification = "DEBUG";
 #else
-        public const string Classification = "GENERAL AVAILABILITY"
+        public const string Classification = "GENERAL AVAILABILITY";
 #endif
 
         public const int Update = 22;

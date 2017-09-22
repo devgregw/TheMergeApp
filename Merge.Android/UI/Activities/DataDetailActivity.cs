@@ -70,25 +70,26 @@ namespace Merge.Android.UI.Activities {
     [Activity(Label = "Details", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public class DataDetailActivity : AppCompatActivity, MenuBuilder.ICallback,
         AppBarLayout.IOnOffsetChangedListener, IOnMapReadyCallback {
-        [BindView(Resource.Id.dataLayout)]
-        private LinearLayout _dataLayout;
-        [BindView(Resource.Id.fab)]
-        private FloatingActionButton _fab;
-        [BindView(Resource.Id.toolbar_layout)]
-        private CollapsingToolbarLayout _toolbarLayout;
-        [BindView(Resource.Id.mapFragmentContainer)]
-        private FrameLayout _mapContainer;
-        [BindView(Resource.Id.app_bar)]
-        private AppBarLayout _appBarLayout;
-        [BindView(Resource.Id.image)]
-        private ImageView _image;
+        [BindView(Resource.Id.app_bar)] private AppBarLayout _appBarLayout;
 
-        private LinearLayout _pageContent;
+        [BindView(Resource.Id.dataLayout)] private LinearLayout _dataLayout;
+
+        private MergeEvent _event;
+
+        [BindView(Resource.Id.fab)] private FloatingActionButton _fab;
+
+        private MergeGroup _group;
+
+        [BindView(Resource.Id.image)] private ImageView _image;
+
+        [BindView(Resource.Id.mapFragmentContainer)] private FrameLayout _mapContainer;
 
         private MenuPopupHelper _menuHelper;
         private MergePage _page;
-        private MergeEvent _event;
-        private MergeGroup _group;
+
+        private LinearLayout _pageContent;
+
+        [BindView(Resource.Id.toolbar_layout)] private CollapsingToolbarLayout _toolbarLayout;
 
         public bool OnMenuItemSelected(MenuBuilder p0, IMenuItem p1) {
             switch (p1.ItemId) {
@@ -124,11 +125,9 @@ namespace Merge.Android.UI.Activities {
             // nothing
         }
 
-        [OnClick(Resource.Id.fab)]
-        public void Fab_OnClick(object sender, EventArgs e) => _menuHelper.Show();
-
         public void OnMapReady(GoogleMap map) {
             LatLng coordinates;
+
             // ReSharper disable once InconsistentNaming
             void repos() {
                 map.MoveCamera(CameraUpdateFactory.NewLatLngZoom(coordinates, 15));
@@ -136,8 +135,8 @@ namespace Merge.Android.UI.Activities {
             }
 
             var options = new MarkerOptions();
-            options.SetPosition(new LatLng((double)_group.Coordinates.Latitude,
-                (double)_group.Coordinates.Longitude));
+            options.SetPosition(new LatLng((double) _group.Coordinates.Latitude,
+                (double) _group.Coordinates.Longitude));
             options.SetTitle(_group.Name);
             var newMarker = map.AddMarker(options);
             coordinates = newMarker.Position;
@@ -155,6 +154,9 @@ namespace Merge.Android.UI.Activities {
             arrow.SetColorFilter(collapsed ? Color.White : Color.Transparent, PorterDuff.Mode.SrcIn);
             SupportActionBar.SetHomeAsUpIndicator(arrow);
         }
+
+        [OnClick(Resource.Id.fab)]
+        public void Fab_OnClick(object sender, EventArgs e) => _menuHelper.Show();
 
         public override bool OnOptionsItemSelected(IMenuItem item) {
             if (item.ItemId == global::Android.Resource.Id.Home) {
@@ -183,7 +185,7 @@ namespace Merge.Android.UI.Activities {
         }
 
         private async void SetupPageContent() {
-            ((MergeElementCreationReceiver)MergeDatabase.ElementCreationReceiver).SetColorInfo(
+            ((MergeElementCreationReceiver) MergeDatabase.ElementCreationReceiver).SetColorInfo(
                 _page.Color.ToAndroidColor(), _page.Theme);
             if (_pageContent == null) {
                 _pageContent = new LinearLayout(this) {
@@ -218,9 +220,9 @@ namespace Merge.Android.UI.Activities {
 
         private void SetupLayout(MergePage p) {
             LogHelper.FirebaseLog(this, "viewDetails", new Dictionary<string, string> {
-                { "id", p.Id },
-                { "type", "page" },
-                { "name", p.Title }
+                {"id", p.Id},
+                {"type", "page"},
+                {"name", p.Title}
             });
             if (p.LeadersOnly && !PreferenceHelper.IsValidLeader) {
                 var dialog = new AlertDialog.Builder(this).SetTitle("Unauthorized")
@@ -251,9 +253,9 @@ namespace Merge.Android.UI.Activities {
         [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private void SetupLayout(MergeEvent e) {
             LogHelper.FirebaseLog(this, "viewDetails", new Dictionary<string, string> {
-                { "id", e.Id },
-                { "type", "event" },
-                { "title", e.Title }
+                {"id", e.Id},
+                {"type", "event"},
+                {"title", e.Title}
             });
             _event = e;
             SetupMenu(Resource.Menu.EventMenu, !e.HasRegistration);
@@ -290,13 +292,14 @@ namespace Merge.Android.UI.Activities {
 
         private void SetupLayout(MergeGroup g) {
             LogHelper.FirebaseLog(this, "viewDetails", new Dictionary<string, string> {
-                { "id", g.Id },
-                { "type", "group" },
-                { "name", g.Name }
+                {"id", g.Id},
+                {"type", "group"},
+                {"name", g.Name}
             });
             _group = g;
             SetupMenu(Resource.Menu.GroupMenu);
-            Colorize(new Color(ContextCompat.GetColor(this, Resource.Color.colorPrimary)), MergeApi.Framework.Enumerations.Theme.Dark);
+            Colorize(new Color(ContextCompat.GetColor(this, Resource.Color.colorPrimary)),
+                MergeApi.Framework.Enumerations.Theme.Dark);
             _dataLayout.AddView(new IconView(this, Resource.Drawable.MergeGroups, g.LeadersFormatted, true, true));
             _dataLayout.AddView(new IconView(this, Resource.Drawable.Location, g.Address));
             _dataLayout.AddView(new IconView(this, Resource.Drawable.Home, $"Hosted by {g.Host}"));
@@ -308,7 +311,7 @@ namespace Merge.Android.UI.Activities {
 
         protected override void OnResume() {
             base.OnResume();
-            ((MergeActionInvocationReceiver)MergeDatabase.ActionInvocationReceiver).SetContext(this);
+            ((MergeActionInvocationReceiver) MergeDatabase.ActionInvocationReceiver).SetContext(this);
         }
 
         protected override void OnCreate(Bundle savedInstanceState) {

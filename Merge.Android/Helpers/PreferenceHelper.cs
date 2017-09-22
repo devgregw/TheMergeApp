@@ -36,7 +36,6 @@ using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.Preferences;
-using Android.Provider;
 using Android.Widget;
 using Firebase.Messaging;
 using Java.Lang;
@@ -171,7 +170,7 @@ namespace Merge.Android.Helpers {
             .GetBoolean("caching", true);
 
         //public static bool Telemetry => _preferences
-            //.GetBoolean("telemetry", true);
+        //.GetBoolean("telemetry", true);
 
         public static bool Logging {
             /*get => _preferences.GetBoolean("logging", false);
@@ -179,7 +178,7 @@ namespace Merge.Android.Helpers {
             get => false;
         }
 
-        public static void AddDismissedTip(string id) => DismissedTips = DismissedTips.Concat(new[] { id }).ToArray();
+        public static void AddDismissedTip(string id) => DismissedTips = DismissedTips.Concat(new[] {id}).ToArray();
 
         public static void Initialize(Context context) {
             _context = context;
@@ -209,16 +208,17 @@ namespace Merge.Android.Helpers {
                         AuthenticationState = LeaderAuthenticationState.NoAttempt;
                         FirebaseMessaging.Instance.UnsubscribeFromTopic("verified_leader");
                     }
-                }
-                else if (key == "caching") {
+                } else if (key == "caching") {
                     var dialog = new AlertDialog.Builder(_c).SetTitle("Restart Required")
                         .SetMessage("To apply your changes, the Merge app must be restarted.").SetPositiveButton(
                             "Restart",
                             (s, e) => {
                                 var intent =
                                     PendingIntent.GetActivity(_c, 0,
-                                        _c.PackageManager.GetLaunchIntentForPackage(_c.PackageName), PendingIntentFlags.CancelCurrent);
-                                ((AlarmManager)_c.GetSystemService(Context.AlarmService)).Set(AlarmType.Rtc, JavaSystem.CurrentTimeMillis() + 1, intent);
+                                        _c.PackageManager.GetLaunchIntentForPackage(_c.PackageName),
+                                        PendingIntentFlags.CancelCurrent);
+                                ((AlarmManager) _c.GetSystemService(Context.AlarmService)).Set(AlarmType.Rtc,
+                                    JavaSystem.CurrentTimeMillis() + 1, intent);
                                 JavaSystem.Exit(2);
                             }).SetNegativeButton("Later", (s, e) => { }).SetCancelable(false).Create();
                     dialog.SetOnShowListener(AlertDialogColorOverride.Instance);

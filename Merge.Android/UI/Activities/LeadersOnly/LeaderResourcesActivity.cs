@@ -57,11 +57,11 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
     [SuppressMessage("ReSharper", "UnusedMember.Local")]
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     public class LeaderResourcesActivity : AppCompatActivity {
-        [BindView(Resource.Id.content_list)]
-        private LinearLayout _mainList;
-
         private ViewApplier _applier;
         private bool _first = true;
+
+        [BindView(Resource.Id.content_list)] private LinearLayout _mainList;
+
         private IEnumerable<MergePage> _pages;
 
         [OnClick(Resource.Id.resourcesAttendance)]

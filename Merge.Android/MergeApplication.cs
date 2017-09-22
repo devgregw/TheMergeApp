@@ -31,7 +31,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reactive.Linq;
 using Android.App;
 using Android.Runtime;
 using Android.Util;
@@ -100,7 +99,8 @@ namespace Merge.Android {
         public class MergeLogger : ILogReceiver {
             public bool Initialize() => true;
 
-            public void Log(LogLevel level, string sender, string message) => LogHelper.WriteMessage(level.ToString().ToUpper(), $"{sender}: {message}");
+            public void Log(LogLevel level, string sender, string message) => LogHelper.WriteMessage(
+                level.ToString().ToUpper(), $"{sender}: {message}");
 
             public void Log(LogLevel level, string sender, Exception e) => LogHelper.WriteException(e, false, null);
         }
