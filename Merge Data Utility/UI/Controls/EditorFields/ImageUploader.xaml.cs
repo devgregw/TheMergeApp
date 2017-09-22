@@ -68,8 +68,9 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
             if (_state == State.NotModified)
                 return Value;
             var localPath = Value;
-            return (await FileUploader.PutStorageReferenceAsync(localPath,
-                $"{name}.{ImageConverter.GetExtension(localPath)}", folder)).Url;
+            var reference = await FileUploader.PutStorageReferenceAsync(localPath,
+                $"{name}.{ImageConverter.GetExtension(localPath)}", folder);
+            return reference.Url;
         }
 
         private void coverBrowse_Click(object sender, RoutedEventArgs e) {
@@ -78,7 +79,7 @@ namespace Merge_Data_Utility.UI.Controls.EditorFields {
                 Title = "Choose an Image"
             };
             if (!dlg.ShowDialog().GetValueOrDefault(false)) return;
-            var length = new FileInfo(dlg.FileName).Length / 1048576L;
+            var length = new FileInfo(dlg.FileName).Length / 1000000L;
             if (length >= 5L) {
                 MessageBox.Show(
                     $"The image you selected is too big.  The image you selected is {length} MB in size, but the maximum is 5 MB.",

@@ -22,6 +22,7 @@
                         <MenuItem Header="Merge Group Record..." Click="NewMergeGroupRecord_Clicked" />
                     </MenuItem>
                     <MenuItem Header="Refresh" Click="Refresh_Clicked" />
+                    <MenuItem Header="Clean" Click="Clean_Clicked" />
                     <Separator />
                     <MenuItem Header="Close" Click="Close_Clicked" />
                 </MenuItem>
@@ -35,7 +36,7 @@
                     <MenuItem Header="Collapse All" Click="CollapseAll" />
                 </MenuItem>
             </Menu>
-            
+
             <TreeView x:Name="tree" SelectedItemChanged="TreeViewItemSelected" Margin="0,18,0,0"
                       BorderThickness="0,1,1,0" />
         </Grid>

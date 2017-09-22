@@ -304,14 +304,15 @@ namespace Merge_Data_Utility.Tools {
                 Weeks = GetWeeks(allRecords);
                 TotalStudents = Groups.Sum(g => g.StudentNames.Count);
                 AverageStudentCount = Convert.ToInt32(Math.Round(
-                        Convert.ToDouble(Weeks.Sum(w => w.Records.Sum(r => r.Students.Count))) /
-                        Convert.ToDouble(Weeks.Count.NotZero()), 0));
+                    Convert.ToDouble(Weeks.Sum(w => w.Records.Sum(r => r.Students.Count))) /
+                    Convert.ToDouble(Weeks.Count.NotZero()), 0));
                 AverageMergeGroupStudentCount =
                     Convert.ToInt32(Math.Round(
                         Convert.ToDouble(MergeGroupWeeks.Sum(w => w.Records.Sum(r => r.StudentCount))) /
                         Convert.ToDouble(MergeGroupWeeks.Count.NotZero()), 0));
                 AverageLeaderAttendancePercentage =
-                    GetPercentage(Weeks.Sum(w => w.GetMetrics(Groups).AverageLeaderAttendancePercentage), Weeks.Count.NotZero(),
+                    GetPercentage(Weeks.Sum(w => w.GetMetrics(Groups).AverageLeaderAttendancePercentage),
+                        Weeks.Count.NotZero(),
                         false);
                 AverageAttendancePercentage = GetPercentage(
                     Weeks.Sum(w => w.GetMetrics(Groups).AverageAttendancePercentage),
@@ -322,12 +323,14 @@ namespace Merge_Data_Utility.Tools {
                     MostRecentAttendanceWeek = null;
                 } else {
                     HighestAttendanceWeek = Weeks.Max(w => {
-                        var record = w.GetMetrics(Groups).HighestAttendanceRecord;
-                        return record.GetMetrics(Groups.First(g => g.Id == record.GroupId)).AttendancePercentage;
+                        return Weeks.First(w2 => w2.Date == w.Records.Max(r => r.GetMetrics(Groups.First(g => g.Id == r.GroupId)).AttendancePercentage).Date).GetMetrics(Groups).TotalStudents;
+                        //var record = w.GetMetrics(Groups).HighestAttendanceRecord;
+                        //return record.GetMetrics(Groups.First(g => g.Id == record.GroupId)).AttendancePercentage;
                     });
                     LowestAttendanceWeek = Weeks.Min(w => {
-                        var record = w.GetMetrics(Groups).LowestAttendanceRecord;
-                        return record.GetMetrics(Groups.First(g => g.Id == record.GroupId)).AttendancePercentage;
+                        return Weeks.First(w2 => w2.Date == w.Records.Min(r => r.GetMetrics(Groups.First(g => g.Id == r.GroupId)).AttendancePercentage).Date).GetMetrics(Groups).TotalStudents;
+                        //var record = w.GetMetrics(Groups).LowestAttendanceRecord;
+                        //return record.GetMetrics(Groups.First(g => g.Id == record.GroupId)).AttendancePercentage;
                     });
                     MostRecentAttendanceWeek = Weeks.Max(w => w.Date);
                 }

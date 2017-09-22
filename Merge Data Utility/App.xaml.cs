@@ -29,6 +29,9 @@
 
 #region USINGS
 
+using System;
+using System.Globalization;
+using System.IO;
 using System.Windows;
 
 #endregion
@@ -37,5 +40,16 @@ namespace Merge_Data_Utility {
     /// <summary>
     ///     Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application { }
+    public partial class App : Application {
+        public App() {
+#if !DEBUG
+            AppDomain.CurrentDomain.UnhandledException += (s, e) => {
+                var ex = (Exception) e.ExceptionObject;
+                var name = $"crash-{DateTime.Now.ToString("MM-dd-yyyy-hh-mm-tt", CultureInfo.CurrentUICulture)}.txt";
+                File.WriteAllText(name, ex.ToString());
+                MessageBox.Show($"Unfortunately, a fatal error has occurred and the Merge Data Utility must exit.  A crash report was saved here: {new FileInfo(name).FullName}.\nClick OK to exit.", "Fatal Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+            };
+#endif
+        }
+    }
 }

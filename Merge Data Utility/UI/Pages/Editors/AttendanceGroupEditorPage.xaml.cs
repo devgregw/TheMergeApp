@@ -49,11 +49,11 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
     ///     Interaction logic for AttendanceGroupEditorPage.xaml
     /// </summary>
     public partial class AttendanceGroupEditorPage : EditorPage {
+        private List<(string Old, string New)> _renames;
+
         public AttendanceGroupEditorPage() {
             InitializeComponent();
         }
-
-        private List<(string Old, string New)> _renames;
 
         public AttendanceGroupEditorPage(AttendanceGroup src, bool draft) : this() {
             SetSource(src, false);
@@ -127,7 +127,8 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
             return new AttendanceGroup {
                 Id = idField.Id,
                 LeaderNames = leadersList.GetItems(i => i.Content.ToString()).ToList(),
-                StudentNames = studentsList.GetItems(i => i.Content.ToString()).OrderBy(n => n.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last()).ToList(),
+                StudentNames = studentsList.GetItems(i => i.Content.ToString())
+                    .OrderBy(n => n.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries).Last()).ToList(),
                 GradeLevel = GradeLevelConverter.FromString(((ComboBoxItem) gradeBox.SelectedItem).Content.ToString()),
                 Gender = genderBox.SelectedIndex == 0 ? Gender.Male : Gender.Female
             };
@@ -151,12 +152,11 @@ namespace Merge_Data_Utility.UI.Pages.Editors {
                         reference.SetMessage("Renaming students...");
                         var records =
                             (await MergeDatabase.ListAsync<AttendanceRecord>()).Where(r => r.GroupId == o.Id).ToList();
-                        foreach (var t in _renames) {
-                            foreach (var r in records) {
-                                if (!r.Students.Contains(t.Old)) continue;
-                                r.Students[r.Students.IndexOf(t.Old)] = t.New;
-                                await MergeDatabase.UpdateAsync(r);
-                            }
+                        foreach (var t in _renames)
+                        foreach (var r in records) {
+                            if (!r.Students.Contains(t.Old)) continue;
+                            r.Students[r.Students.IndexOf(t.Old)] = t.New;
+                            await MergeDatabase.UpdateAsync(r);
                         }
                     }
                     reference.SetMessage("Processing...");

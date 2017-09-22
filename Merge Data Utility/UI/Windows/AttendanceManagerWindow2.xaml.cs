@@ -351,7 +351,8 @@ namespace Merge_Data_Utility.UI.Windows {
                         Header = "High School",
                         Tag = new Tag("ministry", new {Ministry = "hs", Week = w})
                     });
-                    foreach (var r in w.Records.OrderBy(rec => (int)GetGroup(rec.GroupId).GradeLevel).ThenBy(rec => rec.GroupId)) {
+                    foreach (var r in w.Records.OrderBy(rec => (int) GetGroup(rec.GroupId).GradeLevel)
+                        .ThenBy(rec => rec.GroupId)) {
                         var group = GetGroup(r.GroupId);
                         TreeViewItem recordItem;
                         ((int) group.GradeLevel <= 8 ? jh : hs).Items.Add(recordItem = new TreeViewItem {
@@ -383,7 +384,7 @@ namespace Merge_Data_Utility.UI.Windows {
                         });
                     }
                     if (weekItem.Items.Count > 0)
-                    mgItem.Items.Add(weekItem);
+                        mgItem.Items.Add(weekItem);
                 }
             } else {
                 TreeViewItem jhItem = new TreeViewItem {
@@ -397,7 +398,7 @@ namespace Merge_Data_Utility.UI.Windows {
                     mgItem = new TreeViewItem {
                         Header = "Merge Groups"
                     };
-                foreach (var g in _groups.OrderBy(g => (int)g.GradeLevel).ThenBy(g => g.Id)) {
+                foreach (var g in _groups.OrderBy(g => (int) g.GradeLevel).ThenBy(g => g.Id)) {
                     var groupItem = new TreeViewItem {
                         Header = g.Summary,
                         Tag = new Tag("group", g)
@@ -904,6 +905,41 @@ namespace Merge_Data_Utility.UI.Windows {
             public string Type { get; }
 
             public T GetArgument<T>() => (T) _argument;
+        }
+
+        private async void Clean_Clicked(object sender, RoutedEventArgs e) {
+            List<T> RemoveDuplicates<T>(IEnumerable<T> objects, Func<T, string> selector) {
+                var final = new List<T>();
+                foreach (var o in objects) {
+                    if (final.Select(selector).Contains(selector(o)))
+                        continue;
+                    final.Add(o);
+                }
+                return final;
+            }
+
+            if (MessageBox.Show(this, "This will delete duplicate groups and record.  Do you want to continue?",
+                    "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.Yes) ==
+                MessageBoxResult.Yes) {
+                var reference = new LoaderReference(this);
+                reference.StartLoading("Looking for duplicates...");
+                var duplicateGroups = RemoveDuplicates(_groups.Where(g => _groups.Count(g2 => g2.Id == g.Id) > 1), g => g.Id);
+                var duplicateRecords = RemoveDuplicates(_records.Where(r =>
+                    _records.Count(r2 => r2.GroupId == r.GroupId && r2.DateString == r.DateString) > 1), r => $"{r.GroupId}{r.DateString}");
+                var message =
+                    $"The following duplicate groups will be deleted:\n{duplicateGroups.Aggregate("", (current, item) => current + $"{item.Id} ({item.Summary})\n")}\nThe following duplicate records will be deleted:\n{duplicateRecords.Aggregate("", (current, item) => current + $"{item.GroupId} ({_groups.First(g => g.Id == item.GroupId).Summary})/{item.Date.ToLongDateString()}\n")}";
+                MessageBox.Show(this, message, "Notice", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
+                foreach (var g in duplicateGroups) {
+                    reference.SetMessage($"Deleting attendance/groups/{g.Id}");
+                    await MergeDatabase.DeleteAsync(g);
+                }
+                foreach (var r in duplicateRecords) {
+                    reference.SetMessage($"Deleting attendance/groups/{r.GroupId}/{r.DateString}");
+                    await MergeDatabase.DeleteAsync(r);
+                }
+                reference.StopLoading();
+                Load(true);
+            }
         }
     }
 }

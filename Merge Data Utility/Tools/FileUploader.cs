@@ -34,6 +34,7 @@
 #region USINGS
 
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using MergeApi.Client;
 using MergeApi.Tools;
@@ -46,6 +47,7 @@ namespace Merge_Data_Utility.Tools {
             using (var client = new WebClient()) {
                 var r = await client.UploadFileTaskAsync(
                     $"https://merge.devgregw.com/content/manager.php?name={name}&folder={folder}", path);
+                System.Console.WriteLine(Encoding.UTF8.GetString(r));
             }
             return await MergeDatabase.GetStorageReferenceAsync(name, folder);
         }

@@ -159,11 +159,17 @@ namespace Merge_Data_Utility.UI.Pages {
                 high = overall.HighestAttendanceWeek.GetMetrics(groups),
                 recent = overall.MostRecentAttendanceWeek.GetMetrics(groups);
             attendanceRecordLow.Text =
-                low.Week == null ? "No data" : $"{low.TotalStudents} students on {low.Week.Date.ToShortDateString()} ({low.AverageAttendancePercentage}%)";
+                low.Week == null
+                    ? "No data"
+                    : $"{low.TotalStudents} students on {low.Week.Date.ToShortDateString()} ({low.AverageAttendancePercentage}%)";
             attendanceRecordHigh.Text =
-                high.Week == null ? "No data" : $"{high.TotalStudents} students on {high.Week.Date.ToShortDateString()} ({high.AverageAttendancePercentage}%)";
+                high.Week == null
+                    ? "No data"
+                    : $"{high.TotalStudents} students on {high.Week.Date.ToShortDateString()} ({high.AverageAttendancePercentage}%)";
             attendanceRecent.Text =
-                recent.Week == null ? "No data" : $"{recent.TotalStudents} students  on {recent.Week.Date.ToShortDateString()} ({recent.AverageAttendancePercentage}%)";
+                recent.Week == null
+                    ? "No data"
+                    : $"{recent.TotalStudents} students  on {recent.Week.Date.ToShortDateString()} ({recent.AverageAttendancePercentage}%)";
             attendanceTotalGroups.Text = overall.Groups.Count.ToString();
             attendanceTotalStudents.Text = overall.TotalStudents.ToString();
             reference.StopLoading();

@@ -35,10 +35,10 @@ using System;
 
 namespace Merge_Data_Utility {
     public static class VersionInfo {
-        public const string VersionString = "2.0.1.3";
+        public const string VersionString = "2.0.1.5";
 
         public static readonly Version Version = Version.Parse(VersionString);
 
-        public static readonly int Update = 19;
+        public static readonly int Update = 21;
     }
 }
