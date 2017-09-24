@@ -918,7 +918,7 @@ namespace Merge_Data_Utility.UI.Windows {
                 return final;
             }
 
-            if (MessageBox.Show(this, "This will delete duplicate groups and record.  Do you want to continue?",
+            if (MessageBox.Show(this, "This will delete duplicate groups and records.  Do you want to continue?",
                     "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.Yes) ==
                 MessageBoxResult.Yes) {
                 var reference = new LoaderReference(this);

@@ -48,6 +48,7 @@ namespace Merge_Data_Utility {
                 var name = $"crash-{DateTime.Now.ToString("MM-dd-yyyy-hh-mm-tt", CultureInfo.CurrentUICulture)}.txt";
                 File.WriteAllText(name, ex.ToString());
                 MessageBox.Show($"Unfortunately, a fatal error has occurred and the Merge Data Utility must exit.  A crash report was saved here: {new FileInfo(name).FullName}.\nClick OK to exit.", "Fatal Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                Shutdown(1);
             };
 #endif
         }
