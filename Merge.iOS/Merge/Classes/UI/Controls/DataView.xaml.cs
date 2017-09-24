@@ -65,7 +65,7 @@ namespace Merge.Classes.UI.Controls {
                         Text = p.ButtonLabel,
                         TextColor = p.Color.ToFormsColor().ContrastColor(p.Theme),
                         BackgroundColor = p.Color.ToFormsColor(),
-                        BorderWidth = 1d,
+                        BorderWidth = 0.5d,
                         BorderColor = p.Color.ToFormsColor().ContrastColor(p.Theme),
                         Command = new Command(p.ButtonAction.Invoke)
                     }
