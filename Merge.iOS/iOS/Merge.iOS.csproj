@@ -54,7 +54,7 @@
     </CodesignProvision>
     <MtouchExtraArgs>
     </MtouchExtraArgs>
-    <MtouchUseLlvm>false</MtouchUseLlvm>
+    <MtouchUseLlvm>true</MtouchUseLlvm>
     <OptimizePNGs>true</OptimizePNGs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
@@ -80,10 +80,11 @@
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchFloat32>true</MtouchFloat32>
-    <CodesignKey>iPhone Distribution</CodesignKey>
+    <CodesignKey>iPhone Distribution: Greg Whatley (3V49NK3FLN)</CodesignKey>
     <DeviceSpecificBuild>true</DeviceSpecificBuild>
     <MtouchDebug>true</MtouchDebug>
     <MtouchProfiling>true</MtouchProfiling>
+    <CodesignProvision></CodesignProvision>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Firebase.Analytics, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -212,6 +213,19 @@
     <ImageAsset Include="Resources\LaunchImages.xcassets\LaunchImages.launchimage\launch-retina4.png">
       <InProject>false</InProject>
     </ImageAsset>
+    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\appstore.png" />
+    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\phone_notification_2x.png" />
+    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\phone_notification_3x.png" />
+    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\pad_notification_1x.png" />
+    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\pad_notification_2x.png" />
+    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\watch_notification_38mm_2x.png" />
+    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\watch_notification_42mm_2x.png" />
+    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\watch_settings_2x.png" />
+    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\watch_settings_3x.png" />
+    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\watch_home_all_long_38mm.png" />
+    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\watch_long_42mm_2x.png" />
+    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\watch_short_38mm_2x.png" />
+    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\watch_short_42mm_2x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
