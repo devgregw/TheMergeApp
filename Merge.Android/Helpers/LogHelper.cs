@@ -99,7 +99,7 @@ namespace Merge.Android.Helpers {
             if (!_enable)
                 return;
             _file = new File(_context.GetExternalFilesDir(null),
-                $"mergeandroid{VersionConsts.MiniVersion}-{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.txt");
+                $"mergeandroid-{VersionConsts.Version}-{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.txt");
             if (!_file.Exists())
                 _file.CreateNewFile();
             WriteMessage("INFO",

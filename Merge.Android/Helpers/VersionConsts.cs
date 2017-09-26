@@ -29,9 +29,7 @@
 
 namespace Merge.Android.Helpers {
     public static class VersionConsts {
-        public const string Version = "0.1.1.0";
-
-        public const string MiniVersion = "0110";
+        public const string Version = "0.1.1.1";
 
 #if DEBUG
         public const string Classification = "DEBUG";
@@ -39,6 +37,6 @@ namespace Merge.Android.Helpers {
         public const string Classification = "GENERAL AVAILABILITY";
 #endif
 
-        public const int Update = 22;
+        public const int Update = 23;
     }
 }

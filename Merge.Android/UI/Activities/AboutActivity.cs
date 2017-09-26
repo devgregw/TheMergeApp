@@ -89,7 +89,7 @@ namespace Merge.Android.UI.Activities {
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.SetDisplayShowHomeEnabled(true);
             _aboutVersion.Text =
-                $"Version {VersionConsts.Version} (update {VersionConsts.Update}) {VersionConsts.Classification}\nUtilizing MergeApi version {VersionInfo.VERSION_STRING} (update {VersionInfo.Update})";
+                $"Version {VersionConsts.Version} (update {VersionConsts.Update}) {VersionConsts.Classification}\nUtilizing MergeApi version {VersionInfo.VersionString} (update {VersionInfo.Update})";
         }
     }
 }

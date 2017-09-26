@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="0.1.1.0"
-          package="com.devgregw.merge" android:installLocation="auto" android:versionCode="22">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="0.1.1.1"
+          package="com.devgregw.merge" android:installLocation="auto" android:versionCode="23">
   <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="25" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.INTERNET" />
