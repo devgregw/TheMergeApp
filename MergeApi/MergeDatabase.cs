@@ -161,7 +161,7 @@ namespace MergeApi.Client {
             return await AuthProvider.SignInWithEmailAndPasswordAsync(email, password);
         }
 
-        /*private static async Task<string> GetFirebaseKey<T>(T item) where T : IIdentifiable {
+        private static async Task<string> GetFirebaseKey<T>(T item) where T : class, IIdentifiable {
             ThrowIfNotInitialized();
             LogReceiver.Log(LogLevel.Verbose, "MergeDatabase.GetFirebaseKey",
                 $"Retrieving Firebase key for the {typeof(T).Name} with the ID '{item.Id}'");
@@ -172,7 +172,7 @@ namespace MergeApi.Client {
                     ? $"Identified {typeof(T).Name} {item.Id} as {key}"
                     : $"Could not identify {typeof(T).Name} {item.Id}");
             return key;
-        }*/
+        }
 
         private static ChildQuery GetChildQuery(string typeName) {
             LogReceiver.Log(LogLevel.Verbose, "MergeDatabase.GetChildQuery(1)",
@@ -202,10 +202,7 @@ namespace MergeApi.Client {
         }
 
         public static async Task<IEnumerable<T>> ListAsync<T>() where T : class, IIdentifiable => (await InternalListAsync<T>()).Select(
-            p => p.Value.Manipulate(v => {
-                v.FirebaseKey = p.Key;
-                return v;
-            }));
+            p => p.Value);
 
         public static async Task<T> GetAsync<T>(string id) where T : class, IIdentifiable {
             ThrowIfNotInitialized();
@@ -215,26 +212,28 @@ namespace MergeApi.Client {
             return all.FirstOrDefault(o => o.Id == id);
         }
 
-        public static async Task UpdateAsync<T>(T data) where T : IIdentifiable {
+        public static async Task UpdateAsync<T>(T data) where T : class, IIdentifiable {
             ThrowIfNotInitialized();
+            var key = await GetFirebaseKey(data);
             LogReceiver.Log(LogLevel.Verbose, "MergeDatabase.UpdateAsync",
-                $"Updating {typeof(T).Name}: {data.Id} ({(string.IsNullOrWhiteSpace(data.FirebaseKey) ? "<nonexistant>" : data.FirebaseKey)})");
+                $"Updating {typeof(T).Name}: {data.Id} ({(string.IsNullOrWhiteSpace(key) ? "<nonexistant>" : key)})");
             var q = GetChildQuery(typeof(T).Name);
-            if (!string.IsNullOrWhiteSpace(data.FirebaseKey))
+            if (!string.IsNullOrWhiteSpace(key))
                 await InternalDeleteAsync(data, false);
             await q.PostAsync(data);
         }
 
         private static async Task InternalDeleteAsync<T>(T item, bool deleteAssets)
-            where T : IIdentifiable {
+            where T : class, IIdentifiable {
             ThrowIfNotInitialized();
+            var key = await GetFirebaseKey(item);
             LogReceiver.Log(LogLevel.Verbose, "MergeDatabase.InternalDeleteAsync",
-                $"Deleting {typeof(T).Name}: {item.Id} ({item.FirebaseKey})");
+                $"Deleting {typeof(T).Name}: {item.Id} ({key})");
             if (deleteAssets)
-                await DeleteAssetsAsync(item, item.FirebaseKey);
-            await GetChildQuery(typeof(T).Name, item.FirebaseKey).DeleteAsync();
+                await DeleteAssetsAsync(item, key);
+            await GetChildQuery(typeof(T).Name, key).DeleteAsync();
         }
 
-        public static async Task DeleteAsync<T>(T item) where T : IIdentifiable => await InternalDeleteAsync(item, true);
+        public static async Task DeleteAsync<T>(T item) where T : class, IIdentifiable => await InternalDeleteAsync(item, true);
     }
 }

@@ -60,5 +60,5 @@ using MergeApi.Tools;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion(VersionInfo.VERSION_STRING)]
+[assembly: AssemblyVersion(VersionInfo.VersionString)]
 [assembly: AssemblyFileVersion("1.0.0.0")]

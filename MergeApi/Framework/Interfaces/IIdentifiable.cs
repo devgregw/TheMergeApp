@@ -30,7 +30,5 @@
 namespace MergeApi.Framework.Interfaces {
     public interface IIdentifiable {
         string Id { get; set; }
-
-        string FirebaseKey { get; set; }
     }
 }

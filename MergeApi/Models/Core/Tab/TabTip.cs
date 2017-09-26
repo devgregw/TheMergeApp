@@ -59,8 +59,5 @@ namespace MergeApi.Models.Core.Tab {
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "id")]
         public string Id { get; set; }
-
-        [JsonIgnore]
-        public string FirebaseKey { get; set; }
     }
 }

@@ -67,8 +67,5 @@ namespace MergeApi.Framework.Abstractions {
         public Theme Theme { get; set; }
 
         public abstract Task<ValidationResult> ValidateAsync();
-
-        [JsonIgnore]
-        public string FirebaseKey { get; set; }
     }
 }

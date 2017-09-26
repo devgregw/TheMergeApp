@@ -77,9 +77,6 @@ namespace MergeApi.Models.Core.Attendance {
             }
         }
 
-        [JsonIgnore]
-        public string FirebaseKey { get; set; }
-
         public async Task<AttendanceGroup> GetGroupAsync() => await MergeDatabase.GetAsync<AttendanceGroup>(GroupId);
     }
 }

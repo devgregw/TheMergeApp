@@ -77,9 +77,6 @@ namespace MergeApi.Models.Core.Attendance {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "id")]
         public string Id { get; set; }
 
-        [JsonIgnore]
-        public string FirebaseKey { get; set; }
-
         public async Task<List<AttendanceRecord>> GetRecordsAsync() {
             var records = await MergeDatabase.ListAsync<AttendanceRecord>();
             var filtered = records?.Where(r => r.GroupId == Id).ToList();
