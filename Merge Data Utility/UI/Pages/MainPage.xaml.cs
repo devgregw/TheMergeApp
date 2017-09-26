@@ -79,7 +79,7 @@ namespace Merge_Data_Utility.UI.Pages {
             leadersList.Children.Clear();
         }
 
-        private void PopulateList<T>(StackPanel list, IEnumerable<T> c) where T : IIdentifiable {
+        private void PopulateList<T>(StackPanel list, IEnumerable<T> c) where T : class, IIdentifiable {
             var content = c.ToList();
             content.ForEach(
                 i =>
@@ -271,7 +271,7 @@ namespace Merge_Data_Utility.UI.Pages {
             EditorWindow.Create(source, draft, EditorResult).Show();
         }
 
-        private async void HandleDelete<T>(T item, bool draft) where T : IIdentifiable {
+        private async void HandleDelete<T>(T item, bool draft) where T : class, IIdentifiable {
             if (MessageBox.Show(this.GetWindow(),
                     $"Are you sure you want to delete this {(draft ? "draft" : "object")}?  This action cannot be undone.",
                     "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Exclamation,

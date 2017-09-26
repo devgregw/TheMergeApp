@@ -212,7 +212,7 @@ namespace Merge_Data_Utility.Tools {
         #region Generic Makers
 
         private static Func<ValidationResult, Task<FixResult>> GetDeleteFunc<T>(T obj, string title, string type)
-            where T : IIdentifiable {
+            where T : class, IIdentifiable {
             return async v => {
                 if (
                     MessageBox.Show($"Are you sure you want to delete the {type} '{title}' ({type + "s"}/{obj.Id})?",
