@@ -42,6 +42,14 @@ using MergeApi.Tools;
 
 namespace Merge.Android.Helpers {
     public static class Utilities {
+        public static T IfRelease<T>(T @true, T @false) {
+#if DEBUG
+            return @false;
+#else
+            return @true;
+#endif
+        }
+
         public static void LoadImageForDisplay(string url, ImageView view) => ImageLoader.Instance.DisplayImage(url,
             view);
 

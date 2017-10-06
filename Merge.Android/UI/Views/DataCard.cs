@@ -66,12 +66,10 @@ namespace Merge.Android.UI.Views {
         private string _title, _json, _type, _url;
         public DataCard(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer) { }
 
-        public DataCard(Context context, MergePage p) : base(context) =>
+        public DataCard(Context context, MergePage p, ValidationResult r) : base(context) =>
             Initialize(p.Title, p.ShortDescription, JsonConvert.SerializeObject(p), "page", p.CoverImage,
                 p.Color.ToAndroidColor(), p.Theme,
-                !p.LeadersOnly
-                    ? null
-                    : new IconView(Context, Resource.Drawable.PasswordProtected, "Leaders Only"), p.ButtonAction != null
+                p.ButtonAction != null
                     ? new Button(Context) {
                         Text = p.ButtonLabel
                     }.Manipulate(b => {
@@ -90,11 +88,17 @@ namespace Merge.Android.UI.Views {
                         };
                         return b;
                     })
-                    : null);
+                    : null,
+                !p.LeadersOnly
+                    ? null
+                    : new IconView(Context, Resource.Drawable.PasswordProtected, "Leaders Only"),
+                p.Hidden ? new IconView(Context, Resource.Drawable.NoVisibleContent, "Hidden") : null,
+                r == null || r.ResultType == ValidationResultType.Success ? null : new IconView(Context, Resource.Drawable.Error, "Validation Failed"));
 
-        public DataCard(Context context, MergeEvent e) : base(context) =>
+        public DataCard(Context context, MergeEvent e, ValidationResult r) : base(context) =>
             Initialize(e.Title, e.ShortDescription, JsonConvert.SerializeObject(e), "event", e.CoverImage,
-                e.Color.ToAndroidColor(), e.Theme);
+                e.Color.ToAndroidColor(), e.Theme,
+                r == null || r.ResultType == ValidationResultType.Success ? null : new IconView(Context, Resource.Drawable.Error, "Validation Failed"));
 
         public DataCard(Context context, MergeGroup g) : base(context) =>
             Initialize(g.Name, $"Lead by {g.LeadersFormatted} and hosted by {g.Host}.", JsonConvert.SerializeObject(g),
