@@ -35,10 +35,10 @@ using System;
 
 namespace MergeApi.Tools {
     public static class VersionInfo {
-        public const string VersionString = "1.0.1.4";
+        public const string VersionString = "1.0.1.5";
 
         public static readonly Version Version = Version.Parse(VersionString);
 
-        public static readonly int Update = 5;
+        public static readonly int Update = 6;
     }
 }

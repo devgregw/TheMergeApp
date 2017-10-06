@@ -63,6 +63,7 @@ namespace MergeApi.Models.Core {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate, PropertyName = "content")]
         [JsonConverter(typeof(ClassableListJsonConverter<ElementBase>))] private List<ElementBase> _content;
 
+        [JsonIgnore]
         public List<ElementBase> Content {
             get => _content ?? new List<ElementBase>();
             set => _content = value;
