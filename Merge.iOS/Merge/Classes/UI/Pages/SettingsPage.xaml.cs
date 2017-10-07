@@ -71,7 +71,7 @@ namespace Merge.Classes.UI {
         }
 
         private void ShowSimpleDialog(string title, string message, string[] buttons, Action[] buttonClicks) {
-			AlertHelper.ShowAlert(title, message, b => buttonClicks[Array.IndexOf(buttons, b)](), null, buttons);
+            AlertHelper.ShowAlert(title, message, b => buttonClicks[Array.IndexOf(buttons, b)](), null, buttons);
         }
 
         private void SetLeaderFeaturesCellSafely(bool value) {

@@ -45,20 +45,21 @@ namespace Merge.Classes.Helpers {
     public static class Extensions {
         public static int IndexOf<T>(this IEnumerable<T> e, T item) => Array.IndexOf(e.ToArray(), item);
 
-		public static UIViewController GetTopmostViewController(this UIWindow w) {
-			var controller = UIApplication.SharedApplication.KeyWindow.RootViewController;
-			while (controller.PresentedViewController != null)
-				controller = controller.PresentedViewController;
-			return controller;
-		}
+        public static UIViewController GetTopmostViewController(this UIWindow w) {
+            var controller = UIApplication.SharedApplication.KeyWindow.RootViewController;
+            while (controller.PresentedViewController != null)
+                controller = controller.PresentedViewController;
+            return controller;
+        }
 
-		public static void AddToolbarItem(this Page p, string text, string icon, EventHandler clicked) => p.ToolbarItems.Add(new ToolbarItem {
-			Text = text,
-			Icon = icon
-		}.Manipulate(i => {
-			i.Clicked += clicked;
-			return i;
-		}));
+        public static void AddToolbarItem(this Page p, string text, string icon, EventHandler clicked) =>
+            p.ToolbarItems.Add(new ToolbarItem {
+                Text = text,
+                Icon = icon
+            }.Manipulate(i => {
+                i.Clicked += clicked;
+                return i;
+            }));
 
         public static NavigationPage WrapInNavigationPage(this Page p) => new NavigationPage(p);
 

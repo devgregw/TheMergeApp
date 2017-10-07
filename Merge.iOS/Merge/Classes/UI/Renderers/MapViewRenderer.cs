@@ -72,7 +72,8 @@ namespace Merge.Classes.UI.Renderers {
                 _annotationTapped = annotationTapped;
             }
 
-            public override void DidSelectAnnotationView(MKMapView mapView, MKAnnotationView view) => _annotationTapped?.Invoke(view);
+            public override void DidSelectAnnotationView(MKMapView mapView, MKAnnotationView view) =>
+                _annotationTapped?.Invoke(view);
         }
     }
 }

@@ -41,6 +41,7 @@ using MergeApi.Models.Core;
 using MergeApi.Models.Core.Tab;
 using MergeApi.Tools;
 using Xamarin.Forms;
+using Utilities = Merge.Classes.Helpers.Utilities;
 
 #endregion
 
@@ -93,7 +94,8 @@ namespace Merge.Classes {
 
         public bool DoesPassThroughFilter(MergePage input) => !input.LeadersOnly &&
                                                               input.CheckTargeting(PreferenceHelper.GradeLevels,
-                                                                  PreferenceHelper.Genders) && Helpers.Utilities.IfRelease(!input.Hidden, true);
+                                                                  PreferenceHelper.Genders) &&
+                                                              Utilities.IfRelease(!input.Hidden, true);
 
         int IGenericTabPageDelegate<MergePage, int>.GetTab() => 0;
 

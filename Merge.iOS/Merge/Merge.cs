@@ -31,9 +31,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using CoreGraphics;
 using Merge.Classes;
 using Merge.Classes.Helpers;
+using Merge.Classes.Receivers;
 using Merge.Classes.UI;
 using Merge.Classes.UI.Pages;
 using Merge.Classes.UI.Pages.LeadersOnly;
@@ -46,9 +49,6 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 using Application = Xamarin.Forms.Application;
 using ui = UIKit;
-using System.Threading.Tasks;
-using System.Threading;
-using Merge.Classes.Receivers;
 
 #endregion
 
@@ -80,7 +80,8 @@ namespace Merge {
         }
 
         public void ShowLoader(string message) {
-            _overlay = new LoadingOverlay(message, ui.UIScreen.MainScreen.Bounds, ui.UIApplication.SharedApplication.KeyWindow.RootViewController);
+            _overlay = new LoadingOverlay(message, ui.UIScreen.MainScreen.Bounds,
+                ui.UIApplication.SharedApplication.KeyWindow.RootViewController);
             _overlay.Show();
         }
 
@@ -93,33 +94,34 @@ namespace Merge {
                 BackgroundColor = Color.FromHex(ColorConsts.PrimaryLightColor),
                 Title = "Merge"
             };
-			_tabbedPage.AddToolbarItem("Menu", Images.MoreVertical, (s, e) => {
-				var menuItems = new List<string> {
-							"Refresh",
-							"About Merge",
-							"Settings",
-							"Contact Us"
-						};
-				if (PreferenceHelper.IsValidLeader)
-					menuItems.Add("Leader Resources");
-				AlertHelper.ShowSheet("The Merge App",
-					b => {
-						if (b == "Close")
-							return;
-						var items = menuItems.ToArray();
-					if (b == items[0]) {
-						TabPageDelegates.Instance.Nullify();
-						ReInitTabs();
-					} else if (b == items[1])
-						((NavigationPage)MainPage).Navigation.PushAsync(new AboutPage());
-						else if (b == items[2])
-						((NavigationPage)MainPage).Navigation.PushAsync(new SettingsPage());
-						else if (b == items[3])
-						EmailAction.FromAddress("students@pantego.org").Invoke();
-						else if (b == items[4])
-					((NavigationPage)MainPage).Navigation.PushAsync(new LeaderResourcesPage());	
-					}, "Close", null, ((ToolbarItem)s).ToUIBarButtonItem(), menuItems.ToArray());
-			});
+            _tabbedPage.AddToolbarItem("Menu", Images.MoreVertical, (s, e) => {
+                var menuItems = new List<string> {
+                    "Refresh",
+                    "About Merge",
+                    "Settings",
+                    "Contact Us"
+                };
+                if (PreferenceHelper.IsValidLeader)
+                    menuItems.Add("Leader Resources");
+                AlertHelper.ShowSheet("The Merge App",
+                    b => {
+                        if (b == "Close")
+                            return;
+                        var items = menuItems.ToArray();
+                        if (b == items[0]) {
+                            TabPageDelegates.Instance.Nullify();
+                            ReInitTabs();
+                        } else if (b == items[1]) {
+                            ((NavigationPage) MainPage).Navigation.PushAsync(new AboutPage());
+                        } else if (b == items[2]) {
+                            ((NavigationPage) MainPage).Navigation.PushAsync(new SettingsPage());
+                        } else if (b == items[3]) {
+                            EmailAction.FromAddress("students@pantego.org").Invoke();
+                        } else if (b == items[4]) {
+                            ((NavigationPage) MainPage).Navigation.PushAsync(new LeaderResourcesPage());
+                        }
+                    }, "Close", null, ((ToolbarItem) s).ToUIBarButtonItem(), menuItems.ToArray());
+            });
             _tabbedPage.Children.Add(new ContentPage {
                 BackgroundColor = Color.FromHex(ColorConsts.PrimaryLightColor)
             });
@@ -169,11 +171,11 @@ namespace Merge {
         }*/
 
         public sealed class LoadingOverlay : ui.UIView {
-            private ui.UILabel _label;
-            private ui.UIActivityIndicatorView _spinner;
             private ui.UIButton _button;
             private ui.UIViewController _controller;
-            private bool _showing = false;
+            private ui.UILabel _label;
+            private bool _showing;
+            private ui.UIActivityIndicatorView _spinner;
 
             public LoadingOverlay(string msg, CGRect frame, ui.UIViewController controller) : base(frame) {
                 BackgroundColor = ui.UIColor.Black;

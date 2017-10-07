@@ -36,6 +36,7 @@ using System.Linq;
 using CoreLocation;
 using MapKit;
 using Merge.Classes.Helpers;
+using Merge.Classes.Receivers;
 using Merge.Classes.UI.Controls;
 using Merge.iOS.Helpers;
 using MergeApi.Framework.Enumerations;
@@ -45,7 +46,6 @@ using MergeApi.Tools;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Merge.Classes.Receivers;
 using Utilities = Merge.Classes.Helpers.Utilities;
 
 #endregion
@@ -206,12 +206,12 @@ namespace Merge.Classes.UI.Pages {
 
         private void InitializeMenu() {
             _menuItems.Add("Contact Us", EmailAction.FromAddress("students@pantego.org").Invoke);
-			this.AddToolbarItem("More", Images.MoreVertical, (s, e) => AlertHelper.ShowSheet(null, b => {
-				if (b != "Close") {
-					var items = _menuItems.Keys.ToArray();
-				_menuItems.ElementAt(Array.IndexOf(items, b)).Value();
-				}
-			}, "Close", null, null, _menuItems.Keys.ToArray()));
+            this.AddToolbarItem("More", Images.MoreVertical, (s, e) => AlertHelper.ShowSheet(null, b => {
+                if (b != "Close") {
+                    var items = _menuItems.Keys.ToArray();
+                    _menuItems.ElementAt(Array.IndexOf(items, b)).Value();
+                }
+            }, "Close", null, null, _menuItems.Keys.ToArray()));
         }
 
         private void Colorize(Color c, Theme t) {

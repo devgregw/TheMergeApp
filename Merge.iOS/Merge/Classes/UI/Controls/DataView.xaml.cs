@@ -51,9 +51,12 @@ namespace Merge.Classes.UI.Controls {
 
         public DataView(MergeEvent e, ValidationResult r) : this() {
             Initialize(e.Title, e.ShortDescription, e.CoverImage,
-                () => Navigation.PushAsync(new DataDetailPage(e), true), r == null || r.ResultType == ValidationResultType.Success ? null : new IconView(Images.Error, new Label {
-                    Text = "Validation Failure"
-                }));
+                () => Navigation.PushAsync(new DataDetailPage(e), true),
+                r == null || r.ResultType == ValidationResultType.Success
+                    ? null
+                    : new IconView(Images.Error, new Label {
+                        Text = "Validation Failure"
+                    }));
         }
 
         public DataView(MergePage p, ValidationResult r) : this() {
@@ -74,11 +77,15 @@ namespace Merge.Classes.UI.Controls {
                         FontSize = 14d
                     })
                     : null,
-                p.Hidden ? new IconView(Images.NoVisibleContent, new Label {
-                    Text = "Hidden"
-                }) : null, r == null || r.ResultType == ValidationResultType.Success ? null : new IconView(Images.Error, new Label {
-                    Text = "Validation Failure"
-                }));
+                p.Hidden
+                    ? new IconView(Images.NoVisibleContent, new Label {
+                        Text = "Hidden"
+                    })
+                    : null, r == null || r.ResultType == ValidationResultType.Success
+                    ? null
+                    : new IconView(Images.Error, new Label {
+                        Text = "Validation Failure"
+                    }));
         }
 
         public DataView(MergeGroup g) : this() {

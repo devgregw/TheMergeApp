@@ -32,6 +32,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using CoreLocation;
 using EventKit;
@@ -119,17 +120,19 @@ namespace Merge.Classes.Receivers {
 
         public async void InvokeGetDirectionsActionAsync(GetDirectionsAction action) {
             void InternalInvokeWithCoordinates(CLLocationCoordinate2D coords, NSDictionary addressDictionary = null) {
-                if (UIApplication.SharedApplication.CanOpenUrl(NSUrl.FromString("comgooglemaps://"))) {
-                    UIApplication.SharedApplication.OpenUrl(NSUrl.FromString($"comgooglemaps://?directionsmode=driving&daddr={coords.Latitude},{coords.Longitude}"));
-                } else
-                new MKMapItem(new MKPlacemark(coords, addressDictionary)).OpenInMaps(new MKLaunchOptions {
-                    DirectionsMode = MKDirectionsMode.Driving
-                });
+                if (UIApplication.SharedApplication.CanOpenUrl(NSUrl.FromString("comgooglemaps://")))
+                    UIApplication.SharedApplication.OpenUrl(NSUrl.FromString(
+                        $"comgooglemaps://?directionsmode=driving&daddr={coords.Latitude},{coords.Longitude}"));
+                else
+                    new MKMapItem(new MKPlacemark(coords, addressDictionary)).OpenInMaps(new MKLaunchOptions {
+                        DirectionsMode = MKDirectionsMode.Driving
+                    });
             }
 
             async Task InternalInvokeWithAddress(string address) {
                 if (UIApplication.SharedApplication.CanOpenUrl(NSUrl.FromString("comgooglemaps://"))) {
-                    UIApplication.SharedApplication.OpenUrl(NSUrl.FromString($"comgooglemaps://?directionsmode=driving&daddr={System.Net.WebUtility.UrlEncode(address)}"));
+                    UIApplication.SharedApplication.OpenUrl(NSUrl.FromString(
+                        $"comgooglemaps://?directionsmode=driving&daddr={WebUtility.UrlEncode(address)}"));
                 } else {
                     var geocodeResult =
                         await LoadAsync(async () => await new CLGeocoder().GeocodeAddressAsync(address));
@@ -280,8 +283,8 @@ namespace Merge.Classes.Receivers {
             AlertHelper.ShowSheet("Contact " + name, b => {
                 var labels = items.Keys.ToArray();
                 var mediums = items.Values.ToArray();
-				if (b == "Cancel")
-					return;
+                if (b == "Cancel")
+                    return;
                 if (b == "View Info") {
                     var msg = "";
                     foreach (var medium in mediums)
@@ -298,7 +301,7 @@ namespace Merge.Classes.Receivers {
                     AlertHelper.ShowAlert("Contact Info for " + name, msg, null, "Close", null);
                     return;
                 }
-				var ni = Array.IndexOf(items.Keys.ToArray(), b);
+                var ni = Array.IndexOf(items.Keys.ToArray(), b);
                 var item = labels[ni];
                 if (item.Contains("Email"))
                     EmailAction.FromContactMedium((EmailAddressMedium) mediums[ni]).Invoke();
@@ -347,11 +350,12 @@ namespace Merge.Classes.Receivers {
         }
 
         private void ShowErrorAlert(string title, string message, Exception error) {
-			AlertHelper.ShowAlert(title, $"{message}\n{error.Message} ({error.GetType().FullName})", b => {}, "OK", null);
+            AlertHelper.ShowAlert(title, $"{message}\n{error.Message} ({error.GetType().FullName})", b => { }, "OK",
+                null);
         }
 
         public void ShowSimpleAlert(string title, string message) {
-			AlertHelper.ShowAlert(title, message, b => {}, "OK", null);
+            AlertHelper.ShowAlert(title, message, b => { }, "OK", null);
         }
 
         public void ShowBadParamGroupAlert(ActionBase action) {

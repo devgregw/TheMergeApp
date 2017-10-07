@@ -1,4 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Merge.Classes.UI.Pages.LeadersOnly.MergeGroupRecordEditorPage" Title="Record Editor">
@@ -10,23 +11,26 @@
                 <Label Text="Date" TextColor="Black" FontSize="18" />
                 <Label x:Name="date" TextColor="Gray" FontSize="14" />
                 <Label Text="Student Count" TextColor="Black" FontSize="18" />
-                <Entry x:Name="studentCount" Keyboard="Numeric"/>
+                <Entry x:Name="studentCount" Keyboard="Numeric" />
                 <Label Text="Image" TextColor="Black" FontSize="18" />
                 <Label Text="Optional" TextColor="Gray" FontSize="14" />
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.33*"/>
-                        <ColumnDefinition Width="0.33*"/>
-                        <ColumnDefinition Width="0.33*"/>
+                        <ColumnDefinition Width="0.33*" />
+                        <ColumnDefinition Width="0.33*" />
+                        <ColumnDefinition Width="0.33*" />
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" x:Name="clearButton" Clicked="ClearImage" TextColor="Black" Text="Clear" IsEnabled="false"
-                        BackgroundColor="#ffd326" />
-                    <Button Grid.Column="1" x:Name="cameraButton"  Clicked="SelectImageCamera" TextColor="Black" Text="Camera"
-                        BackgroundColor="#ffd326" />
-                    <Button Grid.Column="2" x:Name="galleryButton"  Clicked="SelectImageGallery" TextColor="Black" Text="Browse"
-                        BackgroundColor="#ffd326" />
+                    <Button Grid.Column="0" x:Name="clearButton" Clicked="ClearImage" TextColor="Black" Text="Clear"
+                            IsEnabled="false"
+                            BackgroundColor="#ffd326" />
+                    <Button Grid.Column="1" x:Name="cameraButton" Clicked="SelectImageCamera" TextColor="Black"
+                            Text="Camera"
+                            BackgroundColor="#ffd326" />
+                    <Button Grid.Column="2" x:Name="galleryButton" Clicked="SelectImageGallery" TextColor="Black"
+                            Text="Browse"
+                            BackgroundColor="#ffd326" />
                 </Grid>
-                <Image x:Name="image" Aspect="AspectFill"  HorizontalOptions="Center" VerticalOptions="Start"/>
+                <Image x:Name="image" Aspect="AspectFill" HorizontalOptions="Center" VerticalOptions="Start" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

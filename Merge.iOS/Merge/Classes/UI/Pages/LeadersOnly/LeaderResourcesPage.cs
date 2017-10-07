@@ -36,6 +36,7 @@ using MergeApi.Models.Core;
 using MergeApi.Models.Core.Tab;
 using MergeApi.Tools;
 using Xamarin.Forms;
+using Utilities = Merge.Classes.Helpers.Utilities;
 
 #endregion
 
@@ -64,7 +65,8 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
 
             public View TransformIntoView(MergePage input, ValidationResult r) => new DataView(input, r);
 
-            public bool DoesPassThroughFilter(MergePage input) => input.LeadersOnly && Helpers.Utilities.IfRelease(!input.Hidden, true);
+            public bool DoesPassThroughFilter(MergePage input) =>
+                input.LeadersOnly && Utilities.IfRelease(!input.Hidden, true);
 
             public int GetTab() => 0;
 

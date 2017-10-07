@@ -35,23 +35,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using Foundation;
 using Merge.Classes.Helpers;
-using Merge.iOS.Helpers;
+using Merge.Classes.Receivers;
 using MergeApi.Client;
 using MergeApi.Models.Core.Attendance;
 using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
 using Xamarin.Forms.Xaml;
-using Merge.Classes.Receivers;
 
 #endregion
 
 namespace Merge.Classes.UI.Pages.LeadersOnly {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class RecordEditorPage : ContentPage {
+        private bool _enable;
         private AttendanceGroup _group;
         private List<string> _names;
         private AttendanceRecord _record;
-        private bool _enable;
 
         private RecordEditorPage() {
             InitializeComponent();
@@ -108,12 +106,13 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
             await Navigation.PopAsync();
         }
 
-        private List<string> GetStudents() => studentsList.Children.OfType<StackLayout>().Select(layout => ((Label)layout.Children[0]).Text)
-                .ToList();
+        private List<string> GetStudents() => studentsList.Children.OfType<StackLayout>()
+            .Select(layout => ((Label) layout.Children[0]).Text)
+            .ToList();
 
         private bool IsStudentChecked(string name) => (from layout in studentsList.Children.OfType<StackLayout>()
-                                                       where ((Label)layout.Children[0]).Text == name
-                                                       select ((Switch)layout.Children[1]).IsToggled).FirstOrDefault();
+            where ((Label) layout.Children[0]).Text == name
+            select ((Switch) layout.Children[1]).IsToggled).FirstOrDefault();
 
         private void AddStudentToList(string name, bool check, bool enable) {
             _names.Add(name);
@@ -137,10 +136,11 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
             });
         }
 
-        private void AddStudent(object sender, EventArgs e) => AlertHelper.ShowTextInputAlert("Add Student", "Type the student's name then tap 'Add'.", false, f => { },
-                (b, i) => {
-                    if (b == "Add")
-                        AddStudentToList(i, true, true);
-                }, "Add", "Cancel");
+        private void AddStudent(object sender, EventArgs e) => AlertHelper.ShowTextInputAlert("Add Student",
+            "Type the student's name then tap 'Add'.", false, f => { },
+            (b, i) => {
+                if (b == "Add")
+                    AddStudentToList(i, true, true);
+            }, "Add", "Cancel");
     }
 }

@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
-// Project Merge.Android:  FileUploader.cs (in Solution Merge.Android)
-// Created by Greg Whatley on 09/06/2017 at 3:58 PM.
+// Project Merge.iOS:  FileUploader.cs (in Solution Merge.iOS)
+// Created by Greg Whatley on 09/15/2017 at 9:23 PM.
 // 
 // The MIT License (MIT)
 // 

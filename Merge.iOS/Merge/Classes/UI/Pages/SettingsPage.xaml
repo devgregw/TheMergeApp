@@ -12,7 +12,8 @@
                 </TableSection>
                 <TableSection x:Name="extrasSection" Title="Extras">
                     <SwitchCell x:Name="cachingCell" OnChanged="Caching_Changed" Text="Enable Caching" />
-                    <SwitchCell x:Name="invalidObjectsCell" OnChanged="ShowInvalidObjects_Changed" Text="Show Invalid Objects"/>
+                    <SwitchCell x:Name="invalidObjectsCell" OnChanged="ShowInvalidObjects_Changed"
+                                Text="Show Invalid Objects" />
                     <SwitchCell x:Name="leaderFeaturesCell" Text="Enable Leader-Only Features"
                                 OnChanged="LeaderFeatures_Changed" />
                     <ViewCell>

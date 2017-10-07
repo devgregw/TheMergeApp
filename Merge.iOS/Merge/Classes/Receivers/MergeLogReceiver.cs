@@ -30,13 +30,12 @@
 #region USINGS
 
 using System;
-using MergeApi.Framework.Enumerations;
-using MergeApi.Framework.Interfaces.Receivers;
-using Firebase.CrashReporting;
 using System.Collections.Generic;
 using System.Linq;
-using Foundation;
 using Firebase.Analytics;
+using Firebase.CrashReporting;
+using Foundation;
+using MergeApi.Framework.Interfaces.Receivers;
 using LogLevel = MergeApi.Framework.Enumerations.LogLevel;
 
 #endregion
@@ -72,7 +71,9 @@ namespace Merge.Classes.Receivers {
                 {"debug", "true"}
 #endif
             });
-            var newDict = allItems.Select(p => new KeyValuePair<NSString, NSObject>(new NSString(p.Key), NSObject.FromObject(p.Value))).ToDictionary(p => p.Key, p => p.Value);
+            var newDict = allItems
+                .Select(p => new KeyValuePair<NSString, NSObject>(new NSString(p.Key), NSObject.FromObject(p.Value)))
+                .ToDictionary(p => p.Key, p => p.Value);
             Analytics.LogEvent(name,
                 new NSDictionary<NSString, NSObject>(newDict.Keys.ToArray(), newDict.Values.ToArray()));
         }

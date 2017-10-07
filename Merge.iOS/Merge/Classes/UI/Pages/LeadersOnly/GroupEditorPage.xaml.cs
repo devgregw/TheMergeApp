@@ -31,17 +31,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Foundation;
 using Merge.Classes.Helpers;
-using Merge.iOS.Helpers;
+using Merge.Classes.Receivers;
 using MergeApi.Client;
 using MergeApi.Models.Core.Attendance;
 using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
 using Xamarin.Forms.Xaml;
-using System.Linq;
-using Merge.Classes.Receivers;
 
 #endregion
 
@@ -49,9 +47,9 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class GroupEditorPage : ContentPage {
         private AttendanceGroup _group;
+        private List<(string Old, string New)> _renames;
 
         private List<string> _students;
-        private List<(string Old, string New)> _renames;
 
         public GroupEditorPage(AttendanceGroup group) {
             InitializeComponent();
@@ -94,32 +92,35 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
                                 })
                             },
                             new Button {
-                            Text = "Edit",
-                            TextColor = Color.Red,
-                            FontSize = 14d,
-                            Command = new Command(() => {
-                                AlertHelper.ShowTextInputAlert("Edit Student", "Type the student's name then tap 'Done'.", false, f => f.Text = name,
-                                    (b, i) => {
-                                        if (b == "Done") {
-                                            if (!string.IsNullOrWhiteSpace(i)) {
-                                                if (_renames.Select(t => t.New).Contains(name)) {
-                                                    var index1 = _renames.Select(t => t.New).IndexOf(name);
-                                                    var previous = _renames[index1];
-                                                    _renames[index1] = (previous.Old, i);
-                                                } else
-                                                    _renames.Add((name, i));
-                                                var index2 = _students.IndexOf(name);
-                                                _students[index2] = i;
-                                                ((Label) ((StackLayout)studentsList.Children.ElementAt(index2)).Children.ElementAt(0))
-                                                    .Text = i;
-                                            } else
-                                                AlertHelper.ShowAlert("Error",
-                                                    "Could not edit student: No name specified.", null, "OK");
-                                        }
-                                    }, "Done", "Cancel");
-                            })
+                                Text = "Edit",
+                                TextColor = Color.Red,
+                                FontSize = 14d,
+                                Command = new Command(() => {
+                                    AlertHelper.ShowTextInputAlert("Edit Student",
+                                        "Type the student's name then tap 'Done'.", false, f => f.Text = name,
+                                        (b, i) => {
+                                            if (b == "Done")
+                                                if (!string.IsNullOrWhiteSpace(i)) {
+                                                    if (_renames.Select(t => t.New).Contains(name)) {
+                                                        var index1 = _renames.Select(t => t.New).IndexOf(name);
+                                                        var previous = _renames[index1];
+                                                        _renames[index1] = (previous.Old, i);
+                                                    } else {
+                                                        _renames.Add((name, i));
+                                                    }
+                                                    var index2 = _students.IndexOf(name);
+                                                    _students[index2] = i;
+                                                    ((Label) ((StackLayout) studentsList.Children.ElementAt(index2))
+                                                            .Children.ElementAt(0))
+                                                        .Text = i;
+                                                } else {
+                                                    AlertHelper.ShowAlert("Error",
+                                                        "Could not edit student: No name specified.", null, "OK");
+                                                }
+                                        }, "Done", "Cancel");
+                                })
+                            }
                         }
-                    }
                     }
                 }
             });
@@ -135,12 +136,11 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
             if (_renames.Any()) {
                 var records = (await MergeDatabase.ListAsync<AttendanceRecord>()).Where(r => r.GroupId == _group.Id)
                     .ToList();
-                foreach (var t in _renames) {
-                    foreach (var r in records) {
-                        if (!r.Students.Contains(t.Old)) continue;
-                        r.Students[r.Students.IndexOf(t.Old)] = t.New;
-                        await MergeDatabase.UpdateAsync(r);
-                    }
+                foreach (var t in _renames)
+                foreach (var r in records) {
+                    if (!r.Students.Contains(t.Old)) continue;
+                    r.Students[r.Students.IndexOf(t.Old)] = t.New;
+                    await MergeDatabase.UpdateAsync(r);
                 }
             }
             await MergeDatabase.UpdateAsync(_group);
@@ -151,12 +151,11 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
         private void AddStudent(object sender, EventArgs e) {
             AlertHelper.ShowTextInputAlert("Add Student", "Type the student's name then tap 'Done'.", false, f => { },
                 (b, i) => {
-                    if (b == "Done") {
+                    if (b == "Done")
                         if (!string.IsNullOrWhiteSpace(i))
                             AddStudentToList(i);
                         else
                             AlertHelper.ShowAlert("Error", "Could not add student: No name specified.", null, "OK");
-                    }
                 }, "Add", "Cancel");
         }
     }
