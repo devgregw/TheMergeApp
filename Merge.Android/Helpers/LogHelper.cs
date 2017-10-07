@@ -31,23 +31,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Android;
 using Android.App;
 using Android.Content;
-using Android.Content.PM;
-using Android.Support.V4.Content;
 using Android.Util;
 using Firebase.Analytics;
 using Firebase.Crash;
 using Java.Lang;
 using Enum = System.Enum;
 using Exception = System.Exception;
-using File = Java.IO.File;
 using Process = Android.OS.Process;
-using Uri = Android.Net.Uri;
 
 #endregion
 
@@ -56,6 +48,7 @@ namespace Merge.Android.Helpers {
         //private static File _file;
         //private static File _folder;
         private static Context _context;
+
         private static bool _enable;
 
         public static void FirebaseLog(Context c, string name, Dictionary<string, string> values) => FirebaseAnalytics

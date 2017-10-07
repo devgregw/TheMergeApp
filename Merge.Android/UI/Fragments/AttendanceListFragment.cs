@@ -117,7 +117,9 @@ namespace Merge.Android.UI.Fragments {
                     SelectedGroup = null;
                     SetItems(_groups
                         .Where(g => argument.ToString() == "jh" ? (int) g.GradeLevel <= 8 : (int) g.GradeLevel >= 9)
-                        .OrderBy(g => (int) g.GradeLevel).ThenBy(g => IntFromWord(g.LeaderNames.ElementAt(0).Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Last()))
+                        .OrderBy(g => (int) g.GradeLevel).ThenBy(g =>
+                            IntFromWord(g.LeaderNames.ElementAt(0)
+                                .Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries).Last()))
                         .ToDictionary(g => g.Summary, g => $"ag:{JsonConvert.SerializeObject(g)}"));
                     break;
                 case StateRecords:

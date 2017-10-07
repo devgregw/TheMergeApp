@@ -101,7 +101,9 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
             var students = GetStudents().Where(IsStudentChecked).ToList();
             if (students.Count == 0) {
                 var errDialog = new AlertDialog.Builder(this).SetTitle("No Students")
-                    .SetMessage("Please select at least one student.  If no students attended, simply do not create a record.").SetPositiveButton("Ok",
+                    .SetMessage(
+                        "Please select at least one student.  If no students attended, simply do not create a record.")
+                    .SetPositiveButton("Ok",
                         (s, e) => { }).Create();
                 errDialog.SetOnShowListener(AlertDialogColorOverride.Instance);
                 errDialog.Show();

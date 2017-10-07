@@ -47,7 +47,6 @@ using Merge.Android.Receivers;
 using Merge.Android.UI.Views;
 using MergeApi.Client;
 using MergeApi.Framework.Enumerations;
-using MergeApi.Framework.Interfaces;
 using MergeApi.Models.Core;
 using MergeApi.Tools;
 using AlertDialog = Android.Support.V7.App.AlertDialog;
@@ -86,10 +85,14 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
                     return;
                 }
             }
-            Task<(MergePage Object, ValidationResult Result)>[] validations = _pages.Where(p => p.LeadersOnly && Utilities.IfRelease(!p.Hidden, true))
+            Task<(MergePage Object, ValidationResult Result)>[] validations = _pages
+                .Where(p => p.LeadersOnly && Utilities.IfRelease(!p.Hidden, true))
                 .Select(async o => (o,
-                   await o.ValidateAsync())).ToArray();
-            var filtered = (await Task.WhenAll(validations)).Where(o => Utilities.IfRelease(PreferenceHelper.ShowInvalidObjects || o.Result == null || o.Result.ResultType == ValidationResultType.Success, true));
+                    await o.ValidateAsync())).ToArray();
+            var filtered = (await Task.WhenAll(validations)).Where(o =>
+                Utilities.IfRelease(
+                    PreferenceHelper.ShowInvalidObjects || o.Result == null ||
+                    o.Result.ResultType == ValidationResultType.Success, true));
             var content = filtered.Select(p => new DataCard(this, p.Object, p.Result)).ToList();
             if (content.Count > 0) {
                 _applier.Apply(content, !_first);

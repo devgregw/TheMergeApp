@@ -42,8 +42,6 @@ using Android.Content.Res;
 using Android.Gms.Common;
 using Android.Gms.Common.Apis;
 using Android.Gms.Location;
-using Android.Graphics;
-using Android.Graphics.Drawables;
 using Android.Locations;
 using Android.OS;
 using Android.Support.Design.Widget;
@@ -52,8 +50,6 @@ using Android.Support.V4.Widget;
 using Android.Views;
 using Android.Widget;
 using CheeseBind;
-using Com.Nostra13.Universalimageloader.Core;
-using Com.Nostra13.Universalimageloader.Core.Display;
 using Merge.Android.Helpers;
 using Merge.Android.Receivers;
 using Merge.Android.UI.Activities.LeadersOnly;
@@ -161,7 +157,8 @@ namespace Merge.Android.UI.Activities {
 
         private async Task HandleTab<T, TSortBy>(Func<IEnumerable<T>> variableGetter,
             Action<IEnumerable<T>> variableSetter,
-            int tab, Func<T, TSortBy> sorter, Func<T, bool> filter, Func<(T Object, ValidationResult Result), View> viewCreator) where T : class, IIdentifiable {
+            int tab, Func<T, TSortBy> sorter, Func<T, bool> filter,
+            Func<(T Object, ValidationResult Result), View> viewCreator) where T : class, IIdentifiable {
             _navView.SetCheckedItem(GetDrawerItemForTab(tab));
             if (variableGetter() == null) {
                 // Load data from the database if we haven't already (variableGetter() will also return null if the user tapped refresh: see Nullify())
@@ -204,12 +201,14 @@ namespace Merge.Android.UI.Activities {
                 Task<(T Object, ValidationResult Result)>[] validations = variableGetter().Where(filter).OrderBy(sorter)
                     .Select(async o => (o,
                         o is IValidatable ? await ((IValidatable) o).ValidateAsync() : null)).ToArray();
-                var filtered = (await Task.WhenAll(validations)).Where(t => Utilities.IfRelease(PreferenceHelper.ShowInvalidObjects || t.Result == null ||
-                                    t.Result.ResultType == ValidationResultType.Success, true)).ToList();
+                var filtered = (await Task.WhenAll(validations)).Where(t =>
+                    Utilities.IfRelease(PreferenceHelper.ShowInvalidObjects || t.Result == null ||
+                                        t.Result.ResultType == ValidationResultType.Success, true)).ToList();
                 var tips = _tips.Where(t => t.Tab == GetTabForInt(tab) &&
                                             t.CheckTargeting(PreferenceHelper.GradeLevels, PreferenceHelper.Genders) &&
                                             !PreferenceHelper.DismissedTips.Contains(t.Id));
-                var content = tips.Select(t => new TipCard(this, t)).Concat(filtered.Select(o => viewCreator((o.Object, o.Result))))
+                var content = tips.Select(t => new TipCard(this, t))
+                    .Concat(filtered.Select(o => viewCreator((o.Object, o.Result))))
                     .ToList();
                 var image = _headers.ContainsKey(tab) && _headers[tab] != null
                     ? CreateHeaderImageView(_headers[tab].Image)

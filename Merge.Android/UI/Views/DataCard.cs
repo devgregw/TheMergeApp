@@ -93,12 +93,16 @@ namespace Merge.Android.UI.Views {
                     ? null
                     : new IconView(Context, Resource.Drawable.PasswordProtected, "Leaders Only"),
                 p.Hidden ? new IconView(Context, Resource.Drawable.NoVisibleContent, "Hidden") : null,
-                r == null || r.ResultType == ValidationResultType.Success ? null : new IconView(Context, Resource.Drawable.Error, "Validation Failed"));
+                r == null || r.ResultType == ValidationResultType.Success
+                    ? null
+                    : new IconView(Context, Resource.Drawable.Error, "Validation Failed"));
 
         public DataCard(Context context, MergeEvent e, ValidationResult r) : base(context) =>
             Initialize(e.Title, e.ShortDescription, JsonConvert.SerializeObject(e), "event", e.CoverImage,
                 e.Color.ToAndroidColor(), e.Theme,
-                r == null || r.ResultType == ValidationResultType.Success ? null : new IconView(Context, Resource.Drawable.Error, "Validation Failed"));
+                r == null || r.ResultType == ValidationResultType.Success
+                    ? null
+                    : new IconView(Context, Resource.Drawable.Error, "Validation Failed"));
 
         public DataCard(Context context, MergeGroup g) : base(context) =>
             Initialize(g.Name, $"Lead by {g.LeadersFormatted} and hosted by {g.Host}.", JsonConvert.SerializeObject(g),
