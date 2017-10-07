@@ -53,8 +53,8 @@ using Uri = Android.Net.Uri;
 
 namespace Merge.Android.Helpers {
     public static class LogHelper {
-        private static File _file;
-        private static File _folder;
+        //private static File _file;
+        //private static File _folder;
         private static Context _context;
         private static bool _enable;
 
@@ -68,7 +68,7 @@ namespace Merge.Android.Helpers {
 #endif
             }).ToBundle());
 
-        public static async Task<string[]> GetAllLogs() {
+        /*public static async Task<string[]> GetAllLogs() {
             WriteMessage("INFO", "Listing logs");
             var logs =
                 (await _folder.ListFilesAsync()).Select(f => f.Name)
@@ -88,11 +88,11 @@ namespace Merge.Android.Helpers {
                 WriteMessage("WARN", $"Deleting log: {file.Name}");
                 file.Delete();
             }
-        }
+        }*/
 
         public static void Initialize(Context c) {
             _context = c;
-            _folder = _context.GetExternalFilesDir(null);
+            /*_folder = _context.GetExternalFilesDir(null);
             if (!_folder.Exists())
                 _folder.Mkdir();
             _enable = PreferenceHelper.Logging;
@@ -101,7 +101,7 @@ namespace Merge.Android.Helpers {
             _file = new File(_context.GetExternalFilesDir(null),
                 $"mergeandroid-{VersionConsts.Version}-{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.txt");
             if (!_file.Exists())
-                _file.CreateNewFile();
+                _file.CreateNewFile();*/
             WriteMessage("INFO",
                 $"*** WELCOME TO MERGE ***\n*** VERSION {VersionConsts.Version} ({VersionConsts.Classification}, UPDATE {VersionConsts.Update}) BY GREG WHATLEY ***\n*** LOGGING INITIALIZED ***");
             WriteMessage("DEBUG", $"Instance Id: {MergeApplication.InstanceId}");
@@ -149,7 +149,7 @@ namespace Merge.Android.Helpers {
                 $"*** EXCEPTION ***\n*** {ex.GetType().FullName}: {ex.Message} ***\n*** BEGIN STACKTRACE ***\n{ex.StackTrace}\n*** END STACKTRACE ***");
         }
 
-        public static void SendLog(string filename) {
+        /*public static void SendLog(string filename) {
             WriteMessage("INFO", $"Sending log: {filename}");
             var file = new File(_context.GetExternalFilesDir(null), filename);
             var path = SdkChecker.Nougat
@@ -164,7 +164,7 @@ namespace Merge.Android.Helpers {
             intent.AddFlags(ActivityFlags.NewTask);
             intent.AddFlags(ActivityFlags.GrantReadUriPermission);
             _context.StartActivity(intent);
-        }
+        }*/
 
         public static void WriteMessage(string level, string message) {
             if (message.Contains("\n")) {
@@ -172,13 +172,13 @@ namespace Merge.Android.Helpers {
                 foreach (var msg in msgs)
                     WriteMessage(level, msg);
             } else {
-                if (_enable && ContextCompat.CheckSelfPermission(_context, Manifest.Permission.WriteExternalStorage) ==
+                /*if (_enable && ContextCompat.CheckSelfPermission(_context, Manifest.Permission.WriteExternalStorage) ==
                     Permission.Granted)
                     using (var stream = System.IO.File.Open(_file.AbsolutePath, FileMode.Append)) {
                         using (var writer = new StreamWriter(stream)) {
                             writer.Write($"[{DateTime.Now.ToString("HH:mm:ss")}] [{level}] {message}\n");
                         }
-                    }
+                    }*/
                 LogPriority p;
                 if (!Enum.TryParse(level, true, out p))
                     p = LogPriority.Info;

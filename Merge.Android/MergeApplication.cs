@@ -32,8 +32,12 @@
 using System;
 using System.Collections.Generic;
 using Android.App;
+using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.Runtime;
 using Android.Util;
+using Com.Nostra13.Universalimageloader.Core;
+using Com.Nostra13.Universalimageloader.Core.Display;
 using Firebase.Analytics;
 using Firebase.Auth;
 using Merge.Android.Helpers;
@@ -56,14 +60,16 @@ namespace Merge.Android {
 
         public static string InstanceId { get; private set; }
 
-        public override void OnCreate() {
-            base.OnCreate();
-            Log.Debug("MergeApplication", $"For debugging purposes: {GetString(Resource.String.google_app_id)}");
-            InstanceId = Guid.NewGuid().ToString();
+        public static MergeLogger Logger { get; private set; }
+
+        private void InitializeLogging() {
             FirebaseAnalytics.GetInstance(this).SetAnalyticsCollectionEnabled(true);
-            LogHelper.FirebaseLog(this, "appStarted", new Dictionary<string, string>());
-            PreferenceHelper.Initialize(this);
+            Logger = new MergeLogger();
             LogHelper.Initialize(this);
+            LogHelper.FirebaseLog(this, "appStarted", new Dictionary<string, string>());
+        }
+
+        private void InitializeDatabase() {
             MergeDatabase.Initialize(async () => {
                     if (!string.IsNullOrWhiteSpace(PreferenceHelper.Token) &&
                         PreferenceHelper.TokenExpiration > DateTime.Now && PreferenceHelper.AuthenticationState !=
@@ -93,7 +99,30 @@ namespace Merge.Android {
                     }
                     return "";
                 }, new MergeActionInvocationReceiver(), new MergeElementCreationReceiver(this),
-                new MergeLogger());
+                Logger);
+        }
+
+        private void InitializeImageLoader() {
+            var bkg = new ColorDrawable(Color.LightGray);
+            ImageLoader.Instance.Init(new ImageLoaderConfiguration.Builder(this).DefaultDisplayImageOptions(
+                new DisplayImageOptions.Builder().CacheOnDisk(PreferenceHelper.Caching)
+                    .CacheInMemory(PreferenceHelper.Caching)
+                    .Displayer(new FadeInBitmapDisplayer(200))
+                    .ShowImageOnLoading(bkg)
+                    .ShowImageForEmptyUri(bkg)
+                    .ShowImageOnFail(new ColorDrawable(Color.Gray))
+                    .BitmapConfig(Bitmap.Config.Rgb565)
+                    .Build()).Build());
+        }
+
+        public override void OnCreate() {
+            base.OnCreate();
+            Log.Debug("MergeApplication", $"For debugging purposes: {GetString(Resource.String.google_app_id)}");
+            InstanceId = Guid.NewGuid().ToString();
+            InitializeLogging();
+            InitializeDatabase();
+            PreferenceHelper.Initialize(this);
+            InitializeImageLoader();
         }
 
         public class MergeLogger : ILogReceiver {

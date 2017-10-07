@@ -317,19 +317,6 @@ namespace Merge.Android.UI.Activities {
                 InitializeMain();
         }
 
-        private void InitializeUniversalImageLoader() {
-            var bkg = new ColorDrawable(Color.LightGray);
-            ImageLoader.Instance.Init(new ImageLoaderConfiguration.Builder(this).DefaultDisplayImageOptions(
-                new DisplayImageOptions.Builder().CacheOnDisk(PreferenceHelper.Caching)
-                    .CacheInMemory(PreferenceHelper.Caching)
-                    .Displayer(new FadeInBitmapDisplayer(200))
-                    .ShowImageOnLoading(bkg)
-                    .ShowImageForEmptyUri(bkg)
-                    .ShowImageOnFail(new ColorDrawable(Color.Gray))
-                    .BitmapConfig(Bitmap.Config.Rgb565)
-                    .Build()).Build());
-        }
-
         private bool InitializeGooglePlayServices() {
             LogHelper.WriteMessage("INFO", "Checking for Google Play Services");
             var gms = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
@@ -428,7 +415,6 @@ namespace Merge.Android.UI.Activities {
         private void InitializeMain() {
             if (SdkChecker.KitKat)
                 Window.AddFlags(WindowManagerFlags.TranslucentStatus);
-            InitializeUniversalImageLoader();
             InitializeUserInterface();
             InitializeHeaderImageSwitcher();
             SelectTab(Intent.GetIntExtra("tab", TabHome), true);
