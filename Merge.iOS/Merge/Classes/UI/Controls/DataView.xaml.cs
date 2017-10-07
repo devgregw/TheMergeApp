@@ -34,7 +34,9 @@ using System.Linq;
 using Merge.Classes.Helpers;
 using Merge.Classes.UI.Pages;
 using Merge.iOS.Helpers;
+using MergeApi.Framework.Enumerations;
 using MergeApi.Models.Core;
+using MergeApi.Tools;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -47,20 +49,16 @@ namespace Merge.Classes.UI.Controls {
             InitializeComponent();
         }
 
-        public DataView(MergeEvent e) : this() {
+        public DataView(MergeEvent e, ValidationResult r) : this() {
             Initialize(e.Title, e.ShortDescription, e.CoverImage,
-                () => Navigation.PushAsync(new DataDetailPage(e), true));
+                () => Navigation.PushAsync(new DataDetailPage(e), true), r == null || r.ResultType == ValidationResultType.Success ? null : new IconView(Images.Error, new Label {
+                    Text = "Validation Failure"
+                }));
         }
 
-        public DataView(MergePage p) : this() {
+        public DataView(MergePage p, ValidationResult r) : this() {
             Initialize(p.Title, p.ShortDescription, p.CoverImage,
-                () => Navigation.PushAsync(new DataDetailPage(p), true), p.LeadersOnly
-                    ? new IconView(Images.PasswordProtected, new Label {
-                        Text = "Leaders Only",
-                        TextColor = Color.Black,
-                        FontSize = 14d
-                    })
-                    : null, p.ButtonAction != null
+                () => Navigation.PushAsync(new DataDetailPage(p), true), p.ButtonAction != null
                     ? new Button {
                         Text = p.ButtonLabel,
                         TextColor = p.Color.ToFormsColor().ContrastColor(p.Theme),
@@ -69,7 +67,18 @@ namespace Merge.Classes.UI.Controls {
                         BorderColor = p.Color.ToFormsColor().ContrastColor(p.Theme),
                         Command = new Command(p.ButtonAction.Invoke)
                     }
-                    : null);
+                    : null, p.LeadersOnly
+                    ? new IconView(Images.PasswordProtected, new Label {
+                        Text = "Leaders Only",
+                        TextColor = Color.Black,
+                        FontSize = 14d
+                    })
+                    : null,
+                p.Hidden ? new IconView(Images.NoVisibleContent, new Label {
+                    Text = "Hidden"
+                }) : null, r == null || r.ResultType == ValidationResultType.Success ? null : new IconView(Images.Error, new Label {
+                    Text = "Validation Failure"
+                }));
         }
 
         public DataView(MergeGroup g) : this() {

@@ -46,6 +46,7 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Merge.Classes.Receivers;
+using Utilities = Merge.Classes.Helpers.Utilities;
 
 #endregion
 
@@ -96,7 +97,7 @@ namespace Merge.Classes.UI.Pages {
             if (e.HasRegistration)
                 AddLabel(Images.RegistrationRequired,
                     $"Registration is required\nRegistration closes on {e.RegistrationClosingDate.Value.ToString("dddd, d MMMM yyyy \"at\" h:mm tt", CultureInfo.CurrentUICulture)}");
-            AddLabel(Images.Targeting, ApiAccessor.GetTargetingString(e));
+            AddLabel(Images.Targeting, Utilities.GetTargetingString(e));
             _menuItems.Add("Add To Calendar", AddToCalendarAction.FromEventId(e.Id).Invoke);
             if (!string.IsNullOrWhiteSpace(e.Address))
                 _menuItems.Add("Get Directions", GetDirectionsAction.FromEventId(e.Id).Invoke);
@@ -160,7 +161,7 @@ namespace Merge.Classes.UI.Pages {
             }
             if (p.LeadersOnly)
                 AddLabel(Images.PasswordProtected, "Leaders Only");
-            AddLabel(Images.Targeting, ApiAccessor.GetTargetingString(p));
+            AddLabel(Images.Targeting, Utilities.GetTargetingString(p));
             _menuItems.Add("Reload", async () => {
                 await Navigation.PushAsync(new DataDetailPage(p));
                 Navigation.RemovePage(this);

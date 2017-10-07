@@ -37,6 +37,7 @@ using Merge.Classes.Helpers;
 using Merge.Classes.UI.Controls;
 using Merge.iOS.Helpers;
 using MergeApi.Client;
+using MergeApi.Framework.Enumerations;
 using MergeApi.Framework.Interfaces;
 using MergeApi.Models.Actions;
 using MergeApi.Models.Core.Tab;
@@ -54,7 +55,7 @@ namespace Merge.Classes.UI.Pages {
 
         TSortBy TransformForSorting(T input);
 
-        View TransformIntoView(T input);
+        View TransformIntoView(T input, ValidationResult r);
 
         bool DoesPassThroughFilter(T input);
 
@@ -206,12 +207,16 @@ namespace Merge.Classes.UI.Pages {
                     _metaDelegate.SetHeaders(new List<TabHeader>());
                 }
             }
-            var all = _delegate.GetItems().OrderBy(_delegate.TransformForSorting).ToList();
-            var filteredMainContent = all.Where(_delegate.DoesPassThroughFilter).ToList();
+            Task<(T Object, ValidationResult Result)>[] validations = _delegate.GetItems()
+                .Where(_delegate.DoesPassThroughFilter).OrderBy(_delegate.TransformForSorting).Select(async o =>
+                    (o, o is IValidatable ? await ((IValidatable) o).ValidateAsync() : null)).ToArray();
+            var all = (await Task.WhenAll(validations)).Where(o => PreferenceHelper.ShowInvalidObjects || o.Result == null || o.Result.ResultType == ValidationResultType.Success).ToList();
+            //var all = _delegate.GetItems().OrderBy(_delegate.TransformForSorting).ToList();
+            //var filteredMainContent = all.Where(_delegate.DoesPassThroughFilter).ToList();
             var tips = _metaDelegate.GetTips()
                 .Where(t => (int)t.Tab == _delegate.GetTab() && _metaDelegate.TipDoesPassThroughFilter(t)).ToList();
             var content = tips.Select(t => new TipView(t))
-                .Concat(filteredMainContent.Select(_delegate.TransformIntoView)).ToList();
+                .Concat(all.Select(o => _delegate.TransformIntoView(o.Object, o.Result))).ToList();
             TabHeader header;
             if ((header = _metaDelegate.GetHeaders().FirstOrDefault(h => (int)h.Tab == _delegate.GetTab())) != null)
                 if (!string.IsNullOrWhiteSpace(header.Image))
@@ -237,9 +242,9 @@ namespace Merge.Classes.UI.Pages {
                 return b;
             });
             var views = content;
-            if (!filteredMainContent.Any())
+            if (!all.Any())
                 views.Add(nothingCard);
-            if (filteredMainContent.Any() && _delegate.GetTab() == 2)
+            if (all.Any() && _delegate.GetTab() == 2)
                 views.Add(mapButton);
             await SetViews(views, didLoadData);
         }

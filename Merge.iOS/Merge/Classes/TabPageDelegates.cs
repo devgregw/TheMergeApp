@@ -89,11 +89,11 @@ namespace Merge.Classes {
 
         public int TransformForSorting(MergePage input) => (int) input.Importance;
 
-        public View TransformIntoView(MergePage input) => new DataView(input);
+        public View TransformIntoView(MergePage input, ValidationResult r) => new DataView(input, r);
 
         public bool DoesPassThroughFilter(MergePage input) => !input.LeadersOnly &&
                                                               input.CheckTargeting(PreferenceHelper.GradeLevels,
-                                                                  PreferenceHelper.Genders);
+                                                                  PreferenceHelper.Genders) && Helpers.Utilities.IfRelease(!input.Hidden, true);
 
         int IGenericTabPageDelegate<MergePage, int>.GetTab() => 0;
 
@@ -115,7 +115,7 @@ namespace Merge.Classes {
                              Math.Pow(c.Longitude - Convert.ToDouble(input.Coordinates.Longitude), 2));
         }
 
-        public View TransformIntoView(MergeGroup input) => new DataView(input);
+        public View TransformIntoView(MergeGroup input, ValidationResult r) => new DataView(input);
 
         public bool DoesPassThroughFilter(MergeGroup input) => true;
 
@@ -134,7 +134,7 @@ namespace Merge.Classes {
             : RecurrenceRule.GetNextOccurrence(input.StartDate.Value, input.RecurrenceRule)
                 .GetValueOrDefault(DateTime.MaxValue);
 
-        public View TransformIntoView(MergeEvent input) => new DataView(input);
+        public View TransformIntoView(MergeEvent input, ValidationResult r) => new DataView(input, r);
 
         public bool DoesPassThroughFilter(MergeEvent input) => input.CheckTargeting(PreferenceHelper.GradeLevels,
             PreferenceHelper.Genders);

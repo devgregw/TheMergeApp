@@ -70,7 +70,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Merge.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\AlertHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\Extensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\ApiAccessor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\Utilities.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\Helpers\PreferenceHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\GroupsMapPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classes\UI\Pages\SettingsPage.xaml.cs">
