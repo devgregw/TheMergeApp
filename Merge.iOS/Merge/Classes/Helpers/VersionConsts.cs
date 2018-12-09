@@ -29,9 +29,9 @@
 
 namespace Merge.Classes.Helpers {
     public static class VersionConsts {
-        public const string Version = "0.2.6";
+        public const string Version = "0.2.7";
 
-        public const int Update = 14;
+        public const int Update = 15;
 
         public const string Classification = "GENERAL AVAILABILITY";
     }
