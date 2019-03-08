@@ -38,7 +38,7 @@ using System.Net;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Framework.Abstractions;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Models.Actions;

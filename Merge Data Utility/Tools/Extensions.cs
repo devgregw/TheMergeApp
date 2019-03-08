@@ -41,6 +41,20 @@ using System.Windows.Media;
 
 namespace Merge_Data_Utility.Tools {
     public static class Extensions {
+        public static List<string> LogText { get; }
+
+        static Extensions() {
+            LogText = new List<string>();
+        }
+
+        public static void Log(this object obj, string m) {
+            var message =
+                $"({LogText.Count}) {obj.GetType().FullName} @ {DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()}: {m}";
+            Console.WriteLine(message);
+            LogText.Add(
+                message);
+        }
+
         public static int IndexOf<TKey, TValue>(this IDictionary<TKey, TValue> dict,
             KeyValuePair<TKey, TValue> item) => dict.Keys.ToList().IndexOf(item.Key);
 

@@ -43,7 +43,7 @@
         <Grid Grid.Column="1">
             <Menu VerticalAlignment="Top" Height="19" BorderThickness="0,0,0,1" BorderBrush="#FF828790" />
             <ScrollViewer Margin="0,19,0,0" VerticalScrollBarVisibility="Auto">
-                <StackPanel x:Name="statPanel" VerticalAlignment="Top" />
+                <StackPanel x:Name="__statPanel" VerticalAlignment="Top" />
             </ScrollViewer>
         </Grid>
     </Grid>

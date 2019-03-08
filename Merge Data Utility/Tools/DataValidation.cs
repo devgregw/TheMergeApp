@@ -34,7 +34,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Framework.Abstractions;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Framework.Interfaces;

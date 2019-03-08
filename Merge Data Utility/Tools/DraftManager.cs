@@ -44,39 +44,45 @@ using Newtonsoft.Json.Linq;
 
 namespace Merge_Data_Utility.Tools {
     public static class DraftManager {
+        public class DraftEntry {
+            public object Data { get; }
+
+            public Type Type { get; }
+
+            public T GetData<T>() => (T) Data;
+
+            public DraftEntry(object data, Type type) {
+                Data = data;
+                Type = type;
+            }
+        }
+
         private static JObject _content {
             get {
-                if (!File.Exists("drafts.json")) {
-                    File.Open("drafts.json", FileMode.OpenOrCreate).Close();
-                    File.WriteAllText("drafts.json",
-                        new JObject(new JProperty("events", new JArray()), new JProperty("groups", new JArray()),
-                            /*new JProperty("announcements", new JArray()), */new JProperty("pages", new JArray()),
-                            new JProperty("tips", new JArray())
-                            /*new JProperty("leaders", new JArray())*/).ToString());
-                }
+                if (File.Exists("drafts.json")) return JObject.Parse(File.ReadAllText("drafts.json"));
+                File.Open("drafts.json", FileMode.OpenOrCreate).Close();
+                File.WriteAllText("drafts.json",
+                    new JObject(new JProperty("events", new JArray()), new JProperty("groups", new JArray()),
+                        new JProperty("pages", new JArray()),
+                        new JProperty("tips", new JArray())).ToString());
                 return JObject.Parse(File.ReadAllText("drafts.json"));
             }
             set => File.WriteAllText("drafts.json", value.ToString());
         }
 
-        public static List<T> GetAllOfType<T>(string key) where T : IIdentifiable {
+        public static List<DraftEntry> GetAllOfType<T>(string key) where T : IIdentifiable {
             try {
-                return ((JArray) _content[key]).Select(token => token.ToObject<T>()).ToList();
+                return ((JArray) _content[key]).Select(token => token.ToObject<T>()).Select(obj => new DraftEntry(obj, typeof(T))).ToList();
             } catch {
-                return new List<T>();
+                return new List<DraftEntry>();
             }
         }
 
-        public static IEnumerable<IIdentifiable> GetAllDrafts() {
-            return
-                GetAllOfType<MergeEvent>("events")
-                    .Cast<IIdentifiable>()
-                    .Concat(GetAllOfType<MergeGroup>("groups"))
-                    .Concat(GetAllOfType<MergePage>("pages"))
-                    .Concat(GetAllOfType<TabTip>("tips"))
-                    //.Concat(GetAllOfType<MergeLeader>("leaders"))
+        public static IEnumerable<DraftEntry> GetAllDrafts() => GetDraftedEvents()
+                    .Concat(GetDraftedGroups())
+                    .Concat(GetDraftedPages())
+                    .Concat(GetDraftedTips())
                     .ToList();
-        }
 
         private static void Add(string key, IIdentifiable thing) {
             var copy = _content;
@@ -101,79 +107,47 @@ namespace Merge_Data_Utility.Tools {
 
         [SuppressMessage("ReSharper", "CanBeReplacedWithTryCastAndCheckForNull")]
         public static void AutoDelete(IIdentifiable item) {
-            if (item is MergeEvent)
-                DeleteDraftedEvent((MergeEvent) item);
-            else if (item is MergeGroup)
-                DeleteDraftedGroup((MergeGroup) item);
-            else if (item is MergePage)
-                DeleteDraftedPage((MergePage) item);
-            /*else if (item is MergeLeader)
-                DeleteDraftedLeader((MergeLeader) item);*/
-            else if (item is TabTip)
-                DeleteDraftedTip((TabTip) item);
-            else
-                throw new InvalidOperationException(
-                    $"Cannot delete object of type {item.GetType().FullName} via DraftManager");
+            switch (item) {
+                case MergeEvent e:
+                    DeleteDraftedEvent(e);
+                    break;
+                case MergeGroup g:
+                    DeleteDraftedGroup(g);
+                    break;
+                case MergePage p:
+                    DeleteDraftedPage(p);
+                    break;
+                case TabTip t:
+                    DeleteDraftedTip(t);
+                    break;
+                default:
+                    throw new InvalidOperationException(
+                        $"Cannot delete object of type {item.GetType().FullName} via DraftManager");
+            }
         }
 
-        public static List<MergeEvent> GetDraftedEvents() {
-            return GetAllOfType<MergeEvent>("events");
-        }
+        private static IEnumerable<DraftEntry> GetDraftedEvents() => GetAllOfType<MergeEvent>("events");
 
-        public static void AddDraftedEvent(MergeEvent e) {
-            Add("events", e);
-        }
+        public static void AddDraftedEvent(MergeEvent e) => Add("events", e);
 
-        public static void DeleteDraftedEvent(MergeEvent e) {
-            Delete("events", e);
-        }
+        private static void DeleteDraftedEvent(MergeEvent e) => Delete("events", e);
 
-        public static List<MergeGroup> GetDraftedGroups() {
-            return GetAllOfType<MergeGroup>("groups");
-        }
+        private static IEnumerable<DraftEntry> GetDraftedGroups() => GetAllOfType<MergeGroup>("groups");
 
-        public static void AddDraftedGroup(MergeGroup g) {
-            Add("groups", g);
-        }
+        public static void AddDraftedGroup(MergeGroup g) => Add("groups", g);
 
-        public static void DeleteDraftedGroup(MergeGroup g) {
-            Delete("groups", g);
-        }
+        private static void DeleteDraftedGroup(MergeGroup g) => Delete("groups", g);
 
-        public static List<MergePage> GetDraftedPages() {
-            return GetAllOfType<MergePage>("pages");
-        }
+        private static IEnumerable<DraftEntry> GetDraftedPages() => GetAllOfType<MergePage>("pages");
 
-        public static void AddDraftedPage(MergePage p) {
-            Add("pages", p);
-        }
+        public static void AddDraftedPage(MergePage p) => Add("pages", p);
 
-        public static void DeleteDraftedPage(MergePage p) {
-            Delete("pages", p);
-        }
+        private static void DeleteDraftedPage(MergePage p) => Delete("pages", p);
 
-        /*public static List<MergeLeader> GetDraftedLeaders() {
-            return GetAllOfType<MergeLeader>("leaders");
-        }
+        private static IEnumerable<DraftEntry> GetDraftedTips() => GetAllOfType<TabTip>("tips");
 
-        public static void AddDraftedLeader(MergeLeader l) {
-            Add("leaders", l);
-        }
+        public static void AddDraftedTip(TabTip t) => Add("tips", t);
 
-        public static void DeleteDraftedLeader(MergeLeader l) {
-            Delete("leaders", l);
-        }*/
-
-        public static List<TabTip> GetDraftedTips() {
-            return GetAllOfType<TabTip>("tips");
-        }
-
-        public static void AddDraftedTip(TabTip t) {
-            Add("tips", t);
-        }
-
-        public static void DeleteDraftedTip(TabTip t) {
-            Delete("tips", t);
-        }
+        private static void DeleteDraftedTip(TabTip t) => Delete("tips", t);
     }
 }

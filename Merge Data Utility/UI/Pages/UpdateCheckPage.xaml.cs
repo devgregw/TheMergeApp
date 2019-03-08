@@ -71,7 +71,7 @@ namespace Merge_Data_Utility.UI.Pages {
             using (var client = new WebClient()) {
                 client.CachePolicy = new RequestCachePolicy(RequestCacheLevel.BypassCache);
                 var json = JObject.Parse(
-                    await client.DownloadStringTaskAsync("https://merge.devgregw.com/utility/versions.json"));
+                    await client.DownloadStringTaskAsync("https://merge.gregwhatley.dev/utility/versions.json"));
                 var array = json.Value<JArray>("versions");
                 return array.Select(token => token.ToObject<UtilityVersion>()).OrderBy(v => v.Version).ToArray();
             }

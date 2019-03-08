@@ -35,7 +35,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Framework.Interfaces;
 using MergeApi.Models.Core;
@@ -45,6 +45,7 @@ using Merge_Data_Utility.UI.Controls;
 using Merge_Data_Utility.UI.Windows;
 using Merge_Data_Utility.UI.Windows.Choosers;
 using ValidationResult = MergeApi.Tools.ValidationResult;
+using System;
 
 #endregion
 
@@ -68,7 +69,6 @@ namespace Merge_Data_Utility.UI.Pages {
             InitializeDrafts();
 
             InitializeAttendance();
-            InitializeNotifications();
             InitializeAboutAdmin();
         }
 
@@ -155,30 +155,30 @@ namespace Merge_Data_Utility.UI.Pages {
             attendanceAvg.Text =
                 $"{overall.AverageStudentCount} students/week ({overall.AverageAttendancePercentage}%)";
             leaderAttendanceAvg.Text = $"{overall.AverageLeaderAttendancePercentage}%";
-            AttendanceTools.AttendanceWeekMetrics low = overall.LowestAttendanceWeek.GetMetrics(groups),
-                high = overall.HighestAttendanceWeek.GetMetrics(groups),
-                recent = overall.MostRecentAttendanceWeek.GetMetrics(groups);
+            AttendanceTools.AttendanceWeekMetrics low = overall.LowestAttendanceWeek?.GetMetrics(groups),
+                high = overall.HighestAttendanceWeek?.GetMetrics(groups),
+                recent = overall.MostRecentAttendanceWeek?.GetMetrics(groups);
             attendanceRecordLow.Text =
-                low.Week == null
+                low?.Week == null
                     ? "No data"
                     : $"{low.TotalStudents} students on {low.Week.Date.ToShortDateString()} ({low.AverageAttendancePercentage}%)";
             attendanceRecordHigh.Text =
-                high.Week == null
+                high?.Week == null
                     ? "No data"
                     : $"{high.TotalStudents} students on {high.Week.Date.ToShortDateString()} ({high.AverageAttendancePercentage}%)";
             attendanceRecent.Text =
-                recent.Week == null
+                recent?.Week == null
                     ? "No data"
                     : $"{recent.TotalStudents} students  on {recent.Week.Date.ToShortDateString()} ({recent.AverageAttendancePercentage}%)";
             attendanceTotalGroups.Text = overall.Groups.Count.ToString();
-            attendanceTotalStudents.Text = overall.TotalStudents.ToString();
+            attendanceTotalStudents.Text = groups.Select(g => g.StudentNames.Count).Sum().ToString();
             reference.StopLoading();
         }
 
         public void InitializeDrafts() {
             draftsList.Children.Clear();
             foreach (var draft in DraftManager.GetAllDrafts()) {
-                var c = ModelControl.Create(draft, true, o => { HandleEdit(o, true); },
+                var c = ModelControl.Create(draft.Data, true, o => { HandleEdit(o, true, draft.Type); },
                     o => { HandleDelete((IIdentifiable) o, true); });
                 c.Minify();
                 draftsList.Children.Add(c);
@@ -191,21 +191,6 @@ namespace Merge_Data_Utility.UI.Pages {
                     Margin = new Thickness(5),
                     FontStyle = FontStyles.Italic
                 });
-        }
-
-        public async void InitializeNotifications() {
-            /*var reference = new LoaderReference(notificationsBox);
-            reference.StartLoading("Loading notification data...");
-            using (var client = new WebClient()) {
-                client.Headers.Add(HttpRequestHeader.Authorization,
-                    "Basic ZmEwYWRhMDUtNmUxZC00M2QyLWFkMDEtNTAwOGEwZjk1OTUx");
-                var response =
-                    JObject.Parse(
-                        await client.DownloadStringTaskAsync(
-                            "https://onesignal.com/api/v1/apps/b52deecc-3f20-4904-a3f0-fd8e9aabb2b3"));
-                messageableUsers.Text = response.Value<int>("messageable_players").ToString();
-            }
-            reference.StopLoading();*/
         }
 
         public void InitializeAboutAdmin() {
@@ -267,8 +252,8 @@ namespace Merge_Data_Utility.UI.Pages {
             InitializeDrafts();
         }
 
-        private void HandleEdit<T>(T source, bool draft) {
-            EditorWindow.Create(source, draft, EditorResult).Show();
+        private void HandleEdit<T>(T source, bool draft, Type typeOverride = null) {
+            EditorWindow.Create(source, draft, EditorResult, typeOverride).Show();
         }
 
         private async void HandleDelete<T>(T item, bool draft) where T : class, IIdentifiable {

@@ -36,7 +36,7 @@
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Tools;
 
 #endregion
@@ -46,7 +46,7 @@ namespace Merge_Data_Utility.Tools {
         public static async Task<StorageReference> PutStorageReferenceAsync(string path, string name, string folder) {
             using (var client = new WebClient()) {
                 var r = await client.UploadFileTaskAsync(
-                    $"https://merge.devgregw.com/content/manager.php?name={name}&folder={folder}", path);
+                    $"https://merge.gregwhatley.dev/content/manager.php?name={name}&folder={folder}", path);
                 System.Console.WriteLine(Encoding.UTF8.GetString(r));
             }
             return await MergeDatabase.GetStorageReferenceAsync(name, folder);

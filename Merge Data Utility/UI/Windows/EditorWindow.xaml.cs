@@ -32,7 +32,7 @@
 using System;
 using System.Linq;
 using System.Windows;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Models.Core;
 using MergeApi.Models.Elements;
 using Merge_Data_Utility.Tools;
@@ -82,7 +82,7 @@ namespace Merge_Data_Utility.UI.Windows {
                     if (diff.Any()) {
                         foreach (var img in diff)
                             await MergeDatabase.DeleteStorageReferenceAsync(
-                                img.Url.Replace("https://merge.devgregw.com/content/", ""), "");
+                                img.Url.Replace("https://merge.gregwhatley.dev/content/", ""), "");
                         args.Cancel = false;
                         _safeClosing = true;
                         Close();
@@ -101,8 +101,8 @@ namespace Merge_Data_Utility.UI.Windows {
             set => menu.IsEnabled = value;
         }
 
-        public static EditorWindow Create<T>(T source, bool draft, Action<ResultType> callback) => new EditorWindow(
-            EditorPage.GetPage(source, draft), callback);
+        public static EditorWindow Create<T>(T source, bool draft, Action<ResultType> callback, Type typeOverride = null) => new EditorWindow(
+            EditorPage.GetPage(source, draft, typeOverride), callback);
 
         private void CloseSafe(ResultType r) {
             _safeClosing = true;

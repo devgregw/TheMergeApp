@@ -74,7 +74,7 @@ namespace mdu_updater {
                         progress.IsIndeterminate = false;
                         progress.Value = ee.ProgressPercentage;
                     };
-                    client.DownloadFileAsync(new Uri("https://merge.devgregw.com/utility/latest.zip"), "update.zip");
+                    client.DownloadFileAsync(new Uri("https://merge.gregwhatley.dev/utility/latest.zip"), "update.zip");
                 }
             };
         }

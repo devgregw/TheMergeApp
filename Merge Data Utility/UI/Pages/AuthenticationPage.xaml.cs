@@ -31,7 +31,7 @@
 
 using System.Windows;
 using System.Windows.Controls;
-using MergeApi.Client;
+using MergeApi;
 using Merge_Data_Utility.Properties;
 using Merge_Data_Utility.Tools;
 

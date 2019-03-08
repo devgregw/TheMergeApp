@@ -36,7 +36,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Models.Core;
 using MergeApi.Models.Core.Attendance;
 using Merge_Data_Utility.Tools;

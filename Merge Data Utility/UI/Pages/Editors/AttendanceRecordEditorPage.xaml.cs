@@ -36,7 +36,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Models.Core.Attendance;
 using Merge_Data_Utility.Tools;
 using Merge_Data_Utility.UI.Pages.Base;

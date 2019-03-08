@@ -70,11 +70,12 @@ namespace Merge_Data_Utility.UI.Pages.Base {
             _drafting = false;
         }
 
-        public static EditorPage GetPage<T>(T source, bool draft) {
-            Console.WriteLine(typeof(T).Name);
+        public static EditorPage GetPage<T>(T source, bool draft, Type typeOverride = null) {
+            var type = typeOverride ?? typeof(T);
+            Console.WriteLine(type.Name);
             return
                 (EditorPage)
-                Mappings[typeof(T)].GetConstructors()
+                Mappings[type].GetConstructors()
                     .First(c => c.GetParameters().ToList().Count == 2)
                     .Invoke(new object[] {source, draft});
         }

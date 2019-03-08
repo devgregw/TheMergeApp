@@ -33,7 +33,7 @@ using System;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Framework.Interfaces.Receivers;
 using Merge_Data_Utility.Tools;

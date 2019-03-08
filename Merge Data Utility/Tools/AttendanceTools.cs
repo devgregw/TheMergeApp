@@ -101,6 +101,7 @@ namespace Merge_Data_Utility.Tools {
 
         public sealed class MergeGroupAttendanceMetrics {
             public MergeGroupAttendanceMetrics(MergeGroup group, List<MergeGroupAttendanceRecord> allRecords) {
+                this.Log($"Retrieving metrics for MergeGroup ID {group.Id}");
                 MergeGroup = group;
                 Records = allRecords.Where(r => r.MergeGroupId == group.Id).ToList();
                 AverageStudentCount =
@@ -127,6 +128,7 @@ namespace Merge_Data_Utility.Tools {
 
         public sealed class MergeGroupAttendanceWeekMetrics {
             public MergeGroupAttendanceWeekMetrics(MergeGroupWeek week, List<MergeGroup> groups) {
+                this.Log($"Retrieving metrics for MergeGroupWeek DATE {week.Date}");
                 MergeGroupWeek = week;
                 Groups = groups.Where(g => week.Records.Select(r => r.MergeGroupId).Contains(g.Id)).ToList();
                 StudentCount = MergeGroupWeek.Records.Sum(r => r.StudentCount);
@@ -165,6 +167,7 @@ namespace Merge_Data_Utility.Tools {
 
         public sealed class AttendanceRecordMetrics {
             public AttendanceRecordMetrics(AttendanceRecord record, AttendanceGroup group) {
+                this.Log($"Retrieving metrics for AttendanceReocrd GROUP ID {record.GroupId} DATE STRING {record.DateString} GROUP ID {group.Id}");
                 AttendanceRecord = record;
                 AttendanceGroup = group;
                 AttendancePercentage = GetPercentage(record.Students.Count, group.StudentNames.Count, true);
@@ -179,6 +182,7 @@ namespace Merge_Data_Utility.Tools {
 
         public sealed class AttendanceGroupMetrics {
             public AttendanceGroupMetrics(AttendanceGroup group, List<AttendanceRecord> allRecords) {
+                this.Log($"Retrieving metrics for AttendanceGroup {group.Id}");
                 AttendanceGroup = group;
                 GroupRecords = allRecords.Where(r => r.GroupId == group.Id).OrderByDescending(r => r.Date).ToList();
                 AverageLeaderAttendancePercentage = GetPercentage(GroupRecords.Sum(r => r.LeadersPresent ? 1 : 0),
@@ -222,9 +226,10 @@ namespace Merge_Data_Utility.Tools {
                 get {
                     if (GroupRecords.Count == 0)
                         return null;
-                    var rates = AttendanceGroup.StudentNames.ToDictionary(name => name, GetStudentAttendancePercentage);
-                    return rates.Max(pair => pair.Value)
-                        .Manipulate(pair => new Tuple<string, int>(pair.Key, pair.Value));
+                    var rates = AttendanceGroup.StudentNames.Select(
+                        name => (name, GetStudentAttendancePercentage(name)));//.ToDictionary(name => name, GetStudentAttendancePercentage);
+                    return rates.Max(pair => pair.Item2)
+                        .Manipulate(pair => new Tuple<string, int>(pair.Item1, pair.Item2));
                 }
             }
 
@@ -232,9 +237,10 @@ namespace Merge_Data_Utility.Tools {
                 get {
                     if (GroupRecords.Count == 0)
                         return null;
-                    var rates = AttendanceGroup.StudentNames.ToDictionary(name => name, GetStudentAttendancePercentage);
-                    return rates.Min(pair => pair.Value)
-                        .Manipulate(pair => new Tuple<string, int>(pair.Key, pair.Value));
+                    var rates = AttendanceGroup.StudentNames.Select(
+                        name => (name, GetStudentAttendancePercentage(name)));//.ToDictionary(name => name, GetStudentAttendancePercentage);
+                    return rates.Min(pair => pair.Item2)
+                        .Manipulate(pair => new Tuple<string, int>(pair.Item1, pair.Item2));
                 }
             }
 
@@ -246,6 +252,7 @@ namespace Merge_Data_Utility.Tools {
 
         public sealed class AttendanceWeekMetrics {
             public AttendanceWeekMetrics(Week week, List<AttendanceGroup> allGroups) {
+                this.Log($"Retrieving metrics for Week DATE {week.Date.ToLongDateString()}");
                 Week = week;
                 Groups = allGroups.Where(g => Week?.Records.Any(r => r.GroupId == g.Id) ?? false).ToList();
                 TotalStudents = Week?.Records.Sum(r => r.Students.Count) ?? 0;
@@ -296,6 +303,7 @@ namespace Merge_Data_Utility.Tools {
         public sealed class OverallAttendanceMetrics {
             public OverallAttendanceMetrics(List<AttendanceRecord> allRecords, List<AttendanceGroup> allGroups,
                 List<MergeGroup> mergeGroups, List<MergeGroupAttendanceRecord> mergeGroupRecords) {
+                this.Log($"Retrieving metrics for everything ({allRecords.Count} records, {allGroups.Count} groups, {mergeGroups.Count} Merge groups, {mergeGroupRecords.Count} Merge group records)");
                 Groups = allGroups;
                 Records = allRecords;
                 MergeGroups = mergeGroups;
@@ -323,13 +331,33 @@ namespace Merge_Data_Utility.Tools {
                     MostRecentAttendanceWeek = null;
                 } else {
                     HighestAttendanceWeek = Weeks.Max(w => {
-                        return Weeks.First(w2 => w2.Date == w.Records.Max(r => r.GetMetrics(Groups.First(g => g.Id == r.GroupId)).AttendancePercentage).Date).GetMetrics(Groups).TotalStudents;
+                        var a = w.Records.Max(r => {
+                            try {
+                                var g = Groups.First(gr => gr.Id == r.GroupId);
+                                return r.GetMetrics(g).AttendancePercentage;
+                            } catch (InvalidOperationException) {
+                                this.Log("No matching element");
+                                return 0;
+                            }
+                        });
+                        var b = Weeks.First(w2 => w2.Date == a.Date);
+                        return b.GetMetrics(Groups).TotalStudents;
                         //var record = w.GetMetrics(Groups).HighestAttendanceRecord;
                         //return record.GetMetrics(Groups.First(g => g.Id == record.GroupId)).AttendancePercentage;
                     });
                     LowestAttendanceWeek = Weeks.Min(w => {
-                        return Weeks.First(w2 => w2.Date == w.Records.Min(r => r.GetMetrics(Groups.First(g => g.Id == r.GroupId)).AttendancePercentage).Date).GetMetrics(Groups).TotalStudents;
-                        //var record = w.GetMetrics(Groups).LowestAttendanceRecord;
+                        var a = w.Records.Min(r => {
+                            try {
+                                var g = Groups.First(gr => gr.Id == r.GroupId);
+                                return r.GetMetrics(g).AttendancePercentage;
+                            } catch (InvalidOperationException) {
+                                this.Log("No matching element");
+                                return 0;
+                            }
+                        });
+                        var b = Weeks.First(w2 => w2.Date == a.Date);
+                        return b.GetMetrics(Groups).TotalStudents;
+                        //var record = w.GetMetrics(Groups).HighestAttendanceRecord;
                         //return record.GetMetrics(Groups.First(g => g.Id == record.GroupId)).AttendancePercentage;
                     });
                     MostRecentAttendanceWeek = Weeks.Max(w => w.Date);

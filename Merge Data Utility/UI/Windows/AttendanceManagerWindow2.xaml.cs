@@ -35,7 +35,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Models.Core;
 using MergeApi.Models.Core.Attendance;
 using MergeApi.Tools;
@@ -72,13 +72,13 @@ namespace Merge_Data_Utility.UI.Windows {
                 button.Click += (s, e) => a.Value();
                 content.Children.Add(button);
             }
-            statPanel.Children.Add(new GroupBox {
+            __statPanel.Children.Add(new GroupBox {
                 Header = "Actions",
                 Content = content
             });
         }
 
-        private void ClearMetricsAndActions() => statPanel.Children.Clear();
+        private void ClearMetricsAndActions() => __statPanel.Children.Clear();
 
         private void AddMetric(Tag t) {
             if (t == null)
@@ -163,12 +163,6 @@ namespace Merge_Data_Utility.UI.Windows {
                             : _records.Where(r => groupIds.Contains(r.GroupId)).ToList(), groups,
                         new List<MergeGroup>(),
                         new List<MergeGroupAttendanceRecord>());
-                    /*var weekMetrics2 =
-                        new AttendanceTools.Week(_records
-                                .Where(r => r.Date.ToLongDateString() ==
-                                            ((AttendanceTools.Week) arg.Week).Date.ToLongDateString() &&
-                                            groupIds.Contains(r.GroupId)).ToList())
-                            .GetMetrics(groups);*/
                     AddMetric($"{(arg.Ministry == "jh" ? "Junior High" : "High School")} Statistics",
                         new Dictionary<string, string> {
                             {
@@ -312,13 +306,19 @@ namespace Merge_Data_Utility.UI.Windows {
                 grid.Children.Add(nameBlock);
                 grid.Children.Add(valueBlock);
             }
-            statPanel.Children.Add(new GroupBox {
+            __statPanel.Children.Add(new GroupBox {
                 Header = name,
                 Content = grid
             });
         }
 
-        private AttendanceGroup GetGroup(string id) => _groups.First(g => g.Id == id);
+        private AttendanceGroup GetGroup(string id) {
+            try {
+                return _groups.First(g => g.Id == id);
+            } catch (Exception e) {
+                throw new ArgumentException($"Could not find group by ID {id}.");
+            }
+        }
 
         private async void Load(bool fetch) {
             if (fetch) {
@@ -335,7 +335,7 @@ namespace Merge_Data_Utility.UI.Windows {
                 var oam = new OverallAttendanceMetrics(_records, _groups, _mergeGroups, _mergeGroupRecords);
                 var weeks =
                     oam.Weeks
-                        .OrderByDescending(week => week.Date);
+                       .OrderByDescending(week => week.Date);
                 var mgWeeks = oam.MergeGroupWeeks.OrderByDescending(week => week.Date);
                 foreach (var w in weeks) {
                     var weekItem = new TreeViewItem {
@@ -547,10 +547,10 @@ namespace Merge_Data_Utility.UI.Windows {
                                 }, {
                                     "Delete Group", async () => {
                                         if (MessageBox.Show(this,
-                                                "If you choose to delete this group, its students will be moved to another group of the same grade level and gender.  This operation cannot be undone!  Are you sure you want to delete this group?",
+                                                "This operation cannot be undone!  Are you sure you want to delete this group?",
                                                 "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Exclamation,
                                                 MessageBoxResult.No) == MessageBoxResult.Yes) {
-                                            var eligibleGroups =
+                                            /*var eligibleGroups =
                                                 _groups.Where(
                                                     g => g.Id != group.Id && g.GradeLevel == group.GradeLevel &&
                                                          g.Gender == group.Gender).ToList();
@@ -564,11 +564,13 @@ namespace Merge_Data_Utility.UI.Windows {
                                                     MessageBoxImage.Information);
                                                 return;
                                             }
-                                            var selectedGroup = eligibleGroups.ElementAt(choice);
+                                            */
+                                            //var selectedGroup = eligibleGroups.ElementAt(choice);
                                             var reference = new LoaderReference(this);
                                             reference.StartLoading("Migrating students...");
-                                            selectedGroup.StudentNames.AddRange(group.StudentNames);
-                                            var newRecords = new List<AttendanceRecord>();
+                                            //selectedGroup.StudentNames.AddRange(group.StudentNames);
+                                            //var newRecords = new List<AttendanceRecord>();
+                                            /*
                                             foreach (var oldRecord in _records.Where(r => r.GroupId == group.Id)) {
                                                 var correspondingRecord =
                                                     _records.FirstOrDefault(r => r.GroupId == selectedGroup.Id &&
@@ -593,7 +595,7 @@ namespace Merge_Data_Utility.UI.Windows {
                                                 reference.SetMessage(
                                                     $"Updaing record {newRecords.IndexOf(nr) + 1} of {newRecords.Count}...");
                                                 await MergeDatabase.UpdateAsync(nr);
-                                            }
+                                            }*/
                                             var oldRecords = _records.Where(r => r.GroupId == group.Id).ToList();
                                             foreach (var or in oldRecords) {
                                                 reference.SetMessage(

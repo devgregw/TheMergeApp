@@ -184,7 +184,7 @@ namespace Merge_Data_Utility.UI.Pages {
                 imagePreview.Source = new BitmapImage(new Uri(sourceBox.Text));
                 _imageOk = true;
             } catch (Exception ex) {
-                imagePreview.Source = new BitmapImage(new Uri("https://merge.devgregw.com/util/img_preview_error.png"));
+                imagePreview.Source = new BitmapImage(new Uri("https://merge.gregwhatley.dev/util/img_preview_error.png"));
                 _imageOk = false;
             }
         }*/
@@ -206,7 +206,7 @@ namespace Merge_Data_Utility.UI.Pages {
                     new Uri(url));
                 _videoOk = true;
             } catch (Exception ex) {
-                videoPreview.Navigate(new Uri("https://merge.devgregw.com/util/img_preview_error.png"));
+                videoPreview.Navigate(new Uri("https://merge.gregwhatley.dev/util/img_preview_error.png"));
                 _videoOk = false;
             }
         }

@@ -30,9 +30,11 @@
 #region USINGS
 
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows;
+using Merge_Data_Utility.Tools;
 
 #endregion
 
@@ -44,11 +46,32 @@ namespace Merge_Data_Utility {
         public App() {
 #if !DEBUG
             AppDomain.CurrentDomain.UnhandledException += (s, e) => {
-                var ex = (Exception) e.ExceptionObject;
+                var ex = (Exception)e.ExceptionObject;
                 var name = $"crash-{DateTime.Now.ToString("MM-dd-yyyy-hh-mm-tt", CultureInfo.CurrentUICulture)}.txt";
-                File.WriteAllText(name, ex.ToString());
-                MessageBox.Show($"Unfortunately, a fatal error has occurred and the Merge Data Utility must exit.  A crash report was saved here: {new FileInfo(name).FullName}.\nClick OK to exit.", "Fatal Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
-                Shutdown(1);
+                File.WriteAllLines(name,
+                    new[] {
+                        $"-- Merge Data Utility (version {VersionInfo.VersionString} update {VersionInfo.Update}) CRASH REPORT --",
+                        "Please do not modify this file!",
+                        "",
+                        $"Time of crash: {DateTime.Now.ToShortDateString()} at {DateTime.Now.ToLongTimeString()}",
+                        $"Windows version: {Environment.OSVersion.VersionString}"
+                    });
+                File.AppendAllLines(name,
+                                new[] {
+                        "",
+                        "-- Exception Details --",
+                        ex.ToString()
+                                });
+                File.AppendAllLines(name, new[] {
+
+                        "",
+                        "-- Log --"
+                });
+                File.AppendAllLines(name, Extensions.LogText);
+
+                //File.WriteAllText(name, $"-- MERGE DATA UTILITY (version {VersionInfo.VersionString} update {VersionInfo.Update}) CRASH REPORT--\nDO NOT MODIFY THIS FILE\n\nTime of crash: {DateTime.Now.ToShortDateString()} at {DateTime.Now.ToLongTimeString()}\nWindows: {Environment.OSVersion.VersionString}\n\n--LOG--\n\n{Extensions.LogText}\n--EXCEPTION STACK TRACE--\n\n{ex.ToString()}");
+                MessageBox.Show($"Unfortunately, a fatal error has occurred and the Merge Data Utility must exit.  A crash report was saved here: {new FileInfo(name).FullName}.  Please attach this file to an email and sent it to devgregw@outlook.com.\nClick OK to exit.", "Fatal Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                Current.Shutdown();
             };
 #endif
         }

@@ -34,7 +34,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Models.Core.Tab;
 using Merge_Data_Utility.Tools;

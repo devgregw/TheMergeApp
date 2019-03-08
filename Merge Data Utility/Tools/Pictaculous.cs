@@ -37,7 +37,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Framework.Enumerations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -58,10 +58,10 @@ namespace Merge_Data_Utility.Tools {
             var bytes = File.ReadAllBytes(path);
             using (var client = new WebClient()) {
                 MergeDatabase.LogReceiver.Log(LogLevel.Info, "Pictaculous",
-                    "POST " + "https://merge.devgregw.com.com/util/pictaculous.php");
+                    "POST " + "https://merge.gregwhatley.dev/util/pictaculous.php");
                 var r = JObject.Parse(
                     Encoding.UTF8.GetString(
-                        await client.UploadDataTaskAsync("https://merge.devgregw.com/util/pictaculous.php", bytes)));
+                        await client.UploadDataTaskAsync("https://merge.gregwhatley.dev/util/pictaculous.php", bytes)));
                 MergeDatabase.LogReceiver.Log(LogLevel.Debug, "Pictaculous", r.ToString(Formatting.None));
                 var colors = r.Value<JObject>("info").Value<JArray>("colors");
                 return colors.Select(t => t.ToString().ToColor()).ToList();
