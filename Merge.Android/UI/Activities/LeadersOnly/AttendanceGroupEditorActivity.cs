@@ -44,7 +44,7 @@ using Android.Views;
 using Android.Widget;
 using CheeseBind;
 using Merge.Android.Helpers;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Models.Core.Attendance;
 using Newtonsoft.Json;
 using AlertDialog = Android.Support.V7.App.AlertDialog;

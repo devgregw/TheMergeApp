@@ -43,15 +43,11 @@ namespace Merge.Android.Services {
     [IntentFilter(new[] {"com.google.firebase.MESSAGING_EVENT"})]
     public sealed class MergeNotificationService : FirebaseMessagingService {
         public override void OnMessageReceived(RemoteMessage message) {
-            Log.Info("MergeNotificationService", "Notification received: " + message.MessageId);
+           Log.Info("MergeNotificationService", "Notification received: " + message.MessageId);
             var fbn = message.GetNotification();
             var builder = new NotificationCompat.Builder(this).SetContentTitle(fbn.Title).SetContentText(fbn.Body)
                 .SetSmallIcon(Resource.Drawable.ic_notification);
-            /*if (message.Data.ContainsKey("image")) {
-                builder.SetStyle(new NotificationCompat.BigPictureStyle()
-                    .BigPicture(BitmapFactory.DecodeResource(Resources, Resource.Drawable.LargeHeader))
-                    .SetSummaryText(fbn.Title));
-            }*/
+
             if (message.Data.ContainsKey("action")) {
                 var intent = new Intent(this, typeof(MainActivity));
                 intent.PutExtra("action", message.Data["action"]);

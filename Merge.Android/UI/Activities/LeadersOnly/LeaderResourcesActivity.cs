@@ -45,7 +45,7 @@ using CheeseBind;
 using Merge.Android.Helpers;
 using Merge.Android.Receivers;
 using Merge.Android.UI.Views;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Models.Core;
 using MergeApi.Tools;

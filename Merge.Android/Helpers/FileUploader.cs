@@ -35,7 +35,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Tools;
 
 #endregion
@@ -47,7 +47,7 @@ namespace Merge.Android.Helpers {
             var base64 = Convert.ToBase64String(bytes);
             using (var client = new WebClient()) {
                 var r = await client.UploadValuesTaskAsync(
-                    $"https://merge.devgregw.com/content/manager.php?name={name}&folder={folder}",
+                    $"https://merge.gregwhatley.dev/content/manager.php?name={name}&folder={folder}",
                     new NameValueCollection {
                         {"data", base64}
                     });

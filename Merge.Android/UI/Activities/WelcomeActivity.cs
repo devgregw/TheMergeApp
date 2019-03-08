@@ -44,7 +44,7 @@ using Android.Widget;
 using CheeseBind;
 using Firebase.Messaging;
 using Merge.Android.Helpers;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Models.Actions;
 using AlertDialog = Android.Support.V7.App.AlertDialog;
@@ -80,7 +80,7 @@ namespace Merge.Android.UI.Activities {
                     "By using the Merge app, you agree to the MIT license as well as all third-party licenses specified.  Tap 'Licenses' to learn more, or visit the 'About Merge' page after you complete the setup.")
                 .SetCancelable(false).SetPositiveButton("I Agree", (s, e) => { ShowLoggingDialog(); })
                 .SetNeutralButton("Licenses", (s, e) => {
-                    LaunchUriAction.FromUri("https://merge.devgregw.com/licenses").Invoke();
+                    LaunchUriAction.FromUri("https://merge.gregwhatley.dev/licenses").Invoke();
                     ShowLegalDialog();
                 })
                 .SetNegativeButton("Back", (s, e) => ShowWelcomeDialog()).Create();

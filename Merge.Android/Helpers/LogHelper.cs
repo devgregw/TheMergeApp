@@ -45,11 +45,7 @@ using Process = Android.OS.Process;
 
 namespace Merge.Android.Helpers {
     public static class LogHelper {
-        //private static File _file;
-        //private static File _folder;
         private static Context _context;
-
-        private static bool _enable;
 
         public static void FirebaseLog(Context c, string name, Dictionary<string, string> values) => FirebaseAnalytics
             .GetInstance(c).LogEvent(name, values.Concat(new Dictionary<string, string> {
@@ -61,40 +57,8 @@ namespace Merge.Android.Helpers {
 #endif
             }).ToBundle());
 
-        /*public static async Task<string[]> GetAllLogs() {
-            WriteMessage("INFO", "Listing logs");
-            var logs =
-                (await _folder.ListFilesAsync()).Select(f => f.Name)
-                .Where(s => _file == null || s != _file.Name)
-                .ToArray();
-            foreach (var l in logs)
-                WriteMessage("DEBUG", $"Found log: {l}");
-            return logs;
-        }
-
-        public static async Task DeleteAllLogs() {
-            WriteMessage("WARN", "Deleting all logs");
-            var files = await _folder.ListFilesAsync();
-            foreach (
-                var file in files.Where(f => f.Name.Contains("merge")).Where(f => _file == null || f.Name != _file.Name)
-            ) {
-                WriteMessage("WARN", $"Deleting log: {file.Name}");
-                file.Delete();
-            }
-        }*/
-
         public static void Initialize(Context c) {
             _context = c;
-            /*_folder = _context.GetExternalFilesDir(null);
-            if (!_folder.Exists())
-                _folder.Mkdir();
-            _enable = PreferenceHelper.Logging;
-            if (!_enable)
-                return;
-            _file = new File(_context.GetExternalFilesDir(null),
-                $"mergeandroid-{VersionConsts.Version}-{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.txt");
-            if (!_file.Exists())
-                _file.CreateNewFile();*/
             WriteMessage("INFO",
                 $"*** WELCOME TO MERGE ***\n*** VERSION {VersionConsts.Version} ({VersionConsts.Classification}, UPDATE {VersionConsts.Update}) BY GREG WHATLEY ***\n*** LOGGING INITIALIZED ***");
             WriteMessage("DEBUG", $"Instance Id: {MergeApplication.InstanceId}");
@@ -126,14 +90,6 @@ namespace Merge.Android.Helpers {
             d.Show();
         }
 
-        public static void WriteException(Throwable tr, bool showMessage, Action retryAction) {
-            if (showMessage)
-                ShowErrorMessage(tr.GetType(), tr.Message, tr.StackTrace, retryAction);
-            FirebaseCrash.Report(tr);
-            WriteMessage("ERROR",
-                $"*** EXCEPTION ***\n*** {tr.GetType().FullName}: {tr.Message} ***\n*** BEGIN STACKTRACE ***\n{tr.StackTrace}\n*** END STACKTRACE ***");
-        }
-
         public static void WriteException(Exception ex, bool showMessage, Action retryAction) {
             if (showMessage)
                 ShowErrorMessage(ex.GetType(), ex.Message, ex.StackTrace, retryAction);
@@ -142,42 +98,16 @@ namespace Merge.Android.Helpers {
                 $"*** EXCEPTION ***\n*** {ex.GetType().FullName}: {ex.Message} ***\n*** BEGIN STACKTRACE ***\n{ex.StackTrace}\n*** END STACKTRACE ***");
         }
 
-        /*public static void SendLog(string filename) {
-            WriteMessage("INFO", $"Sending log: {filename}");
-            var file = new File(_context.GetExternalFilesDir(null), filename);
-            var path = SdkChecker.Nougat
-                ? FileProvider.GetUriForFile(_context, GenericFileProvider.GetAuthority(_context),
-                    file)
-                : Uri.FromFile(file);
-            var intent = new Intent(Intent.ActionSend);
-            intent.SetType("vnd.android.cursor.dir/email");
-            intent.PutExtra(Intent.ExtraEmail, new[] {"devgregw@outlook.com"});
-            intent.PutExtra(Intent.ExtraStream, path);
-            intent.PutExtra(Intent.ExtraSubject, "Merge Android Log Submission");
-            intent.AddFlags(ActivityFlags.NewTask);
-            intent.AddFlags(ActivityFlags.GrantReadUriPermission);
-            _context.StartActivity(intent);
-        }*/
-
         public static void WriteMessage(string level, string message) {
             if (message.Contains("\n")) {
                 var msgs = message.Split(new[] {"\n"}, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var msg in msgs)
                     WriteMessage(level, msg);
             } else {
-                /*if (_enable && ContextCompat.CheckSelfPermission(_context, Manifest.Permission.WriteExternalStorage) ==
-                    Permission.Granted)
-                    using (var stream = System.IO.File.Open(_file.AbsolutePath, FileMode.Append)) {
-                        using (var writer = new StreamWriter(stream)) {
-                            writer.Write($"[{DateTime.Now.ToString("HH:mm:ss")}] [{level}] {message}\n");
-                        }
-                    }*/
-                LogPriority p;
-                if (!Enum.TryParse(level, true, out p))
+                if (!Enum.TryParse(level, true, out LogPriority p))
                     p = LogPriority.Info;
                 FirebaseCrash.Log(message);
                 Log.WriteLine(p, "MergeApp", message);
-                //Console.WriteLine($"[{DateTime.Now.ToString("HH:mm:ss")}] [{level}] {message}\n");
             }
         }
     }

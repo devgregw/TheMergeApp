@@ -42,7 +42,7 @@ using Android.Widget;
 using Java.Lang;
 using Merge.Android.Helpers;
 using Merge.Android.UI.Activities;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Framework.Abstractions;
 using MergeApi.Framework.Interfaces;
 using MergeApi.Framework.Interfaces.Receivers;

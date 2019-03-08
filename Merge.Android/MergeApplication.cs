@@ -42,7 +42,7 @@ using Firebase.Analytics;
 using Firebase.Auth;
 using Merge.Android.Helpers;
 using Merge.Android.Receivers;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Framework.Interfaces.Receivers;
 

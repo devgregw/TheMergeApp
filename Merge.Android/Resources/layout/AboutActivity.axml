@@ -81,7 +81,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
                         android:layout_marginBottom="4dp"
-                        android:text="devgregw.com"
+                        android:text="gregwhatley.dev"
                         android:backgroundTint="?attr/colorPrimary" />
                     <Button
                         android:id="@+id/aboutPantego"

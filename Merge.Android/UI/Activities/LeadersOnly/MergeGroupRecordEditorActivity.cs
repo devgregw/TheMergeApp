@@ -49,7 +49,7 @@ using Android.Views;
 using Android.Widget;
 using CheeseBind;
 using Merge.Android.Helpers;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Models.Core;
 using MergeApi.Models.Core.Attendance;
 using Newtonsoft.Json;
@@ -236,7 +236,7 @@ namespace Merge.Android.UI.Activities.LeadersOnly {
             Task.Run(async () => {
                 if (_imageState == StateNone && !string.IsNullOrWhiteSpace(_record?.Image))
                     await MergeDatabase.DeleteStorageReferenceAsync(_record.Image.Replace(
-                        "https://merge.devgregw.com/content/",
+                        "https://merge.gregwhatley.dev/content/",
                         ""), "");
                 await MergeDatabase.UpdateAsync(new MergeGroupAttendanceRecord {
                     MergeGroupId = _group.Id,

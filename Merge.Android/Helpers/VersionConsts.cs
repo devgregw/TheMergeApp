@@ -29,14 +29,14 @@
 
 namespace Merge.Android.Helpers {
     public static class VersionConsts {
-        public const string Version = "0.1.1.3";
+        public const string Version = "0.1.1.5";
 
 #if DEBUG
         public const string Classification = "DEBUG";
 #else
-        public const string Classification = "GENERAL AVAILABILITY";
+        public const string Classification = "GA";
 #endif
 
-        public const int Update = 25;
+        public const int Update = 27;
     }
 }

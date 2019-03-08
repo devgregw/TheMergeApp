@@ -59,6 +59,18 @@ namespace Merge.Android.Helpers {
 
         public static int IndexOf<T>(this IEnumerable<T> e, T s) => Array.IndexOf(e.ToArray(), s);
 
+        public static Dictionary<T1, T2> ToDictionarySafe<T1, T2, T3>(this IEnumerable<T3> collection,
+            Func<T3, T1> keySelector, Func<T3, T2> valueSelector) {
+            var dict = new Dictionary<T1, T2>();
+            foreach (var item in collection) {
+                var k = keySelector(item);
+                var v = valueSelector(item);
+                if (!dict.ContainsKey(k))
+                    dict.Add(k, v);
+            }
+            return dict;
+        }
+
         #region System.DateTime
 
         public static long GetMillisecondsSinceEpoch(this DateTime dt) =>

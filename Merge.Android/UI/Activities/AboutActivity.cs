@@ -54,7 +54,7 @@ namespace Merge.Android.UI.Activities {
 
         [OnClick(Resource.Id.aboutDevgregw)]
         public void AboutDevgregw_OnClick(object sender, EventArgs e) => LaunchUriAction
-            .FromUri("https://devgregw.com").Invoke();
+            .FromUri("https://gregwhatley.dev").Invoke();
 
         [OnClick(Resource.Id.aboutPantego)]
         public void AboutPantego_OnClick(object sender, EventArgs e) => LaunchUriAction
@@ -62,7 +62,7 @@ namespace Merge.Android.UI.Activities {
 
         [OnClick(Resource.Id.aboutLicenses)]
         public void AboutLicenses_OnClick(object sender, EventArgs e) => LaunchUriAction
-            .FromUri("https://merge.devgregw.com/licenses").Invoke();
+            .FromUri("https://merge.gregwhatley.dev/licenses").Invoke();
 
         [OnClick(Resource.Id.aboutSendFeedback)]
         public void AboutSendFeedback_OnClick(object sender, EventArgs e) => EmailAction
@@ -89,7 +89,7 @@ namespace Merge.Android.UI.Activities {
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.SetDisplayShowHomeEnabled(true);
             _aboutVersion.Text =
-                $"Version {VersionConsts.Version} (update {VersionConsts.Update}) {VersionConsts.Classification}\nUtilizing MergeApi version {VersionInfo.VersionString} (update {VersionInfo.Update})";
+                $"Version {VersionConsts.Version} (update {VersionConsts.Update}) {VersionConsts.Classification}\nUtilizing MergeApiStandard version {VersionInfo.VersionString} (update {VersionInfo.Update})";
         }
     }
 }

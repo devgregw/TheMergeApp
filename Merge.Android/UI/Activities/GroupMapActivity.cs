@@ -44,7 +44,7 @@ using Android.Views;
 using Android.Widget;
 using Merge.Android.Helpers;
 using Merge.Android.UI.Views;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Models.Core;
 using Newtonsoft.Json;
 using appcompat = Android.Support.V7.App;

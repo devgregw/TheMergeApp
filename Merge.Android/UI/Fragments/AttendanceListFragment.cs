@@ -38,7 +38,8 @@ using Android.OS;
 using Android.Views;
 using Android.Widget;
 using Merge.Android.UI.Activities.LeadersOnly;
-using MergeApi.Client;
+using MergeApi;
+using Merge.Android.Helpers;
 using MergeApi.Models.Core;
 using MergeApi.Models.Core.Attendance;
 using Newtonsoft.Json;
@@ -111,7 +112,7 @@ namespace Merge.Android.UI.Fragments {
                     if (ministry == "mg") {
                         SelectedMergeGroup = null;
                         SetItems(_mergeGroups.OrderBy(g => g.Id)
-                            .ToDictionary(g => g.Name, g => $"mg:{JsonConvert.SerializeObject(g)}"));
+                            .ToDictionarySafe(g => g.Name, g => $"mg:{JsonConvert.SerializeObject(g)}"));
                         return;
                     }
                     SelectedGroup = null;
@@ -120,7 +121,7 @@ namespace Merge.Android.UI.Fragments {
                         .OrderBy(g => (int) g.GradeLevel).ThenBy(g =>
                             IntFromWord(g.LeaderNames.ElementAt(0)
                                 .Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries).Last()))
-                        .ToDictionary(g => g.Summary, g => $"ag:{JsonConvert.SerializeObject(g)}"));
+                        .ToDictionarySafe(g => g.Summary, g => $"ag:{JsonConvert.SerializeObject(g)}"));
                     break;
                 case StateRecords:
                     Console.WriteLine(argument.ToString());
@@ -131,8 +132,8 @@ namespace Merge.Android.UI.Fragments {
                         SetItems(new Dictionary<string, string> {
                                 {"Add Record", $"add:{id}"}
                             }.Concat(_mergeGroupRecords.Where(r => r.MergeGroupId == id).OrderByDescending(r => r.Date)
-                                .ToDictionary(r => r.Date.ToLongDateString(), JsonConvert.SerializeObject))
-                            .ToDictionary(r => r.Key, r => r.Value));
+                                .ToDictionarySafe(r => r.Date.ToLongDateString(), JsonConvert.SerializeObject))
+                            .ToDictionarySafe(r => r.Key, r => r.Value));
                         return;
                     }
                     SelectedGroup = _groups.First(g => g.Id == id);
@@ -141,8 +142,8 @@ namespace Merge.Android.UI.Fragments {
                             {"Edit Group", "edit"},
                             {"Add Record", $"add:{id}"}
                         }
-                        .Concat(sorted.ToDictionary(g => g.Date.ToLongDateString(), JsonConvert.SerializeObject))
-                        .ToDictionary(p => p.Key, p => p.Value));
+                        .Concat(sorted.ToDictionarySafe(g => g.Date.ToLongDateString(), JsonConvert.SerializeObject))
+                        .ToDictionarySafe(p => p.Key, p => p.Value));
                     break;
             }
         }).Invoke();
