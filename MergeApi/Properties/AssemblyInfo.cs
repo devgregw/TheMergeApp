@@ -40,11 +40,11 @@ using MergeApi.Tools;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("MergeApi")]
-[assembly: AssemblyDescription("A portable class library that directly communicates with the Merge backend server")]
+[assembly: AssemblyDescription("A portable class library that directly communicates with the Merge Firebase server")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Pantego Bible Church")]
 [assembly: AssemblyProduct("MergeApi")]
-[assembly: AssemblyCopyright("Copyright © 2016 Greg Whatley")]
+[assembly: AssemblyCopyright("Copyright © 2019 Greg Whatley")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
