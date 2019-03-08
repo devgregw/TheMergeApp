@@ -35,6 +35,7 @@ using System.Globalization;
 using System.Linq;
 using CoreLocation;
 using MapKit;
+using Xamarin.Forms.Maps;
 using Merge.Classes.Helpers;
 using Merge.Classes.Receivers;
 using Merge.Classes.UI.Controls;
@@ -182,25 +183,24 @@ namespace Merge.Classes.UI.Pages {
             AddLabel(Images.Info, $"Lead by {g.LeadersFormatted}", true, true);
             AddLabel(Images.Location, g.Address);
             AddLabel(Images.Home, $"Hosted by {g.Host}");
-            /*var map = new Map(MapSpan.FromCenterAndRadius(
-                new Position(Convert.ToDouble(g.Coordinates.Latitude), Convert.ToDouble(g.Coordinates.Longitude)),
-                new Distance(20d))) {
+            var map = new Map(MapSpan.FromCenterAndRadius(new Position(Convert.ToDouble(g.Coordinates.Latitude), Convert.ToDouble(g.Coordinates.Longitude)), new Distance(1600)))
+            {
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 HeightRequest = UIApplication.SharedApplication.KeyWindow.Bounds.Width,
                 Margin = new Thickness(-6, 0, -6, 0),
-                HasScrollEnabled = false,
                 HasZoomEnabled = false,
-                IsShowingUser = false,
-                MapType = MapType.Street
+                HasScrollEnabled = false,
+                IsShowingUser = true
             };
-            map.Pins.Add(new Pin {
-                Position = map.VisibleRegion.Center,
-                Label = g.Name,
-                Type = PinType.Place,
-                Address = g.Address
+            map.Pins.Add(new Pin
+            {
+                Position = new Position(Convert.ToDouble(g.Coordinates.Latitude), Convert.ToDouble(g.Coordinates.Longitude)),
+                Type = PinType.Generic,
+                Address = g.Address,
+                Label = g.Name
             });
-            dataList.Children.Add(map);*/
-            /*dataList.Children.Add(mapView = new MapView(new List<MKAnnotation> {
+            dataList.Children.Add(map);
+            /*dataList.Children.Add(new MapView(new List<MKAnnotation> {
                 new MapAnnotation(g.Coordinates.Manipulate(
                     p => new CLLocationCoordinate2D(Convert.ToDouble(p.Latitude), Convert.ToDouble(p.Longitude))))
             }, a => { }, false, false) {

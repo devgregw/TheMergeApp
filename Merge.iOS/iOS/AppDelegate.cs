@@ -95,7 +95,7 @@ namespace Merge.iOS {
             NSUserDefaults.StandardUserDefaults.RegisterDefaults(userAgent);
             UITabBar.Appearance.BarTintColor = ColorConsts.PrimaryUiColor;
             Forms.Init();
-            FormsMaps.Init();
+            Xamarin.FormsMaps.Init();
             LoadApplication(new App());
 
             Firebase.Core.App.Configure();

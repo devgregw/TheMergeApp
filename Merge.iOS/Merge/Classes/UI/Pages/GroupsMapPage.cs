@@ -39,32 +39,64 @@ using MergeApi.Models.Actions;
 using MergeApi.Models.Core;
 using MergeApi.Tools;
 using Xamarin.Forms;
-using Xamarin.Forms.Internals;
 using Xamarin.Forms.Maps;
+using System.Collections.Generic;
+using CoreLocation;
 
 #endregion
 
 namespace Merge.Classes.UI {
     public class GroupsMapPage : ContentPage {
+        public const double EarthRadiusInKilometers = 6367.0;
+
+        public  double ToRadian(double val) { return val * (Math.PI / 180); }
+        public double DiffRadian(double val1, double val2) { return ToRadian(val2) - ToRadian(val1); }
+
+        public double CalcDistance(double lat1, double lng1, double lat2, double lng2) {
+            double radius = EarthRadiusInKilometers;
+            return radius * 2 * Math.Asin(Math.Min(1, Math.Sqrt((Math.Pow(Math.Sin((DiffRadian(lat1, lat2)) / 2.0), 2.0) + Math.Cos(ToRadian(lat1)) * Math.Cos(ToRadian(lat2)) * Math.Pow(Math.Sin((DiffRadian(lng1, lng2)) / 2.0), 2.0)))));
+        }
+
         public GroupsMapPage() {
             Title = "Merge Groups";
             new Action(async () => {
-                new NSObject().InvokeOnMainThread(() => ((App) Application.Current).ShowLoader("Loading..."));
+                new NSObject().InvokeOnMainThread(() => ((App)Application.Current).ShowLoader("Loading..."));
                 var groups = (await MergeDatabase.ListAsync<MergeGroup>()).ToList();
-                new NSObject().InvokeOnMainThread(((App) Application.Current).HideLoader);
+                new NSObject().InvokeOnMainThread(((App)Application.Current).HideLoader);
+                var latitudes = groups.Select(g => Convert.ToDouble(g.Coordinates.Latitude)).ToList();
+                var longitudes = groups.Select(g => Convert.ToDouble(g.Coordinates.Longitude)).ToList();
+
+                double lowestLat = latitudes.Min();
+                double highestLat = latitudes.Max();
+                double lowestLong = longitudes.Min();
+                double highestLong = longitudes.Max();
+                double finalLat = (lowestLat + highestLat) / 2;
+                double finalLong = (lowestLong + highestLong) / 2;
+                double distance = CalcDistance(lowestLat, lowestLong, highestLat, highestLong);
+
+                var map = new Map(MapSpan.FromCenterAndRadius(new Position(finalLat, finalLong), new Distance(distance * 500)))
+                {
+                    IsShowingUser = true,
+                    HorizontalOptions = LayoutOptions.Fill,
+                    VerticalOptions = LayoutOptions.Fill
+                };
+                groups.ForEach(g => {
+                    var pin = new Pin
+                    {
+                        Position = new Position(Convert.ToDouble(g.Coordinates.Latitude), Convert.ToDouble(g.Coordinates.Longitude)),
+                        Address = g.Address,
+                        Label = g.Name,
+                        Type = PinType.Place
+                    };
+                    pin.Clicked += (s, e) => OpenGroupDetailsAction.FromGroupId(g.Id).Invoke();
+                    map.Pins.Add(pin);
+                });
+                Content = map;
                 /*Content = new MapView(groups.Select(g => new MergeGroupAnnotation(g)).Cast<MKAnnotation>().ToList(),
                     a => OpenGroupDetailsAction.FromGroupId(((MergeGroupAnnotation) a).Group.Id).Invoke(), true, true) {
                     HorizontalOptions = LayoutOptions.Fill,
                     VerticalOptions = LayoutOptions.Fill
                 };*/
-                var centerX = groups.Select(g => Convert.ToDouble(g.Coordinates.Latitude)).Sum() / groups.Count;
-                var centerY = groups.Select(g => Convert.ToDouble(g.Coordinates.Longitude)).Sum() / groups.Count;
-                var map = new Map(MapSpan.FromCenterAndRadius(new Position(centerX, centerY), new Distance(100)));
-                groups.Select(g => new Pin { Address = g.Address, Label = g.Name, Position = new Position(Convert.ToDouble(g.Coordinates.Latitude), Convert.ToDouble(g.Coordinates.Longitude)), Type = PinType.Place}.Manipulate(
-                    p => { p.Clicked += (s, e) => OpenGroupDetailsAction.FromGroupId(g.Id).Invoke();
-                        return p;
-                    })).ForEach(map.Pins.Add);
-                Content = map;
             }).Invoke();
         }
     }
