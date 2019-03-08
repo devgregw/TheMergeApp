@@ -121,7 +121,7 @@ namespace Merge.Classes.UI.Pages.LeadersOnly {
                 case ImageState.None:
                     if (!string.IsNullOrWhiteSpace(_record?.Image))
                         await MergeDatabase.DeleteStorageReferenceAsync(
-                            _record.Image.Replace("https://merge.devgregw.com/content/", ""), "");
+                            _record.Image.Replace("https://merge.gregwhatley.dev/content/", ""), "");
                     record.Image = "";
                     break;
                 case ImageState.Modified:

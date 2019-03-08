@@ -10,7 +10,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Merge.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>MergeiOS</AssemblyName>
+    <AssemblyName>Merge.iOS</AssemblyName>
     <XamarinInsightsApiKey>faa1ad0d5f638736d6aa9a7364a37f6a7887c9b6</XamarinInsightsApiKey>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
@@ -98,6 +98,7 @@
     <CodesignProvision>VS: WildCard Development</CodesignProvision>
     <CodesignExtraArgs />
     <CodesignResourceRules />
+    <MtouchLink>None</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <AppExtensionDebugBundleId />

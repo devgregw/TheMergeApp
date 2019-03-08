@@ -112,7 +112,7 @@ namespace Merge.Classes.UI.Pages {
                 "By using the Merge app, you agree to the MIT license as well as all third-party licenses specified.  Tap 'Licenses' to learn more, or visit the 'About Merge' page after you complete the setup.",
                 new[] {"Back", "Licenses", "I Agree"},
                 new Action[] {
-                    ShowWelcomeView, () => { LaunchUriAction.FromUri("https://merge.devgregw.com/licenses").Invoke(); },
+                    ShowWelcomeView, () => { LaunchUriAction.FromUri("https://merge.gregwhatley.dev/licenses").Invoke(); },
                     ShowLeaderView
                 });
         }

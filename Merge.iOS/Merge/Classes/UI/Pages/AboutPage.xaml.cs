@@ -44,11 +44,11 @@ namespace Merge.Classes.UI.Pages {
         public AboutPage() {
             InitializeComponent();
             versionInfo.Text =
-                $"Version {VersionConsts.Version} (update {VersionConsts.Update}) {VersionConsts.Classification}\nUtilizing MergeApi version {VersionInfo.Version} (update {VersionInfo.Update})";
+                $"Version {VersionConsts.Version} (update {VersionConsts.Update}) {VersionConsts.Classification}\nUtilizing MergeApiStandard version {VersionInfo.Version} (update {VersionInfo.Update})";
         }
 
         private void Devgregw(object sender, EventArgs e) =>
-            LaunchUriAction.FromUri("http://www.devgregw.com").Invoke();
+            LaunchUriAction.FromUri("http://www.gregwhatley.dev").Invoke();
 
         private void Pantego(object sender, EventArgs e) => LaunchUriAction.FromUri("http://www.pantego.org").Invoke();
 

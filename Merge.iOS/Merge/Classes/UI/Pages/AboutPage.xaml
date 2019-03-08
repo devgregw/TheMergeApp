@@ -16,7 +16,7 @@
                     <Label TextColor="Black" Text="2 Thessalonians 3:5 ESV" />
                     <StackLayout Spacing="5" Orientation="Horizontal">
                         <Button Clicked="Devgregw" BackgroundColor="#ffd326" TextColor="Black"
-                                HorizontalOptions="FillAndExpand" Text="devgregw.com" />
+                                HorizontalOptions="FillAndExpand" Text="gregwhatley.dev" />
                         <Button Clicked="Pantego" BackgroundColor="#ffd326" TextColor="Black"
                                 HorizontalOptions="FillAndExpand" Text="pantego.org" />
                     </StackLayout>
