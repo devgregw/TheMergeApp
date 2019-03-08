@@ -31,6 +31,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Firebase.Analytics;
 using Firebase.CrashReporting;
@@ -51,12 +52,12 @@ namespace Merge.Classes.Receivers {
         }
 
         public void Log(LogLevel level, string sender, string message) {
-            Console.WriteLine($"[{level}]: {message} (from \"{sender}\")");
+            Debug.WriteLine($"[{level}]: {message} (from \"{sender}\")");
             CrashReporting.Log($"[{level}]: {message} (from \"{sender}\")");
         }
 
         public void Log(LogLevel level, string sender, Exception e) {
-            Console.WriteLine(
+            Debug.WriteLine(
                 $"[{level}]: {e.Message} ({e.GetType().FullName}) (from \"{sender}\")\n{e.StackTrace}\n-----");
             CrashReporting.Log(
                 $"[{level}]: {e.Message} ({e.GetType().FullName}) (from \"{sender}\")\n{e.StackTrace}\n-----");

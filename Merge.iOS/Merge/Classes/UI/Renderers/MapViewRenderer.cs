@@ -39,7 +39,7 @@ using Xamarin.Forms.Platform.iOS;
 
 #endregion
 
-[assembly: ExportRenderer(typeof(MapView), typeof(MapViewRenderer))]
+//[assembly: ExportRenderer(typeof(MapView), typeof(MapViewRenderer))]
 
 namespace Merge.Classes.UI.Renderers {
     public class MapViewRenderer : ViewRenderer {

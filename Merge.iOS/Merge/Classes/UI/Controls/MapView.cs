@@ -37,7 +37,7 @@ using Xamarin.Forms;
 #endregion
 
 namespace Merge.Classes.UI.Controls {
-    public class MapView : View {
+    public class MapView : View{
         public readonly List<MKAnnotation> Annotations;
 
         public readonly Action<IMKAnnotation> Handler;

@@ -38,12 +38,14 @@ using Foundation;
 using Merge.Classes;
 using Merge.Classes.Helpers;
 using Merge.Classes.Receivers;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Framework.Abstractions;
 using UIKit;
 using UserNotifications;
+using Xamarin;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
+using ApnsTokenType = Firebase.CloudMessaging.ApnsTokenType;
 
 #endregion
 
@@ -75,10 +77,10 @@ namespace Merge.iOS {
 
         public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken) {
 #if DEBUG
-            InstanceId.SharedInstance.SetApnsToken(deviceToken, ApnsTokenType.Sandbox);
+            Messaging.SharedInstance.SetApnsToken(deviceToken, ApnsTokenType.Sandbox);
 #endif
 #if RELEASE
-			InstanceId.SharedInstance.SetApnsToken(deviceToken, ApnsTokenType.Prod);
+			Messaging.SharedInstance.SetApnsToken(deviceToken, ApnsTokenType.Production);
 #endif
         }
 
@@ -93,9 +95,10 @@ namespace Merge.iOS {
             NSUserDefaults.StandardUserDefaults.RegisterDefaults(userAgent);
             UITabBar.Appearance.BarTintColor = ColorConsts.PrimaryUiColor;
             Forms.Init();
+            FormsMaps.Init();
             LoadApplication(new App());
 
-            Firebase.Analytics.App.Configure();
+            Firebase.Core.App.Configure();
             if (UIDevice.CurrentDevice.CheckSystemVersion(10, 0)) {
                 var authOptions = UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge |
                                   UNAuthorizationOptions.Sound;
@@ -194,13 +197,7 @@ namespace Merge.iOS {
         }
 
         public void ConnectFcm() {
-            Messaging.SharedInstance.Connect(e => {
-                if (e == null) {
-                    //TODO: SUBSCRIBE OR UNSUBSCRIBE FROM LEADERS TOPIC
-                }
-                Console.WriteLine(
-                    $"[FIREBASE] {(e == null ? "Connected successfully!" : $"Could not connect: {e.LocalizedDescription}")}");
-            });
+            Messaging.SharedInstance.ShouldEstablishDirectChannel = true;
         }
 
         public override void OnActivated(UIApplication uiApplication) {
@@ -209,7 +206,7 @@ namespace Merge.iOS {
         }
 
         public override void DidEnterBackground(UIApplication uiApplication) {
-            Messaging.SharedInstance.Disconnect();
+            //Messaging.SharedInstance.Disconnect();
         }
 
         public override void PerformActionForShortcutItem(UIApplication application,

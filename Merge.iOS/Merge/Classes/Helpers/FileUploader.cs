@@ -35,7 +35,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Tools;
 using UIKit;
 

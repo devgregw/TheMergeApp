@@ -41,7 +41,7 @@ using MapKit;
 using Merge.Classes.Helpers;
 using Merge.Classes.UI;
 using Merge.Classes.UI.Pages;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Framework.Abstractions;
 using MergeApi.Framework.Interfaces;
 using MergeApi.Framework.Interfaces.Receivers;

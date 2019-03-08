@@ -36,7 +36,7 @@ using System.Threading.Tasks;
 using Merge.Classes.Helpers;
 using Merge.Classes.UI.Controls;
 using Merge.iOS.Helpers;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Framework.Enumerations;
 using MergeApi.Framework.Interfaces;
 using MergeApi.Models.Actions;
@@ -246,8 +246,8 @@ namespace Merge.Classes.UI.Pages {
             var views = content;
             if (!all.Any())
                 views.Add(nothingCard);
-            if (all.Any() && _delegate.GetTab() == 2)
-                views.Add(mapButton);
+            //if (all.Any() && _delegate.GetTab() == 2)
+                //views.Add(mapButton);
             await SetViews(views, didLoadData);
         }
 

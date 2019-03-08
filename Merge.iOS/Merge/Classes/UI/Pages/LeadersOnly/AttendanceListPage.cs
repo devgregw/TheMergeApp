@@ -37,7 +37,7 @@ using System.Threading.Tasks;
 using Foundation;
 using Merge.Classes.Helpers;
 using Merge.Classes.UI.Pages.LeadersOnly;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Models.Core;
 using MergeApi.Models.Core.Attendance;
 using MergeApi.Tools;

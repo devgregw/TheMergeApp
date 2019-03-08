@@ -34,10 +34,13 @@ using System.Linq;
 using Foundation;
 using MapKit;
 using Merge.Classes.UI.Controls;
-using MergeApi.Client;
+using MergeApi;
 using MergeApi.Models.Actions;
 using MergeApi.Models.Core;
+using MergeApi.Tools;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
+using Xamarin.Forms.Maps;
 
 #endregion
 
@@ -49,11 +52,19 @@ namespace Merge.Classes.UI {
                 new NSObject().InvokeOnMainThread(() => ((App) Application.Current).ShowLoader("Loading..."));
                 var groups = (await MergeDatabase.ListAsync<MergeGroup>()).ToList();
                 new NSObject().InvokeOnMainThread(((App) Application.Current).HideLoader);
-                Content = new MapView(groups.Select(g => new MergeGroupAnnotation(g)).Cast<MKAnnotation>().ToList(),
+                /*Content = new MapView(groups.Select(g => new MergeGroupAnnotation(g)).Cast<MKAnnotation>().ToList(),
                     a => OpenGroupDetailsAction.FromGroupId(((MergeGroupAnnotation) a).Group.Id).Invoke(), true, true) {
                     HorizontalOptions = LayoutOptions.Fill,
                     VerticalOptions = LayoutOptions.Fill
-                };
+                };*/
+                var centerX = groups.Select(g => Convert.ToDouble(g.Coordinates.Latitude)).Sum() / groups.Count;
+                var centerY = groups.Select(g => Convert.ToDouble(g.Coordinates.Longitude)).Sum() / groups.Count;
+                var map = new Map(MapSpan.FromCenterAndRadius(new Position(centerX, centerY), new Distance(100)));
+                groups.Select(g => new Pin { Address = g.Address, Label = g.Name, Position = new Position(Convert.ToDouble(g.Coordinates.Latitude), Convert.ToDouble(g.Coordinates.Longitude)), Type = PinType.Place}.Manipulate(
+                    p => { p.Clicked += (s, e) => OpenGroupDetailsAction.FromGroupId(g.Id).Invoke();
+                        return p;
+                    })).ForEach(map.Pins.Add);
+                Content = map;
             }).Invoke();
         }
     }

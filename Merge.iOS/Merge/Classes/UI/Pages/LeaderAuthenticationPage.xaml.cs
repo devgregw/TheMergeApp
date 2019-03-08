@@ -34,7 +34,7 @@ using System.Threading.Tasks;
 using Firebase.CloudMessaging;
 using Merge.Classes.Helpers;
 using Merge.iOS;
-using MergeApi.Client;
+using MergeApi;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
