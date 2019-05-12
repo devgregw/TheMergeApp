@@ -56,7 +56,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.devgregw.merge.ios</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.2.8</string>
+	<string>0.2.10</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
@@ -99,7 +99,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Merge uses your current location to display your location on the Merge Group map and to sort Merge Groups.</string>
 	<key>CFBundleVersion</key>
-	<string>16</string>
+	<string>18</string>
 	<key>NSCameraUsageDescription</key>
 	<string>When adding Merge Group attendance reocrds, the camera may be used to attatch a photo.</string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -107,5 +107,13 @@
 		<string>googlechromes</string>
 		<string>comgooglemaps</string>
 	</array>
+	<key>NSContactsUsageDescription</key>
+	<string>This feature will be used to improve your experience.  Your personal information is never sold or processessed.</string>
+	<key>NSSiriUsageDescription</key>
+	<string>This feature will be used to improve your experience.  Your personal information is never sold or processessed.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This feature will be used to improve your experience.  Your personal information is never sold or processessed.</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>This feature will be used to improve your experience.  Your personal information is never sold or processessed.</string>
 </dict>
 </plist>

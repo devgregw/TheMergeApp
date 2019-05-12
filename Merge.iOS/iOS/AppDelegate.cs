@@ -54,7 +54,6 @@ namespace Merge.iOS {
 
     [Register("AppDelegate")]
     public class AppDelegate : FormsApplicationDelegate, IMessageSender, IUNUserNotificationCenterDelegate {
-        private bool _finishedLaunching;
         public static FirebaseAuthLink AuthLink { get; set; }
         public static CLLocationManager LocationManager { get; set; }
 
@@ -148,7 +147,7 @@ namespace Merge.iOS {
             }, new MergeActionReceiver(), new MergeElementReceiver(), new MergeLogReceiver());
 
             RestoreTintColors();
-            _finishedLaunching = true;
+            //_finishedLaunching = true;
             return base.FinishedLaunching(app, options);
         }
 

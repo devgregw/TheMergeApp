@@ -46,7 +46,6 @@ using MergeApi.Models.Core;
 using MergeApi.Tools;
 using UIKit;
 using Xamarin.Forms;
-using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
 using Utilities = Merge.Classes.Helpers.Utilities;
 
@@ -209,7 +208,7 @@ namespace Merge.Classes.UI.Pages {
                 Margin = new Thickness(-6, 0, -6, 0)
             });*/
             _menuItems.Add("Get Directions", () => GetDirectionsAction.FromGroupId(g.Id).Invoke());
-            //_menuItems.Add("See All Groups", () => new OpenGroupMapPageAction().Invoke());
+            _menuItems.Add("See All Groups", () => new OpenGroupMapPageAction().Invoke());
             _menuItems.Add("Contact Group Leaders", () => ShowContactInfoAction.FromGroupId(g.Id).Invoke());
             InitializeMenu();
             MergeLogReceiver.Log("viewDetails", new Dictionary<string, string> {

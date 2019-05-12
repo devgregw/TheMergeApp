@@ -56,8 +56,6 @@ namespace Merge {
     public class App : Application {
         public static ActionBase NotificationAction;
 
-        private bool _launch = true;
-
         private LoadingOverlay _overlay;
 
         private TabbedPage _tabbedPage;

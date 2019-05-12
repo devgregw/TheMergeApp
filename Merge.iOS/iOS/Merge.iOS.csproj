@@ -131,9 +131,6 @@
     <Reference Include="Lorem.NET, Version=2.1.55.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Lorem.Universal.NET.2.1.55\lib\netstandard1.0\Lorem.NET.dll</HintPath>
     </Reference>
-    <Reference Include="MergeApiStandard">
-      <HintPath>..\..\MergeApiStandard\MergeApiStandard\bin\Release\netstandard2.0\MergeApiStandard.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
@@ -166,12 +163,15 @@
     <Reference Include="Xamarin.Forms.Platform.iOS, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Forms.3.6.0.220655\lib\Xamarin.iOS10\Xamarin.Forms.Platform.iOS.dll</HintPath>
     </Reference>
-    <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xamarin.Forms.3.6.0.220655\lib\Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.iOS" />
     <Reference Include="XLabs.Cryptography, Version=2.0.5782.12232, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\XLabs.Cryptography.2.0.5782\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Cryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xamarin.Forms.3.6.0.220655\lib\Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="MergeApiStandard">
+      <HintPath>..\..\..\..\..\Documents\MergeApiStandard.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -250,9 +250,6 @@
     <ImageAsset Include="Resources\LaunchImages.xcassets\LaunchImages.launchimage\launch-retina4.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\appstore.png">
-      <Visible>false</Visible>
-    </ImageAsset>
     <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\phone_notification_2x.png">
       <Visible>false</Visible>
     </ImageAsset>
@@ -289,6 +286,7 @@
     <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\watch_short_42mm_2x.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Resources\LaunchImages.xcassets\AppIcons.appiconset\appstore-1.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />

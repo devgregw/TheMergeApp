@@ -246,8 +246,8 @@ namespace Merge.Classes.UI.Pages {
             var views = content;
             if (!all.Any())
                 views.Add(nothingCard);
-            //if (all.Any() && _delegate.GetTab() == 2)
-                //views.Add(mapButton);
+            if (all.Any() && _delegate.GetTab() == 2)
+                views.Add(mapButton);
             await SetViews(views, didLoadData);
         }
 
