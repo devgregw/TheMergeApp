@@ -52,7 +52,7 @@ namespace Merge.Android.UI.Views {
 
         public BasicCard(Context context, Exception error) : this(context,
             new IconView(context, Resource.Drawable.Error,
-                $"An error occurred while loading content.\n{MakeExceptionString(error)}", true, true) {
+                $"An error occurred while loading content.\n{error.Message} ({error.GetType().Name})", true, true) {
                 LayoutParameters = MakeLayoutParams()
             }) { }
 

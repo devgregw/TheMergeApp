@@ -160,7 +160,7 @@ namespace Merge.Android.UI.Activities {
                 _mapFragment.GetMapAsync(this);
             } catch (Exception e) {
                 var dialog = new appcompat.AlertDialog.Builder(this).SetCancelable(false).SetTitle("Error")
-                    .SetMessage($"An error occurred while loading content.\n{BasicCard.MakeExceptionString(e)}")
+                    .SetMessage($"An error occurred while loading content.\n{e.Message} ({e.GetType().Name})}")
                     .SetPositiveButton("Close", (s, args) => Finish()).Create();
                 dialog.SetOnShowListener(AlertDialogColorOverride.Instance);
                 dialog.Show();
